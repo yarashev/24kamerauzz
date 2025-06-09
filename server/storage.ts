@@ -177,11 +177,11 @@ export class DatabaseStorage implements IStorage {
     const existingItems = await db
       .select()
       .from(cartItems)
-      .where(eq(cartItems.sessionId, insertItem.sessionId))
-      .where(eq(cartItems.productId, insertItem.productId));
+      .where(eq(cartItems.sessionId, insertItem.sessionId));
 
-    if (existingItems.length > 0) {
-      const existingItem = existingItems[0];
+    const existingItem = existingItems.find(item => item.productId === insertItem.productId);
+
+    if (existingItem) {
       const [updatedItem] = await db
         .update(cartItems)
         .set({ quantity: existingItem.quantity + (insertItem.quantity || 1) })
@@ -211,12 +211,12 @@ export class DatabaseStorage implements IStorage {
 
   async removeFromCart(id: number): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.id, id));
-    return result.rowCount !== undefined && result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async clearCart(sessionId: string): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.sessionId, sessionId));
-    return result.rowCount !== undefined && result.rowCount >= 0;
+    return (result.rowCount || 0) >= 0;
   }
 
   // Chat methods
