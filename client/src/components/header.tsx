@@ -35,24 +35,14 @@ export default function Header() {
       >
         {t("nav-products")}
       </button>
-      <button
-        onClick={() => handleScrollTo("calculator")}
-        className="text-gray-700 hover:text-primary transition-colors font-medium"
-      >
-        {t("nav-calculator")}
-      </button>
+      
       <button
         onClick={() => handleScrollTo("news")}
         className="text-gray-700 hover:text-primary transition-colors font-medium"
       >
         {t("nav-news")}
       </button>
-      <button
-        onClick={() => handleScrollTo("contact")}
-        className="text-gray-700 hover:text-primary transition-colors font-medium"
-      >
-        {t("nav-contact")}
-      </button>
+      
     </nav>
   );
 

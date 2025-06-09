@@ -181,9 +181,6 @@ export default function Products() {
     <section id="products" className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h3 className="text-3xl font-bold text-secondary mb-4">
-            kameralar
-          </h3>
           <p className="text-gray-600 text-lg">
             {language === "uz" && "Ishonchli brendlar"}
             {language === "ru" && "Лучшие камеры и электронные устройства"}
