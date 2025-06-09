@@ -111,20 +111,15 @@ const getProductImage = (productName: string): string => {
 };
 
 const cameraBrands = [
-  { id: "all", name: "Barcha", nameRu: "Все", nameEn: "All" },
-  { id: "hikvision", name: "Hikvision", nameRu: "Hikvision", nameEn: "Hikvision" },
   { id: "hilook", name: "Hilook", nameRu: "Hilook", nameEn: "Hilook" },
-  { id: "hiwatch", name: "Hiwatch", nameRu: "Hiwatch", nameEn: "Hiwatch" },
-  { id: "ezviz", name: "Ezviz", nameRu: "Ezviz", nameEn: "Ezviz" },
-  { id: "dahua", name: "Dahua", nameRu: "Dahua", nameEn: "Dahua" },
-  { id: "imou", name: "Imou", nameRu: "Imou", nameEn: "Imou" }
+  { id: "ezviz", name: "Ezviz", nameRu: "Ezviz", nameEn: "Ezviz" }
 ];
 
 export default function Products() {
   const { t, language } = useLanguage();
   const { addToCart, isAddingToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("ip_camera");
-  const [selectedBrand, setSelectedBrand] = useState("all");
+  const [selectedBrand, setSelectedBrand] = useState("hilook");
 
   const { data: allProducts = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -136,8 +131,7 @@ export default function Products() {
   // Filter products by category and brand
   const filteredProducts = products.filter(product => {
     const categoryMatch = product.category === selectedCategory;
-    const brandMatch = selectedBrand === "all" || 
-      (product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase()));
+    const brandMatch = product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase());
     return categoryMatch && brandMatch;
   });
 
