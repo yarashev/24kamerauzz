@@ -44,13 +44,13 @@ export class DatabaseStorage implements IStorage {
         return; // Data already seeded
       }
 
-      // Seed products with different brands
+      // Seed products with different brands and categories
       const sampleProducts: InsertProduct[] = [
         {
           name: "Hikvision DS-2CD2143G0-I",
           description: "4K Ultra HD dome kamera, Tungi ko'rish, IP67",
           price: 299,
-          category: "cameras",
+          category: "ip",
           imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
           features: ["4K Ultra HD", "Night Vision", "H.265+", "IP67"]
@@ -59,64 +59,73 @@ export class DatabaseStorage implements IStorage {
           name: "Hilook IPC-B140H",
           description: "4MP bullet kamera, POE quvvatlash, Smart IR",
           price: 89,
-          category: "cameras",
+          category: "ip",
           imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
           features: ["4MP Resolution", "POE Power", "Smart IR", "Metal Housing"]
         },
         {
-          name: "Hiwatch DS-I220",
-          description: "2MP IP kamera, Fixed lens, DWDR",
-          price: 65,
-          category: "cameras",
+          name: "Hiwatch THC-B140-M",
+          description: "4MP Turbo HD bullet kamera, EXIR, Weatherproof",
+          price: 75,
+          category: "turbo_hd",
           imageUrl: "https://images.unsplash.com/photo-1567443120781-89bf8eeebe44?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["2MP Resolution", "Fixed Lens", "DWDR", "ICR Day/Night"]
+          features: ["4MP Turbo HD", "EXIR Technology", "Weatherproof", "Smart IR"]
         },
         {
           name: "Ezviz C3WN",
           description: "Wi-Fi kamera, Rangli tungi ko'rish, Harakat aniqlash",
           price: 159,
-          category: "cameras",
+          category: "ip",
           imageUrl: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
           features: ["Wi-Fi", "Color Night Vision", "Motion Detection", "Two-way Audio"]
         },
         {
-          name: "Dahua IPC-HDW1531S",
-          description: "5MP dome kamera, WDR, Smart Detection",
-          price: 125,
-          category: "cameras",
+          name: "Dahua NVR4108HS-8P-4KS2",
+          description: "8 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+",
+          price: 245,
+          category: "nvr",
           imageUrl: "https://images.unsplash.com/photo-1558618047-c99d7b6fdbad?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["5MP Resolution", "WDR", "Smart Detection", "IP67 Rating"]
+          features: ["8 Channel PoE", "4K Support", "H.265+", "2TB HDD"]
         },
         {
-          name: "Imou Bullet 2E",
-          description: "2MP Wi-Fi kamera, PIR aniqlash, Mobil app",
-          price: 79,
-          category: "cameras",
+          name: "Hikvision DVR DS-7208HQHI-K1",
+          description: "8 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash",
+          price: 165,
+          category: "dvr",
           imageUrl: "https://images.unsplash.com/photo-1560472353-dc4de84ceb6a?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["2MP Resolution", "PIR Detection", "Wi-Fi", "Mobile App"]
+          features: ["8 Channel", "AHD/TVI/CVI", "H.265+", "1TB HDD"]
         },
         {
-          name: "Hikvision Video Doorbell",
-          description: "Eshik qo'ng'irog'i, 1080p, Ikki tomonlama audio",
-          price: 199,
+          name: "Imou Video Doorbell",
+          description: "Eshik qo'ng'irog'i, 1080p, Ikki tomonlama audio, PIR",
+          price: 139,
           category: "doorbells",
           imageUrl: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["1080p HD", "Two-way Audio", "Motion Detection", "Night Vision"]
+          features: ["1080p HD", "Two-way Audio", "PIR Detection", "Night Vision"]
         },
         {
-          name: "Solar Security Kit Dahua",
+          name: "Dahua Solar Security Kit",
           description: "Quyosh paneli bilan, 4G/Wi-Fi, Uzoq masofada ishlash",
           price: 899,
           category: "systems",
           imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
           features: ["Solar Powered", "4G/Wi-Fi", "Remote Access", "Weather Resistant"]
+        },
+        {
+          name: "Hilook Turbo HD Kit",
+          description: "4 kamerali Turbo HD to'plam, DVR + kameralar",
+          price: 399,
+          category: "systems",
+          imageUrl: "https://images.unsplash.com/photo-1553354103-b0a2bf2912e7?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          inStock: true,
+          features: ["4 Cameras", "4CH DVR", "1TB HDD", "Complete Kit"]
         }
       ];
 
