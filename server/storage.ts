@@ -159,7 +159,7 @@ export class MemStorage implements IStorage {
       ...insertProduct, 
       id,
       inStock: insertProduct.inStock ?? true,
-      features: insertProduct.features ?? []
+      features: (insertProduct.features as string[]) || []
     };
     this.products.set(id, product);
     return product;
@@ -182,7 +182,7 @@ export class MemStorage implements IStorage {
 
     if (existingItem) {
       // Update quantity
-      const updatedItem = { ...existingItem, quantity: existingItem.quantity + insertItem.quantity };
+      const updatedItem = { ...existingItem, quantity: existingItem.quantity + (insertItem.quantity || 1) };
       this.cartItems.set(existingItem.id, updatedItem);
       return updatedItem;
     }
@@ -191,6 +191,7 @@ export class MemStorage implements IStorage {
     const cartItem: CartItem = { 
       ...insertItem, 
       id, 
+      quantity: insertItem.quantity || 1,
       createdAt: new Date()
     };
     this.cartItems.set(id, cartItem);
