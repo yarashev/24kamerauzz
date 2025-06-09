@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
+import { useState } from "react";
+import Promotions from "./promotions";
 
 export default function Hero() {
   const { t } = useLanguage();
+  const [showPromotions, setShowPromotions] = useState(false);
 
   const handleScrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -10,6 +13,14 @@ export default function Hero() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const handleShowPromotions = () => {
+    setShowPromotions(true);
+  };
+
+  if (showPromotions) {
+    return <Promotions />;
+  }
 
   return (
     <section id="hero" className="hero-section">
@@ -28,7 +39,7 @@ export default function Hero() {
                 <h3 className="text-2xl font-bold text-white mb-2">Maxsus taklif!</h3>
                 <p className="text-blue-100 mb-4">Professional xavfsizlik tizimlari uchun 25% chegirma</p>
                 <Button
-                  onClick={() => handleScrollTo("products")}
+                  onClick={handleShowPromotions}
                   className="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-3 text-lg font-semibold"
                   size="lg"
                 >
