@@ -123,7 +123,7 @@ const cameraBrands = [
 export default function Products() {
   const { t, language } = useLanguage();
   const { addToCart, isAddingToCart } = useCart();
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("ip_camera");
   const [selectedBrand, setSelectedBrand] = useState("all");
 
   const { data: allProducts = [], isLoading } = useQuery<Product[]>({
@@ -135,7 +135,7 @@ export default function Products() {
 
   // Filter products by category and brand
   const filteredProducts = products.filter(product => {
-    const categoryMatch = selectedCategory === "all" || product.category === selectedCategory;
+    const categoryMatch = product.category === selectedCategory;
     const brandMatch = selectedBrand === "all" || 
       (product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase()));
     return categoryMatch && brandMatch;
