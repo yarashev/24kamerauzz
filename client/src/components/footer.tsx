@@ -1,6 +1,6 @@
 import { useLanguage } from "@/hooks/use-language";
 import { MessageCircle, Instagram, Facebook } from "lucide-react";
-import Calculator from "./calculator";
+
 
 export default function Footer() {
   const { t, language } = useLanguage();
@@ -54,7 +54,6 @@ export default function Footer() {
 
   return (
     <>
-      <Calculator />
       <footer className="bg-secondary text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
