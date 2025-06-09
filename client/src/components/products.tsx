@@ -14,6 +14,7 @@ import hilookLogo from "@assets/hilook 222222_1749477480288.jpg";
 import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
 import hiwatchLogo from "@assets/4974HIWATCH 222222_1749477667922.jpg";
 import dahuaLogo from "@assets/DAHUA 22222_1749478235269.png";
+import tvtLogo from "@assets/tvt logo_1749478721840.png";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
@@ -274,6 +275,23 @@ export default function Products() {
               className="h-full w-auto object-contain"
             />
           </button>
+
+          {/* TVT Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("tvt");
+              setSelectedCategory("tvt_nvr"); // Default to NVR category for TVT
+            }}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "tvt" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={tvtLogo} 
+              alt="TVT Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
         </div>
 
 
@@ -422,6 +440,44 @@ export default function Products() {
             <Button
               onClick={() => setSelectedCategory("dahua_hd_camera")}
               variant={selectedCategory === "dahua_hd_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              HD KAMERA
+            </Button>
+          </div>
+        )}
+
+        {/* TVT Category Buttons */}
+        {selectedBrand === "tvt" && (
+          <div className="flex justify-center gap-3 mb-6">
+            <Button
+              onClick={() => setSelectedCategory("tvt_nvr")}
+              variant={selectedCategory === "tvt_nvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              NVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("tvt_ip_camera")}
+              variant={selectedCategory === "tvt_ip_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              IP KAMERA
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("tvt_dvr")}
+              variant={selectedCategory === "tvt_dvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              DVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("tvt_hd_camera")}
+              variant={selectedCategory === "tvt_hd_camera" ? "default" : "outline"}
               size="sm"
               className="text-sm"
             >
