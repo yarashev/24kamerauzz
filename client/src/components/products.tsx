@@ -168,12 +168,34 @@ export default function Products() {
 
         {/* Ezviz Logo Display */}
         <div className="flex justify-center mb-8">
-          <div className="w-32 h-32 flex items-center justify-center">
-            <img 
-              src="/attached_assets/i_1749468922773.webp" 
-              alt="Ezviz Logo" 
-              className="w-full h-full object-contain"
-            />
+          <div className="w-48 h-48 bg-white rounded-xl shadow-lg p-6 flex items-center justify-center border-2 border-gray-100">
+            <div className="relative w-full h-full">
+              {/* Ezviz logo as SVG */}
+              <div className="w-full h-full flex items-center justify-center">
+                <svg viewBox="0 0 200 200" className="w-32 h-32">
+                  {/* Top left - blue */}
+                  <ellipse cx="60" cy="60" rx="40" ry="50" fill="#00A0E9" transform="rotate(-20 60 60)"/>
+                  <path d="M 30 50 Q 60 30 90 50 Q 60 70 30 50" fill="none" stroke="white" strokeWidth="4"/>
+                  
+                  {/* Top right - green */}
+                  <ellipse cx="140" cy="60" rx="40" ry="50" fill="#8BC34A" transform="rotate(20 140 60)"/>
+                  <path d="M 110 50 Q 140 30 170 50 Q 140 70 110 50" fill="none" stroke="white" strokeWidth="4"/>
+                  
+                  {/* Bottom left - pink */}
+                  <ellipse cx="60" cy="140" rx="40" ry="50" fill="#E91E63" transform="rotate(20 60 140)"/>
+                  <path d="M 30 130 Q 60 110 90 130 Q 60 150 30 130" fill="none" stroke="white" strokeWidth="4"/>
+                  
+                  {/* Bottom right - orange */}
+                  <ellipse cx="140" cy="140" rx="40" ry="50" fill="#FF9800" transform="rotate(-20 140 140)"/>
+                  <path d="M 110 130 Q 140 110 170 130 Q 140 150 110 130" fill="none" stroke="white" strokeWidth="4"/>
+                </svg>
+              </div>
+              
+              {/* Ezviz text */}
+              <div className="absolute bottom-0 left-0 right-0 text-center">
+                <span className="text-2xl font-bold text-gray-800">EZVIZ</span>
+              </div>
+            </div>
           </div>
         </div>
 
