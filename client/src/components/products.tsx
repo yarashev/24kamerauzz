@@ -128,8 +128,10 @@ export default function Products() {
   const products = Array.isArray(allProducts) ? allProducts : [];
 
   // Filter products by category and brand
-  const filteredProducts = selectedBrand 
-    ? products.filter(product => product.category === selectedBrand)
+  const filteredProducts = selectedBrand === "ezviz" 
+    ? products.filter(product => product.category === "ezviz")
+    : selectedBrand === "hilook" 
+    ? products.filter(product => product.category === selectedCategory)
     : [];
 
   const handleAddToCart = (productId: number) => {
@@ -184,7 +186,10 @@ export default function Products() {
           
           {/* Hilook Logo */}
           <button 
-            onClick={() => setSelectedBrand("hilook")}
+            onClick={() => {
+              setSelectedBrand("hilook");
+              setSelectedCategory("nvr"); // Default to NVR category for Hilook
+            }}
             className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hilook" ? "ring-4 ring-blue-500" : ""
             }`}
@@ -198,6 +203,44 @@ export default function Products() {
         </div>
 
 
+
+        {/* Hilook Category Buttons */}
+        {selectedBrand === "hilook" && (
+          <div className="flex justify-center gap-3 mb-6">
+            <Button
+              onClick={() => setSelectedCategory("nvr")}
+              variant={selectedCategory === "nvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              NVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("ip_camera")}
+              variant={selectedCategory === "ip_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              IP KAMERA
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("dvr")}
+              variant={selectedCategory === "dvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              DVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hd_camera")}
+              variant={selectedCategory === "hd_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              HD KAMERA
+            </Button>
+          </div>
+        )}
 
         {/* Products Display */}
         {!selectedBrand ? (
