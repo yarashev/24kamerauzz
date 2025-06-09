@@ -12,7 +12,7 @@ import type { Product } from "@shared/schema";
 import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
 import hilookLogo from "@assets/hilook 222222_1749477480288.jpg";
 import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
-import hiwatchLogo from "@assets/hiwatch logo_1749476981901.png";
+import hiwatchLogo from "@assets/4974HIWATCH 222222_1749477667922.jpg";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
