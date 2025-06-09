@@ -43,7 +43,7 @@ export default function AdminPanel() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [editingStore, setEditingStore] = useState<Store | null>(null);
-  const [selectedBrand, setSelectedBrand] = useState<string>("hikvision");
+  const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
 
@@ -254,8 +254,20 @@ export default function AdminPanel() {
     return productsByBrand[selectedBrand] || [];
   };
 
+  const getAllProducts = () => {
+    const allProducts: Product[] = [];
+    Object.values(productsByBrand).forEach(brandProducts => {
+      allProducts.push(...brandProducts);
+    });
+    return allProducts;
+  };
+
   const getSelectedBrandInfo = () => {
     return brands.find(b => b.id === selectedBrand);
+  };
+
+  const getDisplayProducts = () => {
+    return selectedBrand === 'all' ? getAllProducts() : getCurrentBrandProducts();
   };
 
   if (!isVisible) {
@@ -309,6 +321,9 @@ export default function AdminPanel() {
                       <SelectValue placeholder="Brendni tanlang" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="all">
+                        📋 Barcha mahsulotlar
+                      </SelectItem>
                       {brands.map(brand => (
                         <SelectItem key={brand.id} value={brand.id}>
                           {brand.logo} {brand.name}
@@ -335,21 +350,26 @@ export default function AdminPanel() {
               </div>
 
               {/* Selected Brand Info */}
-              {getSelectedBrandInfo() && (
-                <Card className="bg-blue-50 border-blue-200">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{getSelectedBrandInfo()?.logo}</span>
-                      <div>
-                        <h4 className="font-semibold text-lg">{getSelectedBrandInfo()?.name}</h4>
-                        <p className="text-sm text-gray-600">
-                          {getCurrentBrandProducts().length} ta mahsulot mavjud
-                        </p>
-                      </div>
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">
+                      {selectedBrand === 'all' ? '📋' : getSelectedBrandInfo()?.logo}
+                    </span>
+                    <div>
+                      <h4 className="font-semibold text-lg">
+                        {selectedBrand === 'all' ? 'Barcha mahsulotlar' : getSelectedBrandInfo()?.name}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {selectedBrand === 'all' 
+                          ? `${getAllProducts().length} ta mahsulot (${brands.length} ta brenddan)`
+                          : `${getCurrentBrandProducts().length} ta mahsulot mavjud`
+                        }
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-              )}
+                  </div>
+                </CardContent>
+              </Card>
 
               {editingProduct && (
                 <Card>
@@ -520,7 +540,7 @@ export default function AdminPanel() {
               )}
 
               <div className="grid gap-4">
-                {getCurrentBrandProducts().map((product: Product) => (
+                {getDisplayProducts().map((product: Product) => (
                   <Card key={product.id}>
                     <CardContent className="p-4">
                       <div className="flex justify-between items-start">
@@ -567,7 +587,7 @@ export default function AdminPanel() {
                     </CardContent>
                   </Card>
                 ))}
-                {getCurrentBrandProducts().length === 0 && (
+                {getDisplayProducts().length === 0 && selectedBrand !== 'all' && (
                   <Card>
                     <CardContent className="p-8 text-center">
                       <Camera className="h-12 w-12 mx-auto text-gray-400 mb-4" />
