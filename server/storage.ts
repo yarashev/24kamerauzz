@@ -44,88 +44,88 @@ export class DatabaseStorage implements IStorage {
         return; // Data already seeded
       }
 
-      // Seed products with different brands and categories
+      // Real product data from catalog
       const sampleProducts: InsertProduct[] = [
         {
-          name: "Hikvision DS-2CD2143G0-I",
-          description: "4K Ultra HD dome kamera, Tungi ko'rish, IP67",
-          price: 299,
-          category: "ip",
+          name: "IPC-B449H",
+          description: "4 MP, 1/1.8\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67, H.265+",
+          price: 117,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["4K Ultra HD", "Night Vision", "H.265+", "IP67"]
+          features: ["4MP", "24/7 Color", "IP67", "H.265+"]
         },
         {
-          name: "Hilook IPC-B140H",
-          description: "4MP bullet kamera, POE quvvatlash, Smart IR",
-          price: 89,
-          category: "ip",
+          name: "IPC-B249H",
+          description: "4 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67, H.265+",
+          price: 90,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["4MP Resolution", "POE Power", "Smart IR", "Metal Housing"]
+          features: ["4MP", "24/7 Color", "IP67", "H.265+"]
         },
         {
-          name: "Hiwatch THC-B140-M",
-          description: "4MP Turbo HD bullet kamera, EXIR, Weatherproof",
+          name: "IPC-B469HA-LU",
+          description: "6 MP, Smart Hybrid Light, Odam va transport vositalarini aniqlash",
           price: 75,
-          category: "turbo_hd",
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1567443120781-89bf8eeebe44?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["4MP Turbo HD", "EXIR Technology", "Weatherproof", "Smart IR"]
+          features: ["6MP", "Smart Hybrid Light", "AI Detection", "H.265+"]
         },
         {
-          name: "Ezviz C3WN",
-          description: "Wi-Fi kamera, Rangli tungi ko'rish, Harakat aniqlash",
-          price: 159,
-          category: "ip",
+          name: "IPC-B449HA-LU",
+          description: "4 MP, Smart Hybrid Light, Odam va transport vositalarini aniqlash",
+          price: 70,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["Wi-Fi", "Color Night Vision", "Motion Detection", "Two-way Audio"]
+          features: ["4MP", "Smart Hybrid Light", "AI Detection", "Microphone"]
         },
         {
-          name: "Dahua NVR4108HS-8P-4KS2",
-          description: "8 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+",
-          price: 245,
-          category: "nvr",
+          name: "IPC-B169HA",
+          description: "6 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
+          price: 70,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1558618047-c99d7b6fdbad?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["8 Channel PoE", "4K Support", "H.265+", "2TB HDD"]
+          features: ["6MP", "24/7 Color", "IP67", "H.265+"]
         },
         {
-          name: "Hikvision DVR DS-7208HQHI-K1",
-          description: "8 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash",
-          price: 165,
-          category: "dvr",
+          name: "IPC-B149HA",
+          description: "4 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
+          price: 63,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1560472353-dc4de84ceb6a?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["8 Channel", "AHD/TVI/CVI", "H.265+", "1TB HDD"]
+          features: ["4MP", "24/7 Color", "IP67", "H.265+"]
         },
         {
-          name: "Imou Video Doorbell",
-          description: "Eshik qo'ng'irog'i, 1080p, Ikki tomonlama audio, PIR",
-          price: 139,
-          category: "doorbells",
+          name: "IPC-B129HA",
+          description: "2 MP, 1/2.8\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
+          price: 43,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["1080p HD", "Two-way Audio", "PIR Detection", "Night Vision"]
+          features: ["2MP", "24/7 Color", "IP67", "H.265+"]
         },
         {
-          name: "Dahua Solar Security Kit",
-          description: "Quyosh paneli bilan, 4G/Wi-Fi, Uzoq masofada ishlash",
-          price: 899,
-          category: "systems",
+          name: "IPC-D159H",
+          description: "5 MP dome kamera, 1/2.7\" Progressive Scan CMOS, IP67, IK08",
+          price: 65,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["Solar Powered", "4G/Wi-Fi", "Remote Access", "Weather Resistant"]
+          features: ["5MP", "Dome", "IP67", "IK08"]
         },
         {
-          name: "Hilook Turbo HD Kit",
-          description: "4 kamerali Turbo HD to'plam, DVR + kameralar",
-          price: 399,
-          category: "systems",
+          name: "IPC-D149H",
+          description: "4 MP dome kamera, 1/2.7\" Progressive Scan CMOS, IP67, IK08",
+          price: 60,
+          category: "ip_camera",
           imageUrl: "https://images.unsplash.com/photo-1553354103-b0a2bf2912e7?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["4 Cameras", "4CH DVR", "1TB HDD", "Complete Kit"]
+          features: ["4MP", "Dome", "IP67", "IK08"]
         }
       ];
 
