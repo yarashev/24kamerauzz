@@ -117,7 +117,7 @@ const cameraBrands: any[] = [];
 export default function Products() {
   const { t, language } = useLanguage();
   const { addToCart, isAddingToCart } = useCart();
-  const [selectedCategory, setSelectedCategory] = useState("ip_camera");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
 
   const { data: allProducts = [], isLoading } = useQuery<Product[]>({
@@ -188,7 +188,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("hilook");
-              setSelectedCategory("nvr"); // Default to NVR category for Hilook
+              setSelectedCategory("ip_camera"); // Default to IP camera category for Hilook
             }}
             className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hilook" ? "ring-4 ring-blue-500" : ""
