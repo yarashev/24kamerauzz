@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -67,13 +67,13 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {/* Language Selector */}
             <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
-              <SelectTrigger className="w-24">
-                <SelectValue />
+              <SelectTrigger className="w-12 h-10 border-0 bg-transparent hover:bg-gray-100 rounded-full">
+                <Globe className="h-5 w-5 text-gray-600" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="uz">O'zbek</SelectItem>
-                <SelectItem value="ru">Русский</SelectItem>
-                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="uz">🇺🇿 O'zbek</SelectItem>
+                <SelectItem value="ru">🇷🇺 Русский</SelectItem>
+                <SelectItem value="en">🇺🇸 English</SelectItem>
               </SelectContent>
             </Select>
 
