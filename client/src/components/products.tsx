@@ -9,6 +9,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { useCart } from "@/hooks/use-cart";
 import { productCategories, formatPrice } from "@/lib/products";
 import type { Product } from "@shared/schema";
+import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
 
 // Function to get product image based on model name
 const getProductImage = (productName: string): string => {
@@ -170,7 +171,7 @@ export default function Products() {
         <div className="flex justify-center mb-8">
           <div className="w-72 h-32 bg-black rounded-xl shadow-lg p-4 flex items-center justify-center">
             <img 
-              src="/attached_assets/ezviz logo_1749469085610.png" 
+              src={ezvizLogo} 
               alt="Ezviz Logo" 
               className="h-full w-auto object-contain"
             />
