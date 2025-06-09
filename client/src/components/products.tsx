@@ -13,7 +13,7 @@ import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
 import hilookLogo from "@assets/hilook 222222_1749477480288.jpg";
 import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
 import hiwatchLogo from "@assets/4974HIWATCH 222222_1749477667922.jpg";
-import dahuaLogo from "@assets/dahua_1749477793270.jpg";
+import dahuaLogo from "@assets/DAHUA 22222_1749478235269.png";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
@@ -254,7 +254,10 @@ export default function Products() {
               className="h-full w-auto object-contain"
             />
           </button>
+        </div>
 
+        {/* Second Row of Brand Logos */}
+        <div className="flex justify-center gap-6 mb-8">
           {/* Dahua Logo */}
           <button 
             onClick={() => {
