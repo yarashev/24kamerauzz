@@ -15,12 +15,12 @@
   --card-foreground: hsl(20, 14.3%, 4.1%);
   --border: hsl(20, 5.9%, 90%);
   --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(213, 82%, 54%);
+  --primary: hsl(224, 89%, 60%);
   --primary-foreground: hsl(210, 40%, 98%);
   --secondary: hsl(210, 40%, 15%);
   --secondary-foreground: hsl(210, 40%, 98%);
-  --accent: hsl(38, 92%, 50%);
-  --accent-foreground: hsl(0, 0%, 0%);
+  --accent: hsl(348, 83%, 47%);
+  --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --ring: hsl(20, 14.3%, 4.1%);
@@ -72,5 +72,42 @@
   
   .btn-accent {
     @apply bg-accent hover:bg-accent/90 text-accent-foreground;
+  }
+
+  /* Custom styles from the original design */
+  .product-card {
+    @apply bg-white rounded-lg shadow-sm p-5 text-center transition-transform duration-300;
+  }
+
+  .product-card:hover {
+    @apply scale-105;
+  }
+
+  .nav-container {
+    @apply flex justify-between items-center px-5 py-4 max-w-7xl mx-auto;
+  }
+
+  .hero-section {
+    @apply bg-gradient-to-br from-primary to-blue-700 text-white py-24 text-center;
+  }
+
+  .chat-message {
+    @apply p-3 my-2 rounded-lg max-w-[90%] break-words;
+  }
+
+  .chat-user {
+    @apply bg-blue-100 text-blue-900 self-end ml-auto;
+  }
+
+  .chat-bot {
+    @apply bg-gray-100 text-gray-900 self-start mr-auto;
+  }
+
+  .section-padding {
+    @apply py-16 px-4 max-w-7xl mx-auto;
+  }
+
+  .calculator-input {
+    @apply p-3 m-1 border border-gray-300 rounded-md w-full;
   }
 }
