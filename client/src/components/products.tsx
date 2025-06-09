@@ -10,6 +10,7 @@ import { useCart } from "@/hooks/use-cart";
 import { productCategories, formatPrice } from "@/lib/products";
 import type { Product } from "@shared/schema";
 import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
+import hilookLogo from "@assets/hilook logo_1749469268846.jpg";
 
 // Function to get product image based on model name
 const getProductImage = (productName: string): string => {
@@ -167,12 +168,22 @@ export default function Products() {
           </p>
         </div>
 
-        {/* Ezviz Logo Display */}
-        <div className="flex justify-center mb-8">
-          <div className="w-72 h-32 bg-black rounded-xl shadow-lg p-4 flex items-center justify-center">
+        {/* Brand Logos Display */}
+        <div className="flex justify-center gap-6 mb-8">
+          {/* Ezviz Logo */}
+          <div className="w-48 h-20 bg-black rounded-lg shadow-lg p-3 flex items-center justify-center">
             <img 
               src={ezvizLogo} 
               alt="Ezviz Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </div>
+          
+          {/* Hilook Logo */}
+          <div className="w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200">
+            <img 
+              src={hilookLogo} 
+              alt="Hilook Logo" 
               className="h-full w-auto object-contain"
             />
           </div>
