@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>24kamera.uz - Aqlli Kamera va Elektronika</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <h1><span class="logo">24</span>kamera.uz</h1>
+      <nav>
+        <a href="#">Bosh sahifa</a>
+        <a href="#products">Mahsulotlar</a>
+        <a href="#calculator">Kalkulyator</a>
+        <a href="#news">Yangiliklar</a>
+        <a href="#contact">Aloqa</a>
+      </nav>
+      <div class="language-selector">
+        <select id="language">
+          <option value="uz">O'zbek</option>
+          <option value="ru">Русский</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2 data-i18n="hero-title">Aqlli Kamera va Elektronika Tizimlari</h2>
+      <p data-i18n="hero-desc">Xavfsizlik kameralar, quyosh panellari va boshqa jihozlar onlayn savdosi</p>
+      <a href="#products" class="btn" data-i18n="view-products">Mahsulotlarni ko‘rish</a>
+    </section>
+
+    <section id="products" class="section">
+      <h3 data-i18n="products">Mahsulotlar</h3>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="camera1.jpg" alt="Kamera 1" />
+          <h4>Kamera Pro X1</h4>
+          <p>$199</p>
+          <button class="btn" onclick="addToCart('Kamera Pro X1', 199)">Savatchaga qo‘shish</button>
+        </div>
+        <div class="product-card">
+          <img src="camera2.jpg" alt="Kamera 2" />
+          <h4>SmartCam 360</h4>
+          <p>$249</p>
+          <button class="btn" onclick="addToCart('SmartCam 360', 249)">Savatchaga qo‘shish</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculator" class="section">
+      <h3>Kamera Kalkulyatori</h3>
+      <input type="number" placeholder="Kv.metr" id="area" />
+      <input type="number" placeholder="Burchak (gradus)" id="angle" />
+      <input type="number" placeholder="Kamera soni" id="count" />
+      <input type="number" placeholder="Masofa (m)" id="distance" />
+      <button class="btn" onclick="calculateRecommendation()">Hisoblash</button>
+      <p id="recommendation"></p>
+    </section>
+
+    <section id="news" class="section">
+      <h3>Yangiliklar va Foydali Maqolalar</h3>
+      <article>
+        <h4>Uy xavfsizligini oshirish bo‘yicha 5 ta maslahat</h4>
+        <p>22-aprel 2024</p>
+      </article>
+    </section>
+
+    <section id="contact" class="section">
+      <h3>Aloqa</h3>
+      <p>Telefon: +998 91 308 95 12</p>
+      <p>Telegram: @24kameraBot</p>
+      <p><a href="https://www.instagram.com/24kamera.uz">Instagram</a></p>
+    </section>
+
+    <section id="jarvis" class="section">
+      <h3>Jarvis Yordamchi</h3>
+      <div id="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Savolingizni yozing..." onkeypress="if(event.key === 'Enter') sendMessage()" />
+        <button onclick="sendMessage()">Yuborish</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 24kamera.uz - Barcha huquqlar himoyalangan.</p>
+  </footer>
+
+  <script src="cart.js"></script>
+  <script src="translate.js"></script>
+  <script src="openai.js"></script>
+  <script>
+    const chatBox = document.getElementById("chat-box");
+    const input = document.getElementById("user-input");
+
+    async function sendMessage() {
+      const userMessage = input.value;
+      if (!userMessage) return alert("Iltimos, xabar kiriting.");
+
+      const userBubble = document.createElement("div");
+      userBubble.className = "chat user";
+      userBubble.innerHTML = `<strong>Siz:</strong> ${userMessage}`;
+      chatBox.appendChild(userBubble);
+
+      const botBubble = document.createElement("div");
+      botBubble.className = "chat bot";
+      botBubble.innerHTML = `<strong>Jarvis:</strong> Javob tayyorlanmoqda...`;
+      chatBox.appendChild(botBubble);
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+      input.value = "";
+
+      const reply = await askJarvis(userMessage);
+      botBubble.innerHTML = `<strong>Jarvis:</strong> ${reply}`;
+    }
+
+    function calculateRecommendation() {
+      const area = document.getElementById("area").value;
+      const angle = document.getElementById("angle").value;
+      const count = document.getElementById("count").value;
+      const distance = document.getElementById("distance").value;
+      const result = document.getElementById("recommendation");
+      result.textContent = `Tavsiya: ${count || 1} ta kamera bilan ${area} m² ni ${angle}° burchakda qamrab olish mumkin. Masofa: ${distance}m.`;
+    }
+  </script>
+</body>
+</html>
