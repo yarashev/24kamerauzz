@@ -31,13 +31,6 @@ export default function Header() {
       >
         {t("nav-home")}
       </button>
-      <CatalogModal>
-        <button className="text-gray-700 hover:text-primary transition-colors font-medium bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 hover:text-white">
-          {language === "uz" && "Katalog"}
-          {language === "ru" && "Каталог"}
-          {language === "en" && "Catalog"}
-        </button>
-      </CatalogModal>
       
       <button
         onClick={() => handleScrollTo("news")}
@@ -64,7 +57,16 @@ export default function Header() {
           <NavigationLinks className="hidden md:flex space-x-8" />
 
           {/* Right Side */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            {/* Catalog Button */}
+            <CatalogModal>
+              <Button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+                {language === "uz" && "Katalog"}
+                {language === "ru" && "Каталог"}
+                {language === "en" && "Catalog"}
+              </Button>
+            </CatalogModal>
+
             {/* Language Selector */}
             <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
               <SelectTrigger className="w-12 h-10 border-0 bg-transparent hover:bg-gray-100 rounded-full">
