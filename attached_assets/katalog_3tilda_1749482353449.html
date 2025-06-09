@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Katalog - 3 tilda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-md mx-auto bg-white rounded-xl shadow p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">📦 Katalog</h2>
+      <select id="lang" class="border rounded px-2 py-1 text-sm" onchange="switchLang(this.value)">
+        <option value="uz">O'zbekcha</option>
+        <option value="ru">Русский</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <ul id="catalog-list" class="space-y-3 text-sm">
+      <!-- JS orqali dinamik joylanadi -->
+    </ul>
+  </div>
+
+  <script>
+    const catalogs = {
+      uz: [
+        "Videoanalitika",
+        "Videokuzatuv",
+        "Domofonlar",
+        "Kirish nazorati",
+        "Belgilangan monitorlar",
+        "Ovoz kuchaytirish uskunalari",
+        "Yong‘in signalizatsiyasi",
+        "Yong‘inga qarshi uskunalar",
+        "Tarmoq uskunalari",
+        "Energiya tizimlari"
+      ],
+      ru: [
+        "Видеоаналитика",
+        "Видеонаблюдение",
+        "Домофоны",
+        "Контроль доступа",
+        "Мониторы маркированные",
+        "Оборудование звукоусиления",
+        "Охранно-пожарная сигнализация",
+        "Пожарное оборудование",
+        "Сетевое оборудование",
+        "Энергосистемы"
+      ],
+      en: [
+        "Video Analytics",
+        "Video Surveillance",
+        "Intercom Systems",
+        "Access Control",
+        "Marked Monitors",
+        "Sound Amplification Equipment",
+        "Fire Alarm Systems",
+        "Fire Safety Equipment",
+        "Network Equipment",
+        "Energy Systems"
+      ]
+    };
+
+    function switchLang(lang) {
+      const list = document.getElementById("catalog-list");
+      list.innerHTML = "";
+      catalogs[lang].forEach(item => {
+        const li = document.createElement("li");
+        li.className = "flex justify-between items-center border-b pb-1";
+        li.innerHTML = `<span>${item}</span><span class="text-gray-400">›</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    // Default til: uz
+    switchLang("uz");
+  </script>
+</body>
+</html>

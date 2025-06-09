@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/hooks/use-language";
 import { useCart } from "@/hooks/use-cart";
 import CartSidebar from "@/components/cart-sidebar";
+import CatalogModal from "@/components/catalog-modal";
 import type { Language } from "@/lib/translations";
 
 export default function Header() {
@@ -30,14 +31,13 @@ export default function Header() {
       >
         {t("nav-home")}
       </button>
-      <button
-        onClick={() => handleScrollTo("products")}
-        className="text-gray-700 hover:text-primary transition-colors font-medium bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 hover:text-white"
-      >
-        {language === "uz" && "Katalog"}
-        {language === "ru" && "Каталог"}
-        {language === "en" && "Catalog"}
-      </button>
+      <CatalogModal>
+        <button className="text-gray-700 hover:text-primary transition-colors font-medium bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 hover:text-white">
+          {language === "uz" && "Katalog"}
+          {language === "ru" && "Каталог"}
+          {language === "en" && "Catalog"}
+        </button>
+      </CatalogModal>
       
       <button
         onClick={() => handleScrollTo("news")}
