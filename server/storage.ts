@@ -44,22 +44,7 @@ export class DatabaseStorage implements IStorage {
         return; // Products already seeded
       }
 
-      // Add Geovision GV-LPR to video analytics category
-      const gvLprProduct: InsertProduct = {
-        name: "Geovision GV-LPR",
-        description: "Avtomobil raqamlarini aniqlash tizimi. 99% aniqlik, 0.2 soniya tezlik, Access bazasi, PIP va TITO integratsiyasi.",
-        price: 1500,
-        category: "geovision",
-        inStock: true,
-        features: ["99% aniqlik", "0.2s tezlik", "Access DB", "PIP funksiyasi", "TITO integratsiya", "Real-time"],
-        imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop"
-      };
-
-      // Insert video analytics product
-      await db.insert(products).values(gvLprProduct);
-
-      console.log("Video analytics products seeded successfully");
-      return;
+      console.log("Database already seeded, skipping...");
 
       // Complete Hilook product catalog with real camera models
       const sampleProducts: InsertProduct[] = [
@@ -71,7 +56,7 @@ export class DatabaseStorage implements IStorage {
           category: "ip_camera",
           imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/bullet/ipc-b140h/IPC-B140H.png",
           inStock: true,
-          features: ["4MP", "IR 30m", "IP67", "POE"]
+          features: ["4MP", "IR 30m", "IP67", "POE"] as string[]
         },
         {
           name: "Hilook IPC-B120H",
@@ -238,7 +223,7 @@ export class DatabaseStorage implements IStorage {
           category: "kits",
           imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/kits/ik-4042bh-mh-wm/IK-4042BH-MH-WM.png",
           inStock: true,
-          features: ["4 IP Cameras", "4CH NVR PoE", "1TB HDD", "Complete Kit"]
+          features: ["4 IP Cameras", "4CH NVR PoE", "1TB HDD", "Complete Kit"] as string[]
         }
       ];
 
@@ -308,7 +293,7 @@ export class DatabaseStorage implements IStorage {
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const [product] = await db
       .insert(products)
-      .values(insertProduct)
+      .values([insertProduct])
       .returning();
     return product;
   }
