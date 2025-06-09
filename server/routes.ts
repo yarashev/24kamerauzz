@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { askJarvisGrok, calculateCameraRecommendationGrok } from "./grok";
+import { askJarvis, calculateCameraRecommendation } from "./openai";
 import { insertCartItemSchema, insertChatMessageSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -111,7 +111,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Message is required" });
       }
       
-      const response = await askJarvisGrok(message);
+      const response = await askJarvis(message);
       
       const chatMessageData = insertChatMessageSchema.parse({
         sessionId,
@@ -146,7 +146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Area, angle, and distance are required" });
       }
       
-      const recommendation = await calculateCameraRecommendationGrok(
+      const recommendation = await calculateCameraRecommendation(
         parseFloat(area),
         parseFloat(angle),
         parseFloat(distance)
