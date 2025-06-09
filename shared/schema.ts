@@ -17,7 +17,7 @@ export const products = pgTable("products", {
   category: text("category").notNull(),
   imageUrl: text("image_url").notNull(),
   inStock: boolean("in_stock").notNull().default(true),
-  features: json("features").$type<string[]>().default([]),
+  features: json("features").$type<string[]>(),
 });
 
 export const cartItems = pgTable("cart_items", {
