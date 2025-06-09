@@ -32,9 +32,11 @@ export default function Header() {
       </button>
       <button
         onClick={() => handleScrollTo("products")}
-        className="text-gray-700 hover:text-primary transition-colors font-medium"
+        className="text-gray-700 hover:text-primary transition-colors font-medium bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 hover:text-white"
       >
-        {t("nav-products")}
+        {language === "uz" && "Katalog"}
+        {language === "ru" && "Каталог"}
+        {language === "en" && "Catalog"}
       </button>
       
       <button
