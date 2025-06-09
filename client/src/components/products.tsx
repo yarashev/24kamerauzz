@@ -132,9 +132,7 @@ export default function Products() {
   const products = Array.isArray(allProducts) ? allProducts : [];
 
   // Filter products by category and brand
-  const filteredProducts = selectedBrand === "hikvision"
-    ? products.filter(product => product.category === "hikvision")
-    : selectedBrand === "ezviz" 
+  const filteredProducts = selectedBrand === "ezviz" 
     ? products.filter(product => product.category === "ezviz")
     : selectedBrand === "hilook" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
@@ -186,20 +184,6 @@ export default function Products() {
 
         {/* Brand Logos Display */}
         <div className="flex justify-center gap-6 mb-8">
-          {/* Hikvision Logo */}
-          <button 
-            onClick={() => setSelectedBrand("hikvision")}
-            className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
-              selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
-            }`}
-          >
-            <img 
-              src={hikvisionLogo} 
-              alt="Hikvision Logo" 
-              className="h-full w-auto object-contain"
-            />
-          </button>
-
           {/* Ezviz Logo */}
           <button 
             onClick={() => setSelectedBrand("ezviz")}
