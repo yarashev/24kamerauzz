@@ -137,10 +137,10 @@ export default function Products() {
     ? products.filter(product => product.category === "ezviz")
     : selectedBrand === "hilook" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
-    : selectedBrand === "hikvision"
-    ? products.filter(product => product.category === "hikvision")
-    : selectedBrand === "hiwatch"
-    ? products.filter(product => product.category === "hiwatch")
+    : selectedBrand === "hikvision" && selectedCategory
+    ? products.filter(product => product.category === selectedCategory)
+    : selectedBrand === "hiwatch" && selectedCategory
+    ? products.filter(product => product.category === selectedCategory)
     : [];
 
   const handleAddToCart = (productId: number) => {
@@ -191,7 +191,10 @@ export default function Products() {
         <div className="flex justify-center gap-4 mb-8">
           {/* Hikvision Logo */}
           <button 
-            onClick={() => setSelectedBrand("hikvision")}
+            onClick={() => {
+              setSelectedBrand("hikvision");
+              setSelectedCategory("hikvision_nvr"); // Default to NVR category for Hikvision
+            }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
             }`}
@@ -236,7 +239,10 @@ export default function Products() {
 
           {/* HiWatch Logo */}
           <button 
-            onClick={() => setSelectedBrand("hiwatch")}
+            onClick={() => {
+              setSelectedBrand("hiwatch");
+              setSelectedCategory("hiwatch_nvr"); // Default to NVR category for HiWatch
+            }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hiwatch" ? "ring-4 ring-blue-500" : ""
             }`}
@@ -281,6 +287,82 @@ export default function Products() {
             <Button
               onClick={() => setSelectedCategory("hd_camera")}
               variant={selectedCategory === "hd_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              HD KAMERA
+            </Button>
+          </div>
+        )}
+
+        {/* Hikvision Category Buttons */}
+        {selectedBrand === "hikvision" && (
+          <div className="flex justify-center gap-3 mb-6">
+            <Button
+              onClick={() => setSelectedCategory("hikvision_nvr")}
+              variant={selectedCategory === "hikvision_nvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              NVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hikvision_ip_camera")}
+              variant={selectedCategory === "hikvision_ip_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              IP KAMERA
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hikvision_dvr")}
+              variant={selectedCategory === "hikvision_dvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              DVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hikvision_hd_camera")}
+              variant={selectedCategory === "hikvision_hd_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              HD KAMERA
+            </Button>
+          </div>
+        )}
+
+        {/* HiWatch Category Buttons */}
+        {selectedBrand === "hiwatch" && (
+          <div className="flex justify-center gap-3 mb-6">
+            <Button
+              onClick={() => setSelectedCategory("hiwatch_nvr")}
+              variant={selectedCategory === "hiwatch_nvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              NVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hiwatch_ip_camera")}
+              variant={selectedCategory === "hiwatch_ip_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              IP KAMERA
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hiwatch_dvr")}
+              variant={selectedCategory === "hiwatch_dvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              DVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hiwatch_hd_camera")}
+              variant={selectedCategory === "hiwatch_hd_camera" ? "default" : "outline"}
               size="sm"
               className="text-sm"
             >
