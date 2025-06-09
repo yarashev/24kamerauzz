@@ -169,46 +169,157 @@ export default function Products() {
         {/* Brand Logos Display */}
         <div className="flex justify-center gap-6 mb-8">
           {/* Ezviz Logo */}
-          <div className="w-48 h-20 bg-black rounded-lg shadow-lg p-3 flex items-center justify-center">
+          <button 
+            onClick={() => setSelectedBrand("ezviz")}
+            className={`w-48 h-20 bg-black rounded-lg shadow-lg p-3 flex items-center justify-center transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "ezviz" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
             <img 
               src={ezvizLogo} 
               alt="Ezviz Logo" 
               className="h-full w-auto object-contain"
             />
-          </div>
+          </button>
           
           {/* Hilook Logo */}
-          <div className="w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200">
+          <button 
+            onClick={() => setSelectedBrand("hilook")}
+            className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "hilook" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
             <img 
               src={hilookLogo} 
               alt="Hilook Logo" 
               className="h-full w-auto object-contain"
             />
+          </button>
+        </div>
+
+
+
+        {/* Products Display */}
+        {!selectedBrand ? (
+          <div className="text-center py-12">
+            <Camera className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+              {language === "uz" && "Brend tanlang"}
+              {language === "ru" && "Выберите бренд"}
+              {language === "en" && "Select a brand"}
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              {language === "uz" && "Mahsulotlarni ko'rish uchun yuqorida brend logosini bosing"}
+              {language === "ru" && "Нажмите на логотип бренда выше, чтобы увидеть продукты"}
+              {language === "en" && "Click on a brand logo above to view products"}
+            </p>
           </div>
-        </div>
-
-
-
-        {/* No products message */}
-        <div className="text-center py-12">
-          <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h4 className="text-xl font-semibold text-gray-600 mb-2">
-            {language === "uz" && "Tez orada yangi mahsulotlar"}
-            {language === "ru" && "Скоро новые продукты"}
-            {language === "en" && "New products coming soon"}
-          </h4>
-          <p className="text-gray-500">
-            {language === "uz" && "Eng yaxshi kameralar va xavfsizlik tizimlari uchun biz bilan qoling"}
-            {language === "ru" && "Оставайтесь с нами для лучших камер и систем безопасности"}
-            {language === "en" && "Stay with us for the best cameras and security systems"}
-          </p>
-        </div>
-
-        <div className="text-center mt-8">
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 font-semibold">
-            {t("view-more")}
-          </Button>
-        </div>
+        ) : (
+          <>
+            {isLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => (
+                  <Card key={i} className="overflow-hidden">
+                    <CardContent className="p-0">
+                      <Skeleton className="w-full h-48" />
+                      <div className="p-4">
+                        <Skeleton className="h-6 w-3/4 mb-2" />
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <Skeleton className="h-4 w-2/3 mb-3" />
+                        <Skeleton className="h-10 w-full" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="text-center py-12">
+                <Camera className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  {language === "uz" && "Mahsulotlar topilmadi"}
+                  {language === "ru" && "Товары не найдены"}
+                  {language === "en" && "No products found"}
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400">
+                  {language === "uz" && "Ushbu brend uchun mahsulotlar mavjud emas"}
+                  {language === "ru" && "Нет доступных продуктов для этого бренда"}
+                  {language === "en" && "No products available for this brand"}
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredProducts.map((product) => (
+                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                    <CardContent className="p-0">
+                      <div className="relative">
+                        <img
+                          src={product.imageUrl || getProductImage(product.name)}
+                          alt={product.name}
+                          className="w-full h-48 object-cover"
+                          loading="lazy"
+                        />
+                        {!product.inStock && (
+                          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <Badge variant="secondary" className="text-white bg-red-600">
+                              {language === "uz" && "Mavjud emas"}
+                              {language === "ru" && "Нет в наличии"}
+                              {language === "en" && "Out of stock"}
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="p-4">
+                        <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100 line-clamp-2">
+                          {product.name}
+                        </h3>
+                        
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                          {product.description}
+                        </p>
+                        
+                        {product.features && product.features.length > 0 && (
+                          <div className="mb-3">
+                            <div className="flex flex-wrap gap-1">
+                              {product.features.slice(0, 3).map((feature, index) => (
+                                <Badge key={index} variant="outline" className="text-xs">
+                                  {feature}
+                                </Badge>
+                              ))}
+                              {product.features.length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                  +{product.features.length - 3}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                            ${product.price}
+                          </span>
+                          
+                          <Button
+                            onClick={() => handleAddToCart(product.id)}
+                            disabled={!product.inStock || isAddingToCart}
+                            size="sm"
+                            className="flex items-center gap-1"
+                          >
+                            <ShoppingCart className="w-4 h-4" />
+                            {language === "uz" && "Qo'shish"}
+                            {language === "ru" && "Добавить"}
+                            {language === "en" && "Add"}
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );
