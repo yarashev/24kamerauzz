@@ -343,6 +343,21 @@ export default function Products() {
               className="h-full w-auto object-contain"
             />
           </button>
+
+          {/* Geovision Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("geovision");
+              setSelectedCategory("geovision"); // Video analytics category
+            }}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "geovision" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <div className="flex items-center justify-center h-full w-full bg-gradient-to-r from-blue-600 to-blue-800 rounded text-white font-bold text-sm">
+              GEOVISION
+            </div>
+          </button>
         </div>
 
 
