@@ -14,6 +14,18 @@
   transition: transform 0.3s ease-in-out;
 }
 
+/* Icon-only product card styles */
+.camera-icon-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 2px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+}
+
+.camera-icon-card:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
@@ -75,11 +87,11 @@
   .btn-primary {
     @apply bg-primary hover:bg-primary/90 text-primary-foreground;
   }
-  
+
   .btn-secondary {
     @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
   }
-  
+
   .btn-accent {
     @apply bg-accent hover:bg-accent/90 text-accent-foreground;
   }
