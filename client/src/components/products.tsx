@@ -130,8 +130,11 @@ export default function Products() {
     queryKey: ["/api/products"],
   });
 
+  // Ensure products is always an array
+  const products = Array.isArray(allProducts) ? allProducts : [];
+
   // Filter products by category and brand
-  const filteredProducts = allProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     const categoryMatch = selectedCategory === "all" || product.category === selectedCategory;
     const brandMatch = selectedBrand === "all" || 
       (product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase()));
