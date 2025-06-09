@@ -18,10 +18,10 @@ export default function Home() {
         <Features />
         <TopCameras />
         <Products />
-        <Calculator />
         <News />
         <JarvisChat />
         <Contact />
+        <Calculator />
       </main>
       <Footer />
     </div>
