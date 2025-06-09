@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, Calculator } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 
 export default function Hero() {
@@ -23,24 +22,19 @@ export default function Hero() {
             <p className="text-xl mb-8 text-blue-100">
               {t("hero-desc")}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                onClick={() => handleScrollTo("products")}
-                className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-4 text-lg font-semibold"
-                size="lg"
-              >
-                <ShoppingBag className="mr-2 h-5 w-5" />
-                {t("view-products")}
-              </Button>
-              <Button
-                onClick={() => handleScrollTo("calculator")}
-                variant="outline"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-11 rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 text-lg font-semibold bg-[#96bf13]"
-                size="lg"
-              >
-                <Calculator className="mr-2 h-5 w-5" />
-                {t("nav-calculator")}
-              </Button>
+            {/* Reklama uchun bo'sh joy */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-white mb-2">Maxsus taklif!</h3>
+                <p className="text-blue-100 mb-4">Professional xavfsizlik tizimlari uchun 25% chegirma</p>
+                <Button
+                  onClick={() => handleScrollTo("products")}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-3 text-lg font-semibold"
+                  size="lg"
+                >
+                  Batafsil ma'lumot
+                </Button>
+              </div>
             </div>
           </div>
           <div className="hidden lg:block">
