@@ -110,9 +110,7 @@ const getProductImage = (productName: string): string => {
   return `https://via.placeholder.com/300x300/f3f4f6/9ca3af?text=${encodeURIComponent(model)}`;
 };
 
-const cameraBrands = [
-  { id: "hilook", name: "Hilook", nameRu: "Hilook", nameEn: "Hilook" }
-];
+const cameraBrands: any[] = [];
 
 export default function Products() {
   const { t, language } = useLanguage();
@@ -182,98 +180,22 @@ export default function Products() {
           ))}
         </div>
 
-        {/* Brand Filter */}
-        <div className="mb-8">
-          <h4 className="text-lg font-semibold text-center mb-4">
-            {language === "uz" && "Brendlar"}
-            {language === "ru" && "Бренды"}
-            {language === "en" && "Brands"}
-          </h4>
-          <div className="flex flex-wrap justify-center gap-3">
-            {cameraBrands.map((brand) => (
-              <Button
-                key={brand.id}
-                variant={selectedBrand === brand.id ? "default" : "outline"}
-                onClick={() => setSelectedBrand(brand.id)}
-                className="min-w-[100px] text-sm"
-                size="sm"
-              >
-                {getBrandName(brand)}
-              </Button>
-            ))}
-          </div>
-        </div>
 
-        {/* Products Grid */}
-        {selectedBrand ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {isLoading ? (
-              // Loading skeletons
-              Array.from({ length: 8 }).map((_, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <Skeleton className="w-full h-48" />
-                  <CardContent className="p-6">
-                    <Skeleton className="h-6 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-full mb-3" />
-                    <div className="flex items-center justify-between">
-                      <Skeleton className="h-8 w-16" />
-                      <Skeleton className="h-10 w-24" />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              filteredProducts.map((product) => (
-              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-square bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg flex items-center justify-center mb-4 overflow-hidden relative group border-2 border-blue-200/50">
-                  <Camera className="h-16 w-16 text-blue-600 group-hover:text-blue-700 transition-colors duration-300" />
-                  <div className="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-5 transition-opacity duration-300 rounded-lg"></div>
-                </div>
-                <CardContent className="p-6">
-                  <h4 className="text-lg font-semibold mb-2">{product.name}</h4>
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">
-                      {formatPrice(product.price)}
-                    </span>
-                    <Button
-                      onClick={() => handleAddToCart(product.id)}
-                      disabled={isAddingToCart || !product.inStock}
-                      className="bg-accent hover:bg-accent/90 text-accent-foreground font-medium"
-                    >
-                      <Plus className="mr-1 h-4 w-4" />
-                      {t("add-to-cart")}
-                    </Button>
-                  </div>
-                  {!product.inStock && (
-                    <Badge variant="secondary" className="mt-2">
-                      {language === "uz" && "Mavjud emas"}
-                      {language === "ru" && "Нет в наличии"}
-                      {language === "en" && "Out of stock"}
-                    </Badge>
-                  )}
-                </CardContent>
-              </Card>
-              ))
-            )}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h4 className="text-xl font-semibold text-gray-600 mb-2">
-              {language === "uz" && "Brand tanlang"}
-              {language === "ru" && "Выберите бренд"}
-              {language === "en" && "Select a brand"}
-            </h4>
-            <p className="text-gray-500">
-              {language === "uz" && "Yuqoridagi brendlardan birini tanlang va mahsulotlarni ko'ring"}
-              {language === "ru" && "Выберите один из брендов выше и просмотрите продукты"}
-              {language === "en" && "Choose one of the brands above to view products"}
-            </p>
-          </div>
-        )}
+
+        {/* No products message */}
+        <div className="text-center py-12">
+          <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+          <h4 className="text-xl font-semibold text-gray-600 mb-2">
+            {language === "uz" && "Tez orada yangi mahsulotlar"}
+            {language === "ru" && "Скоро новые продукты"}
+            {language === "en" && "New products coming soon"}
+          </h4>
+          <p className="text-gray-500">
+            {language === "uz" && "Eng yaxshi kameralar va xavfsizlik tizimlari uchun biz bilan qoling"}
+            {language === "ru" && "Оставайтесь с нами для лучших камер и систем безопасности"}
+            {language === "en" && "Stay with us for the best cameras and security systems"}
+          </p>
+        </div>
 
         <div className="text-center mt-8">
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 font-semibold">

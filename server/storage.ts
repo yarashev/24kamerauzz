@@ -38,11 +38,8 @@ export class DatabaseStorage implements IStorage {
 
   private async seedData() {
     try {
-      // Check if data already exists
-      const existingProducts = await db.select().from(products).limit(1);
-      if (existingProducts.length > 0) {
-        return; // Data already seeded
-      }
+      // Skip seeding - empty catalog
+      return;
 
       // Complete Hilook product catalog with real camera models
       const sampleProducts: InsertProduct[] = [
