@@ -11,6 +11,7 @@ import { productCategories, formatPrice } from "@/lib/products";
 import type { Product } from "@shared/schema";
 import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
 import hilookLogo from "@assets/hilook logo_1749469268846.jpg";
+import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
 const getProductImage = (productName: string): string => {
@@ -119,6 +120,8 @@ export default function Products() {
   const { addToCart, isAddingToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: allProducts = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -136,6 +139,16 @@ export default function Products() {
 
   const handleAddToCart = (productId: number) => {
     addToCart(productId, 1);
+  };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
   };
 
   const getCategoryName = (category: any) => {
@@ -292,13 +305,16 @@ export default function Products() {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {filteredProducts.map((product) => (
-                  <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow duration-200">
+                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer">
                     <CardContent className="p-0">
-                      <div className="relative">
+                      <div 
+                        className="relative"
+                        onClick={() => handleProductClick(product)}
+                      >
                         <img
                           src={product.imageUrl || getProductImage(product.name)}
                           alt={product.name}
-                          className="w-full h-32 object-cover"
+                          className="w-full h-32 object-cover hover:scale-105 transition-transform duration-200"
                           loading="lazy"
                         />
                         {!product.inStock && (
@@ -312,8 +328,11 @@ export default function Products() {
                         )}
                       </div>
                       
-                      <div className="p-2">
-                        <h3 className="font-medium text-sm mb-1 text-gray-900 dark:text-gray-100 line-clamp-2 min-h-[2.5rem]">
+                      <div 
+                        className="p-2"
+                        onClick={() => handleProductClick(product)}
+                      >
+                        <h3 className="font-medium text-sm mb-1 text-gray-900 dark:text-gray-100 line-clamp-2 min-h-[2.5rem] hover:text-blue-600 transition-colors">
                           {product.name}
                         </h3>
                         
@@ -342,19 +361,24 @@ export default function Products() {
                           <span className="text-sm font-bold text-green-600 dark:text-green-400">
                             ${product.price}
                           </span>
-                          
-                          <Button
-                            onClick={() => handleAddToCart(product.id)}
-                            disabled={!product.inStock || isAddingToCart}
-                            size="sm"
-                            className="w-full text-xs h-7"
-                          >
-                            <ShoppingCart className="w-3 h-3 mr-1" />
-                            {language === "uz" && "Qo'sh"}
-                            {language === "ru" && "Добав"}
-                            {language === "en" && "Add"}
-                          </Button>
                         </div>
+                      </div>
+                      
+                      <div className="p-2 pt-0">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddToCart(product.id);
+                          }}
+                          disabled={!product.inStock || isAddingToCart}
+                          size="sm"
+                          className="w-full text-xs h-7"
+                        >
+                          <ShoppingCart className="w-3 h-3 mr-1" />
+                          {language === "uz" && "Qo'sh"}
+                          {language === "ru" && "Добав"}
+                          {language === "en" && "Add"}
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -364,6 +388,13 @@ export default function Products() {
           </>
         )}
       </div>
+      
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }
