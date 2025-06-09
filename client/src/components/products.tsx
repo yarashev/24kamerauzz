@@ -170,7 +170,7 @@ export default function Products() {
         <div className="flex justify-center mb-8">
           <div className="w-32 h-32 flex items-center justify-center">
             <img 
-              src="/attached_assets/i_1749468846382.webp" 
+              src="/attached_assets/i_1749468922773.webp" 
               alt="Ezviz Logo" 
               className="w-full h-full object-contain"
             />
