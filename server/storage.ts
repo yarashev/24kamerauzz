@@ -44,185 +44,184 @@ export class DatabaseStorage implements IStorage {
         return; // Data already seeded
       }
 
-      // Complete product catalog with real camera models
+      // Complete Hilook product catalog with real camera models
       const sampleProducts: InsertProduct[] = [
         // IP Cameras - Bullet
         {
-          name: "IPC-B449H",
-          description: "4 MP, 1/1.8\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67, H.265+",
-          price: 117,
+          name: "Hilook IPC-B140H",
+          description: "4 MP, 1/3\" Progressive Scan CMOS, IR 30m, IP67, H.265+",
+          price: 65,
           category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b449h/IPC-B449H.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/bullet/ipc-b140h/IPC-B140H.png",
           inStock: true,
-          features: ["4MP", "24/7 Color", "IP67", "H.265+"]
+          features: ["4MP", "IR 30m", "IP67", "POE"]
         },
         {
-          name: "IPC-B249H",
-          description: "4 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67, H.265+",
-          price: 90,
+          name: "Hilook IPC-B120H",
+          description: "2 MP, 1/2.8\" Progressive Scan CMOS, IR 30m, IP67, H.265+",
+          price: 45,
           category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b249h/IPC-B249H.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/bullet/ipc-b120h/IPC-B120H.png",
           inStock: true,
-          features: ["4MP", "24/7 Color", "IP67", "H.265+"]
+          features: ["2MP", "IR 30m", "IP67", "POE"]
         },
         {
-          name: "IPC-B469HA-LU",
-          description: "6 MP, Smart Hybrid Light, Odam va transport vositalarini aniqlash",
+          name: "Hilook IPC-B180H",
+          description: "8 MP, 1/2.5\" Progressive Scan CMOS, IR 30m, IP67, H.265+",
+          price: 85,
+          category: "ip_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/bullet/ipc-b180h/IPC-B180H.png",
+          inStock: true,
+          features: ["8MP", "IR 30m", "IP67", "POE"]
+        },
+        {
+          name: "Hilook IPC-B160H",
+          description: "6 MP, 1/2.9\" Progressive Scan CMOS, IR 30m, IP67, H.265+",
           price: 75,
           category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/colorvu-series/bullet/ipc-b469ha-lu/IPC-B469HA-LU.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/bullet/ipc-b160h/IPC-B160H.png",
           inStock: true,
-          features: ["6MP", "Smart Hybrid Light", "AI Detection", "H.265+"]
+          features: ["6MP", "IR 30m", "IP67", "POE"]
         },
         {
-          name: "IPC-B449HA-LU",
-          description: "4 MP, Smart Hybrid Light, Odam va transport vositalarini aniqlash",
+          name: "Hilook IPC-B141H-M",
+          description: "4 MP, 1/3\" Progressive Scan CMOS, IR 30m, IP67, Mikrofon",
           price: 70,
           category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/colorvu-series/bullet/ipc-b449ha-lu/IPC-B449HA-LU.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/bullet/ipc-b141h-m/IPC-B141H-M.png",
           inStock: true,
-          features: ["4MP", "Smart Hybrid Light", "AI Detection", "Microphone"]
-        },
-        {
-          name: "IPC-B169HA",
-          description: "6 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
-          price: 70,
-          category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b169ha/IPC-B169HA.png",
-          inStock: true,
-          features: ["6MP", "24/7 Color", "IP67", "H.265+"]
-        },
-        {
-          name: "IPC-B149HA",
-          description: "4 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
-          price: 63,
-          category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b149ha/IPC-B149HA.png",
-          inStock: true,
-          features: ["4MP", "24/7 Color", "IP67", "H.265+"]
-        },
-        {
-          name: "IPC-B129HA",
-          description: "2 MP, 1/2.8\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
-          price: 43,
-          category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b129ha/IPC-B129HA.png",
-          inStock: true,
-          features: ["2MP", "24/7 Color", "IP67", "H.265+"]
+          features: ["4MP", "IR 30m", "IP67", "Microphone"]
         },
         // IP Cameras - Dome
         {
-          name: "IPC-D159H",
-          description: "5 MP dome kamera, 1/2.7\" Progressive Scan CMOS, IP67, IK08",
-          price: 65,
-          category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-d159h/IPC-D159H.png",
-          inStock: true,
-          features: ["5MP", "Dome", "IP67", "IK08"]
-        },
-        {
-          name: "IPC-D149H",
-          description: "4 MP dome kamera, 1/2.7\" Progressive Scan CMOS, IP67, IK08",
+          name: "Hilook IPC-D140H",
+          description: "4 MP dome kamera, 1/3\" Progressive Scan CMOS, IR 20m, IK08",
           price: 60,
           category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-d149h/IPC-D149H.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/dome/ipc-d140h/IPC-D140H.png",
           inStock: true,
-          features: ["4MP", "Dome", "IP67", "IK08"]
+          features: ["4MP", "IR 20m", "IK08", "POE"]
         },
         {
-          name: "IPC-D129H",
-          description: "2 MP dome kamera, 1/2.8\" Progressive Scan CMOS, IP67, IK08",
-          price: 45,
+          name: "Hilook IPC-D120H",
+          description: "2 MP dome kamera, 1/2.8\" Progressive Scan CMOS, IR 20m, IK08",
+          price: 40,
           category: "ip_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-d129h/IPC-D129H.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/dome/ipc-d120h/IPC-D120H.png",
           inStock: true,
-          features: ["2MP", "Dome", "IP67", "IK08"]
+          features: ["2MP", "IR 20m", "IK08", "POE"]
+        },
+        {
+          name: "Hilook IPC-D180H",
+          description: "8 MP dome kamera, 1/2.5\" Progressive Scan CMOS, IR 20m, IK08",
+          price: 80,
+          category: "ip_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/dome/ipc-d180h/IPC-D180H.png",
+          inStock: true,
+          features: ["8MP", "IR 20m", "IK08", "POE"]
+        },
+        {
+          name: "Hilook IPC-D160H",
+          description: "6 MP dome kamera, 1/2.9\" Progressive Scan CMOS, IR 20m, IK08",
+          price: 70,
+          category: "ip_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/ip-camera/dome/ipc-d160h/IPC-D160H.png",
+          inStock: true,
+          features: ["6MP", "IR 20m", "IK08", "POE"]
         },
         // Turbo HD Cameras
         {
-          name: "THC-B449H",
-          description: "4 MP Turbo HD bullet kamera, EXIR 2.0, IP67",
-          price: 52,
-          category: "turbo_hd_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/turbo-hd-cameras/bullet/thc-b449h/THC-B449H.png",
-          inStock: true,
-          features: ["4MP Turbo HD", "EXIR 2.0", "IP67", "Metal Housing"]
-        },
-        {
-          name: "THC-B249H",
-          description: "4 MP Turbo HD bullet kamera, Smart IR, IP67",
-          price: 48,
-          category: "turbo_hd_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/turbo-hd-cameras/bullet/thc-b249h/THC-B249H.png",
-          inStock: true,
-          features: ["4MP Turbo HD", "Smart IR", "IP67", "Metal Housing"]
-        },
-        {
-          name: "THC-D449H",
-          description: "4 MP Turbo HD dome kamera, EXIR 2.0, IK08",
+          name: "Hilook THC-B140-P",
+          description: "4 MP Turbo HD bullet kamera, EXIR 40m, IP66",
           price: 50,
           category: "turbo_hd_camera",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/turbo-hd-cameras/dome/thc-d449h/THC-D449H.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/turbo-hd/bullet/thc-b140-p/THC-B140-P.png",
           inStock: true,
-          features: ["4MP Turbo HD", "EXIR 2.0", "IK08", "Metal Housing"]
+          features: ["4MP Turbo HD", "EXIR 40m", "IP66", "Metal"]
+        },
+        {
+          name: "Hilook THC-B120-P",
+          description: "2 MP Turbo HD bullet kamera, EXIR 40m, IP66",
+          price: 35,
+          category: "turbo_hd_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/turbo-hd/bullet/thc-b120-p/THC-B120-P.png",
+          inStock: true,
+          features: ["2MP Turbo HD", "EXIR 40m", "IP66", "Metal"]
+        },
+        {
+          name: "Hilook THC-D140-P",
+          description: "4 MP Turbo HD dome kamera, EXIR 20m, IK08",
+          price: 45,
+          category: "turbo_hd_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/turbo-hd/dome/thc-d140-p/THC-D140-P.png",
+          inStock: true,
+          features: ["4MP Turbo HD", "EXIR 20m", "IK08", "Metal"]
+        },
+        {
+          name: "Hilook THC-D120-P",
+          description: "2 MP Turbo HD dome kamera, EXIR 20m, IK08",
+          price: 30,
+          category: "turbo_hd_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/turbo-hd/dome/thc-d120-p/THC-D120-P.png",
+          inStock: true,
+          features: ["2MP Turbo HD", "EXIR 20m", "IK08", "Metal"]
         },
         // NVR Systems
         {
-          name: "NVR-108MH-C/8P",
+          name: "Hilook NVR-108MH-C/8P",
           description: "8 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+, 1TB HDD",
-          price: 185,
+          price: 165,
           category: "nvr",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/nvrs/embedded-nvrs/nvr-108mh-c-8p/NVR-108MH-C-8P.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/nvr/nvr-108mh-c-8p/NVR-108MH-C-8P.png",
           inStock: true,
           features: ["8 Channel PoE", "4K Support", "H.265+", "1TB HDD"]
         },
         {
-          name: "NVR-108MH-C/16P",
-          description: "16 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+, 2TB HDD",
-          price: 245,
+          name: "Hilook NVR-104MH-C/4P",
+          description: "4 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+, 1TB HDD",
+          price: 125,
           category: "nvr",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/nvrs/embedded-nvrs/nvr-108mh-c-16p/NVR-108MH-C-16P.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/nvr/nvr-104mh-c-4p/NVR-104MH-C-4P.png",
           inStock: true,
-          features: ["16 Channel PoE", "4K Support", "H.265+", "2TB HDD"]
+          features: ["4 Channel PoE", "4K Support", "H.265+", "1TB HDD"]
         },
         // DVR Systems
         {
-          name: "DVR-108G-F1",
+          name: "Hilook DVR-108G-F1",
           description: "8 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash, H.265+",
-          price: 125,
+          price: 95,
           category: "dvr",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/dvrs/turbo-hd-dvrs/dvr-108g-f1/DVR-108G-F1.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/dvr/dvr-108g-f1/DVR-108G-F1.png",
           inStock: true,
           features: ["8 Channel", "AHD/TVI/CVI", "H.265+", "1TB HDD"]
         },
         {
-          name: "DVR-116G-F1",
-          description: "16 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash, H.265+",
-          price: 165,
+          name: "Hilook DVR-104G-F1",
+          description: "4 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash, H.265+",
+          price: 75,
           category: "dvr",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/dvrs/turbo-hd-dvrs/dvr-116g-f1/DVR-116G-F1.png",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/dvr/dvr-104g-f1/DVR-104G-F1.png",
           inStock: true,
-          features: ["16 Channel", "AHD/TVI/CVI", "H.265+", "2TB HDD"]
+          features: ["4 Channel", "AHD/TVI/CVI", "H.265+", "1TB HDD"]
         },
-        // PTZ Cameras
+        // Complete Security Kits
         {
-          name: "PTZ-N4425I-DE3",
-          description: "25x zoom PTZ kamera, 4 MP, IR 100m, Smart tracking",
-          price: 485,
-          category: "ptz",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/ptz-cameras/ptz-n4425i-de3/PTZ-N4425I-DE3.png",
+          name: "Hilook Kit TK-4042BH-MM/WM",
+          description: "4 kamerali Turbo HD to'plam, 4CH DVR + 4x THC-B120-P",
+          price: 285,
+          category: "kits",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/kits/tk-4042bh-mm-wm/TK-4042BH-MM-WM.png",
           inStock: true,
-          features: ["25x Zoom", "4MP", "IR 100m", "Smart Tracking"]
+          features: ["4 Cameras", "4CH DVR", "1TB HDD", "Complete Kit"]
         },
-        // Video Doorbells
         {
-          name: "DB11",
-          description: "Wi-Fi video doorbell, 2MP, PIR aniqlash, Ikki tomonlama audio",
-          price: 139,
-          category: "domophones",
-          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/intercom-products/video-doorbells/db11/DB11.png",
+          name: "Hilook Kit IK-4042BH-MH/WM",
+          description: "4 kamerali IP to'plam, 4CH NVR + 4x IPC-B120H",
+          price: 345,
+          category: "kits",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/kits/ik-4042bh-mh-wm/IK-4042BH-MH-WM.png",
           inStock: true,
-          features: ["2MP", "Wi-Fi", "PIR Detection", "Two-way Audio"]
+          features: ["4 IP Cameras", "4CH NVR PoE", "1TB HDD", "Complete Kit"]
         }
       ];
 
