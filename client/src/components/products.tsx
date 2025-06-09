@@ -119,7 +119,7 @@ export default function Products() {
   const { t, language } = useLanguage();
   const { addToCart, isAddingToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("ip_camera");
-  const [selectedBrand, setSelectedBrand] = useState("hilook");
+  const [selectedBrand, setSelectedBrand] = useState("");
 
   const { data: allProducts = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -129,11 +129,11 @@ export default function Products() {
   const products = Array.isArray(allProducts) ? allProducts : [];
 
   // Filter products by category and brand
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = selectedBrand ? products.filter(product => {
     const categoryMatch = product.category === selectedCategory;
     const brandMatch = product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase());
     return categoryMatch && brandMatch;
-  });
+  }) : [];
 
   const handleAddToCart = (productId: number) => {
     addToCart(productId, 1);
@@ -206,24 +206,25 @@ export default function Products() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {isLoading ? (
-            // Loading skeletons
-            Array.from({ length: 8 }).map((_, index) => (
-              <Card key={index} className="overflow-hidden">
-                <Skeleton className="w-full h-48" />
-                <CardContent className="p-6">
-                  <Skeleton className="h-6 w-3/4 mb-2" />
-                  <Skeleton className="h-4 w-full mb-3" />
-                  <div className="flex items-center justify-between">
-                    <Skeleton className="h-8 w-16" />
-                    <Skeleton className="h-10 w-24" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            filteredProducts.map((product) => (
+        {selectedBrand ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {isLoading ? (
+              // Loading skeletons
+              Array.from({ length: 8 }).map((_, index) => (
+                <Card key={index} className="overflow-hidden">
+                  <Skeleton className="w-full h-48" />
+                  <CardContent className="p-6">
+                    <Skeleton className="h-6 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-full mb-3" />
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-8 w-16" />
+                      <Skeleton className="h-10 w-24" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              filteredProducts.map((product) => (
               <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="aspect-square bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg flex items-center justify-center mb-4 overflow-hidden relative group border-2 border-blue-200/50">
                   <Camera className="h-16 w-16 text-blue-600 group-hover:text-blue-700 transition-colors duration-300" />
@@ -256,9 +257,24 @@ export default function Products() {
                   )}
                 </CardContent>
               </Card>
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h4 className="text-xl font-semibold text-gray-600 mb-2">
+              {language === "uz" && "Brand tanlang"}
+              {language === "ru" && "Выберите бренд"}
+              {language === "en" && "Select a brand"}
+            </h4>
+            <p className="text-gray-500">
+              {language === "uz" && "Yuqoridagi brendlardan birini tanlang va mahsulotlarni ko'ring"}
+              {language === "ru" && "Выберите один из брендов выше и просмотрите продукты"}
+              {language === "en" && "Choose one of the brands above to view products"}
+            </p>
+          </div>
+        )}
 
         <div className="text-center mt-8">
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 font-semibold">
