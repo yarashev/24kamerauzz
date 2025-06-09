@@ -10,7 +10,7 @@ import { useCart } from "@/hooks/use-cart";
 import { productCategories, formatPrice } from "@/lib/products";
 import type { Product } from "@shared/schema";
 import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
-import hilookLogo from "@assets/hilook logo_1749469268846.jpg";
+import hilookLogo from "@assets/hilook 222222_1749477480288.jpg";
 import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
 import hiwatchLogo from "@assets/hiwatch logo_1749476981901.png";
 import ProductDetailModal from "./product-detail-modal";
