@@ -8,6 +8,7 @@ import News from "@/components/news";
 import FloatingJarvis from "@/components/floating-jarvis";
 import Contact from "@/components/contact";
 import Footer from "@/components/footer";
+import AdminPanel from "@/components/admin-panel";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       </main>
       <Footer />
       <FloatingJarvis />
+      <AdminPanel />
     </div>
   );
 }
