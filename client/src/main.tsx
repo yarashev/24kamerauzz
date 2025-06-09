@@ -12,17 +12,17 @@ document.head.appendChild(metaDescription);
 
 // Add Open Graph tags
 const ogTitle = document.createElement('meta');
-ogTitle.property = 'og:title';
+ogTitle.setAttribute('property', 'og:title');
 ogTitle.content = '24kamera.uz - Aqlli Kamera va Elektronika Tizimlari';
 document.head.appendChild(ogTitle);
 
 const ogDescription = document.createElement('meta');
-ogDescription.property = 'og:description';
+ogDescription.setAttribute('property', 'og:description');
 ogDescription.content = 'Xavfsizlik kameralar va elektronika jihozlarining eng katta tanlovi. Professional maslahat va o\'rnatish xizmati bilan.';
 document.head.appendChild(ogDescription);
 
 const ogType = document.createElement('meta');
-ogType.property = 'og:type';
+ogType.setAttribute('property', 'og:type');
 ogType.content = 'website';
 document.head.appendChild(ogType);
 

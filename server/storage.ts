@@ -155,7 +155,12 @@ export class MemStorage implements IStorage {
 
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = this.currentProductId++;
-    const product: Product = { ...insertProduct, id };
+    const product: Product = { 
+      ...insertProduct, 
+      id,
+      inStock: insertProduct.inStock ?? true,
+      features: insertProduct.features ?? []
+    };
     this.products.set(id, product);
     return product;
   }

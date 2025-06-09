@@ -34,7 +34,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Cart API
   app.get("/api/cart", async (req, res) => {
     try {
-      const sessionId = req.sessionID || "anonymous";
+      const sessionId = (req as any).sessionID || "anonymous";
       const cartItems = await storage.getCartItems(sessionId);
       res.json(cartItems);
     } catch (error) {
@@ -44,7 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/cart", async (req, res) => {
     try {
-      const sessionId = req.sessionID || "anonymous";
+      const sessionId = (req as any).sessionID || "anonymous";
       const cartItemData = insertCartItemSchema.parse({
         ...req.body,
         sessionId
@@ -93,7 +93,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/cart", async (req, res) => {
     try {
-      const sessionId = req.sessionID || "anonymous";
+      const sessionId = (req as any).sessionID || "anonymous";
       await storage.clearCart(sessionId);
       res.json({ success: true });
     } catch (error) {
@@ -104,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Chat API
   app.post("/api/chat", async (req, res) => {
     try {
-      const sessionId = req.sessionID || "anonymous";
+      const sessionId = (req as any).sessionID || "anonymous";
       const { message } = req.body;
       
       if (!message || typeof message !== 'string') {
@@ -129,7 +129,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/chat/history", async (req, res) => {
     try {
-      const sessionId = req.sessionID || "anonymous";
+      const sessionId = (req as any).sessionID || "anonymous";
       const history = await storage.getChatHistory(sessionId);
       res.json(history);
     } catch (error) {
