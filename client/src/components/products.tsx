@@ -136,6 +136,8 @@ export default function Products() {
     ? products.filter(product => product.category === "ezviz")
     : selectedBrand === "hilook" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
+    : selectedBrand === "hikvision" && selectedCategory
+    ? products.filter(product => product.category === selectedCategory)
     : [];
 
   const handleAddToCart = (productId: number) => {
@@ -214,6 +216,23 @@ export default function Products() {
               className="h-full w-auto object-contain"
             />
           </button>
+
+          {/* Hikvision Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("hikvision");
+              setSelectedCategory("hikvision_nvr"); // Default to NVR category for Hikvision
+            }}
+            className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={hikvisionLogo} 
+              alt="Hikvision Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
         </div>
 
 
@@ -248,6 +267,44 @@ export default function Products() {
             <Button
               onClick={() => setSelectedCategory("hd_camera")}
               variant={selectedCategory === "hd_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              HD KAMERA
+            </Button>
+          </div>
+        )}
+
+        {/* Hikvision Category Buttons */}
+        {selectedBrand === "hikvision" && (
+          <div className="flex justify-center gap-3 mb-6">
+            <Button
+              onClick={() => setSelectedCategory("hikvision_nvr")}
+              variant={selectedCategory === "hikvision_nvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              NVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hikvision_ip_camera")}
+              variant={selectedCategory === "hikvision_ip_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              IP KAMERA
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hikvision_dvr")}
+              variant={selectedCategory === "hikvision_dvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              DVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hikvision_hd_camera")}
+              variant={selectedCategory === "hikvision_hd_camera" ? "default" : "outline"}
               size="sm"
               className="text-sm"
             >
