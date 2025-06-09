@@ -35,7 +35,7 @@ export default function Hero() {
               <Button
                 onClick={() => handleScrollTo("calculator")}
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 text-lg font-semibold"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-11 rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 text-lg font-semibold bg-[#96bf13]"
                 size="lg"
               >
                 <Calculator className="mr-2 h-5 w-5" />

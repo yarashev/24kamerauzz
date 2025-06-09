@@ -52,7 +52,7 @@ export default function Header() {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary">
+            <h1 className="text-2xl font-bold text-primary bg-[#27226e00]">
               <span className="bg-primary text-white px-2 py-1 rounded-md">24</span>kamera.uz
             </h1>
           </div>
