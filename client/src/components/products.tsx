@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -136,6 +136,22 @@ export default function Products() {
   // Ensure products is always an array
   const products = Array.isArray(allProducts) ? allProducts : [];
 
+  // Add event listener for catalog filtering
+  useEffect(() => {
+    const handleFilterProducts = (event: CustomEvent) => {
+      const { brand, category } = event.detail;
+      if (brand === 'geovision') {
+        setSelectedBrand('geovision');
+        setSelectedCategory('geovision');
+      }
+    };
+
+    window.addEventListener('filterProducts', handleFilterProducts as EventListener);
+    return () => {
+      window.removeEventListener('filterProducts', handleFilterProducts as EventListener);
+    };
+  }, []);
+
   // Filter products by category and brand
   const filteredProducts = selectedBrand === "ezviz" 
     ? products.filter(product => product.category === "ezviz")
@@ -145,6 +161,8 @@ export default function Products() {
     ? products.filter(product => product.category === selectedCategory)
     : selectedBrand === "hiwatch" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
+    : selectedBrand === "geovision"
+    ? products.filter(product => product.category === "geovision")
     : [];
 
   const handleAddToCart = (productId: number) => {

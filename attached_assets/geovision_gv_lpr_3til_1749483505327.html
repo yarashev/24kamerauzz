@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>GV-LPR – Geovision</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">Geovision GV-LPR</h2>
+      <select id="lang" class="border px-2 py-1 rounded" onchange="switchLang(this.value)">
+        <option value="uz">O‘zbekcha</option>
+        <option value="ru">Русский</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <img src="geovision.jpg" alt="GV-LPR tizimi" class="w-full h-64 object-contain mb-4 rounded shadow">
+    <div id="desc" class="text-gray-700 text-sm leading-relaxed space-y-2"></div>
+  </div>
+
+  <script>
+    const text = {
+      uz: `
+        GV-LPR — bu avtoturargoh va parkinlarni avtomatlashtirish uchun samarali yechim.
+        Tizim avtomobil raqamlarini aniqlash, video yozuv, kirish nazorati, shlagbaumlar va xavfsizlik uskunalarini o‘z ichiga oladi.
+        GV-LPR real vaqt rejimida raqamlarni aniqlaydi, videoni arxivlaydi va raqam bo‘yicha qidiruvni qo‘llab-quvvatlaydi.
+        Bu tizim 99% aniqlikda raqamni tanish, 0.2 soniyali tezlikda ishlaydi va Access bazasida saqlaydi.
+        Shuningdek, PIP (Picture-in-Picture), signalizatsiya va TITO tizimi bilan integratsiya mavjud.
+      `,
+      ru: `
+        GV-LPR — это эффективное решение для автоматизации парковок и стоянок.
+        Система включает распознавание номеров, видеозапись, контроль доступа и охранное оборудование.
+        GV-LPR фиксирует номера в реальном времени, сохраняет данные и поддерживает поиск по номеру.
+        Распознавание достигает точности 99%, скорость менее 0,2 сек, база данных Access.
+        Поддержка функций PIP, сигнализация при нарушениях и интеграция с системой TITO.
+      `,
+      en: `
+        GV-LPR is an effective solution for automating parking and access control.
+        It includes license plate recognition, video recording, access control, and security hardware.
+        GV-LPR identifies license plates in real-time, stores data, and supports search by plate number.
+        Offers 99% recognition accuracy, under 0.2 sec speed, Access database storage.
+        Features include PIP, alert triggers, and TITO system integration for smart parking.
+      `
+    };
+
+    function switchLang(lang) {
+      document.getElementById("desc").innerHTML = text[lang];
+    }
+
+    switchLang("uz");
+  </script>
+</body>
+</html>

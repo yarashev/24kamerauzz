@@ -38,7 +38,27 @@ export class DatabaseStorage implements IStorage {
 
   private async seedData() {
     try {
-      // Skip seeding - empty catalog
+      // Check if products already exist
+      const existingProducts = await db.select().from(products).limit(1);
+      if (existingProducts.length > 0) {
+        return; // Products already seeded
+      }
+
+      // Add Geovision GV-LPR to video analytics category
+      const gvLprProduct: InsertProduct = {
+        name: "Geovision GV-LPR",
+        description: "Avtomobil raqamlarini aniqlash tizimi. 99% aniqlik, 0.2 soniya tezlik, Access bazasi, PIP va TITO integratsiyasi.",
+        price: 1500,
+        category: "geovision",
+        inStock: true,
+        features: ["99% aniqlik", "0.2s tezlik", "Access DB", "PIP funksiyasi", "TITO integratsiya", "Real-time"],
+        imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop"
+      };
+
+      // Insert video analytics product
+      await db.insert(products).values(gvLprProduct);
+
+      console.log("Video analytics products seeded successfully");
       return;
 
       // Complete Hilook product catalog with real camera models

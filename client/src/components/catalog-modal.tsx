@@ -77,8 +77,18 @@ export default function CatalogModal({ children }: CatalogModalProps) {
   };
 
   const handleSubcategoryClick = (subcategoryName: string) => {
-    // Close modal and scroll to products section
+    // Close modal and scroll to products section with filtering
     setIsOpen(false);
+    
+    // Set the appropriate brand/category filter based on subcategory
+    if (subcategoryName.includes("Geovision")) {
+      // Trigger Geovision brand selection in products component
+      const event = new CustomEvent('filterProducts', { 
+        detail: { brand: 'geovision', category: 'videoanalitika' } 
+      });
+      window.dispatchEvent(event);
+    }
+    
     const element = document.getElementById("products");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
