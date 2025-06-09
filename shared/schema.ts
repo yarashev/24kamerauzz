@@ -1,4 +1,5 @@
 import { pgTable, text, serial, integer, boolean, timestamp, real, json } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -67,6 +68,23 @@ export const insertArticleSchema = createInsertSchema(articles).omit({
   id: true,
   publishedAt: true,
 });
+
+// Relations
+export const productsRelations = relations(products, ({ many }) => ({
+  cartItems: many(cartItems),
+}));
+
+export const cartItemsRelations = relations(cartItems, ({ one }) => ({
+  product: one(products, {
+    fields: [cartItems.productId],
+    references: [products.id],
+  }),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  cartItems: many(cartItems),
+  chatMessages: many(chatMessages),
+}));
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
