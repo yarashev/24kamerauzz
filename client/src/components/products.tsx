@@ -16,6 +16,7 @@ import hiwatchLogo from "@assets/4974HIWATCH 222222_1749477667922.jpg";
 import dahuaLogo from "@assets/DAHUA 22222_1749478235269.png";
 import tvtLogo from "@assets/tvt logo_1749478721840.png";
 import imouLogo from "@assets/imou logo_1749479083422.webp";
+import tplinkLogo from "@assets/tp link_1749479233018.png";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
@@ -307,6 +308,23 @@ export default function Products() {
             <img 
               src={imouLogo} 
               alt="Imou Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
+
+          {/* TP-Link Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("tplink");
+              setSelectedCategory("tplink"); // No subcategories for TP-Link
+            }}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "tplink" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={tplinkLogo} 
+              alt="TP-Link Logo" 
               className="h-full w-auto object-contain"
             />
           </button>
