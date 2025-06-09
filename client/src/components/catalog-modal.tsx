@@ -67,24 +67,7 @@ export default function CatalogModal({ children }: CatalogModalProps) {
     }
   };
 
-  const handleSubcategoryClick = (subcategoryName: string) => {
-    // Close modal and scroll to products section with filtering
-    setIsOpen(false);
-    
-    // Set the appropriate brand/category filter based on subcategory
-    if (subcategoryName.includes("Geovision")) {
-      // Trigger Geovision brand selection in products component
-      const event = new CustomEvent('filterProducts', { 
-        detail: { brand: 'geovision', category: 'videoanalitika' } 
-      });
-      window.dispatchEvent(event);
-    }
-    
-    const element = document.getElementById("products");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -137,23 +120,7 @@ export default function CatalogModal({ children }: CatalogModalProps) {
                   )}
                 </div>
                 
-                {/* Subcategories */}
-                {category.hasSubcategories && isExpanded && subcategories["Videoanalitika"] && (
-                  <div className="border-t bg-gray-50 dark:bg-gray-800 p-4">
-                    <div className="space-y-2">
-                      {subcategories["Videoanalitika"][language]?.map((subcategory, subIndex) => (
-                        <div
-                          key={subIndex}
-                          onClick={() => handleSubcategoryClick(subcategory)}
-                          className="flex items-center justify-between p-2 bg-white dark:bg-gray-700 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                        >
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{subcategory}</span>
-                          <ChevronRight className="h-4 w-4 text-gray-400" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+
               </div>
             );
           })}
