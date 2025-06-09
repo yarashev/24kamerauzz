@@ -13,17 +13,10 @@ export default function CatalogModal({ children }: CatalogModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
-  const subcategories = {
-    "Videoanalitika": {
-      uz: ["Dahua DSS Pro", "Geovision", "HikCentral Professional", "Ivideon", "Macroscop", "Avtomarshal"],
-      ru: ["Dahua DSS Pro", "Geovision", "HikCentral Professional", "Ivideon", "Macroscop", "Автомаршал"],
-      en: ["Dahua DSS Pro", "Geovision", "HikCentral Professional", "Ivideon", "Macroscop", "Avtomarshal"]
-    }
-  };
+  const subcategories = {};
 
   const catalogCategories = {
     uz: [
-      { name: "Videoanalitika", icon: Video, description: "Yuz tanish, harakatni aniqlash va intellektual tahlil", hasSubcategories: true },
       { name: "Videokuzatuv", icon: Video, description: "IP kameralar, DVR, NVR va kuzatuv tizimlari", hasSubcategories: false },
       { name: "Domofonlar", icon: Phone, description: "Video va audio domofon tizimlari", hasSubcategories: false },
       { name: "Kirish nazorati", icon: Shield, description: "Elektron qulflar, kartalar va kirish tizimlari", hasSubcategories: false },
@@ -35,7 +28,6 @@ export default function CatalogModal({ children }: CatalogModalProps) {
       { name: "Energiya tizimlari", icon: Zap, description: "UPS, akkumulyatorlar va quvvat manbaalari", hasSubcategories: false }
     ],
     ru: [
-      { name: "Видеоаналитика", icon: Video, description: "Распознавание лиц, детекция движения и умная аналитика", hasSubcategories: true },
       { name: "Видеонаблюдение", icon: Video, description: "IP камеры, DVR, NVR и системы наблюдения", hasSubcategories: false },
       { name: "Домофоны", icon: Phone, description: "Видео и аудио домофонные системы", hasSubcategories: false },
       { name: "Контроль доступа", icon: Shield, description: "Электронные замки, карты и системы доступа", hasSubcategories: false },
@@ -47,7 +39,6 @@ export default function CatalogModal({ children }: CatalogModalProps) {
       { name: "Энергосистемы", icon: Zap, description: "ИБП, аккумуляторы и источники питания", hasSubcategories: false }
     ],
     en: [
-      { name: "Video Analytics", icon: Video, description: "Face recognition, motion detection and smart analytics", hasSubcategories: true },
       { name: "Video Surveillance", icon: Video, description: "IP cameras, DVR, NVR and surveillance systems", hasSubcategories: false },
       { name: "Intercom Systems", icon: Phone, description: "Video and audio intercom systems", hasSubcategories: false },
       { name: "Access Control", icon: Shield, description: "Electronic locks, cards and access systems", hasSubcategories: false },
