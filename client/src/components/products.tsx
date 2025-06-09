@@ -182,10 +182,10 @@ export default function Products() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h3 className="text-3xl font-bold text-secondary mb-4">
-            {t("products")}
+            kameralar
           </h3>
           <p className="text-gray-600 text-lg">
-            {language === "uz" && "Eng yaxshi kameralar va elektronika jihozlari"}
+            {language === "uz" && "Ishonchli brendlar"}
             {language === "ru" && "Лучшие камеры и электронные устройства"}
             {language === "en" && "Best cameras and electronic devices"}
           </p>
