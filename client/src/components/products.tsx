@@ -186,6 +186,23 @@ export default function Products() {
 
         {/* Brand Logos Display */}
         <div className="flex justify-center gap-6 mb-8">
+          {/* Hikvision Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("hikvision");
+              setSelectedCategory("hikvision_nvr"); // Default to NVR category for Hikvision
+            }}
+            className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={hikvisionLogo} 
+              alt="Hikvision Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
+
           {/* Ezviz Logo */}
           <button 
             onClick={() => setSelectedBrand("ezviz")}
@@ -213,23 +230,6 @@ export default function Products() {
             <img 
               src={hilookLogo} 
               alt="Hilook Logo" 
-              className="h-full w-auto object-contain"
-            />
-          </button>
-
-          {/* Hikvision Logo */}
-          <button 
-            onClick={() => {
-              setSelectedBrand("hikvision");
-              setSelectedCategory("hikvision_nvr"); // Default to NVR category for Hikvision
-            }}
-            className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
-              selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
-            }`}
-          >
-            <img 
-              src={hikvisionLogo} 
-              alt="Hikvision Logo" 
               className="h-full w-auto object-contain"
             />
           </button>
