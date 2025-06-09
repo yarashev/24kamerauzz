@@ -222,6 +222,142 @@ export class DatabaseStorage implements IStorage {
           imageUrl: "https://www.hikvision.com/content/dam/hikvision/products/hilook/kits/ik-4042bh-mh-wm/IK-4042BH-MH-WM.png",
           inStock: true,
           features: ["4 IP Cameras", "4CH NVR PoE", "1TB HDD", "Complete Kit"]
+        },
+        // Ezviz Wi-Fi Cameras
+        {
+          name: "Ezviz CS-H1C (1080P)",
+          description: "1080p, 108° wide lens, IR 10m, harakat aniqlash, ikki tomonlama audio",
+          price: 30,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H1C/CS-H1C-1.png",
+          inStock: true,
+          features: ["1080p", "108° Wide", "IR 10m", "Two-way Audio"]
+        },
+        {
+          name: "Ezviz CS-H6C Pro (1080P)",
+          description: "1080p, Panoramik ko'rish, Patrol rejimi, Smart rangli tungi ko'rish",
+          price: 30,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H6C/CS-H6C-1.png",
+          inStock: true,
+          features: ["1080p", "Pan/Tilt", "Color Night Vision", "AI Detection"]
+        },
+        {
+          name: "Ezviz CS-H6C Pro (4MP)",
+          description: "4MP 2K+, Panoramik ko'rish, AI odam aniqlash, Avtomatik kuzatish",
+          price: 44,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H6C/CS-H6C-4MP.png",
+          inStock: true,
+          features: ["4MP 2K+", "Pan/Tilt", "AI Human Detection", "Auto Tracking"]
+        },
+        {
+          name: "Ezviz CS-H6C Pro (8MP)",
+          description: "8MP 4K, Panoramik ko'rish, AI odam aniqlash, Rangli tungi ko'rish",
+          price: 55,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H6C/CS-H6C-8MP.png",
+          inStock: true,
+          features: ["8MP 4K", "Pan/Tilt", "Color Night Vision", "AI Detection"]
+        },
+        {
+          name: "Ezviz CS-H7C (4MP)",
+          description: "Dual lens 4MP, Panoramik ko'rish, AI odam aniqlash, Ikki patrol rejimi",
+          price: 52,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H7C/CS-H7C-1.png",
+          inStock: true,
+          features: ["Dual Lens 4MP", "Pan/Tilt", "AI Detection", "Dual Patrol"]
+        },
+        {
+          name: "Ezviz CS-C60P (3MP)",
+          description: "Dual lens 3MP 2K, Panoramik ko'rish, AI odam aniqlash, Rangli tungi ko'rish",
+          price: 52,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-C60P/CS-C60P-1.png",
+          inStock: true,
+          features: ["Dual Lens 3MP", "Pan/Tilt", "Color Night Vision", "AI Detection"]
+        },
+        {
+          name: "Ezviz CS-H4 (3MP)",
+          description: "2K, AI odam/transport aniqlash, Aktiv himoya sirena, Rangli tungi ko'rish",
+          price: 40,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H4/CS-H4-1.png",
+          inStock: true,
+          features: ["2K", "AI Detection", "Active Defense", "Color Night Vision"]
+        },
+        {
+          name: "Ezviz CS-H6 (5MP)",
+          description: "5MP 3K, Panoramik ko'rish, Starlight lens, AI odam/hayvon aniqlash",
+          price: 55,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H6/CS-H6-1.png",
+          inStock: true,
+          features: ["5MP 3K", "Pan/Tilt", "Starlight Lens", "AI Pet Detection"]
+        },
+        {
+          name: "Ezviz CS-C6C (8MP 4K)",
+          description: "4K, Panoramik ko'rish, Smart rangli tungi ko'rish, AI odam/hayvon aniqlash",
+          price: 70,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-C6C/CS-C6C-1.png",
+          inStock: true,
+          features: ["8MP 4K", "Pan/Tilt", "Smart Color Night", "AI Detection"]
+        },
+        {
+          name: "Ezviz CS-H5 (3MP) 4G",
+          description: "2K, 4G aloqa qo'llab-quvvatlash, AI aniqlash, Aktiv himoya",
+          price: 55,
+          category: "4g_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H5/CS-H5-1.png",
+          inStock: true,
+          features: ["2K", "4G Support", "AI Detection", "Active Defense"]
+        },
+        {
+          name: "Ezviz CS-H3 (5MP)",
+          description: "3K, AI odam/transport aniqlash, Rangli tungi ko'rish, Aktiv himoya",
+          price: 60,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H3/CS-H3-1.png",
+          inStock: true,
+          features: ["3K", "AI Detection", "Color Night Vision", "Active Defense"]
+        },
+        {
+          name: "Ezviz CS-H3C (1080P)",
+          description: "1080p, AI odam aniqlash, IR 30m, microSD 512GB qo'llab-quvvatlash",
+          price: 38,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H3C/CS-H3C-1080p.png",
+          inStock: true,
+          features: ["1080p", "AI Human Detection", "IR 30m", "microSD 512GB"]
+        },
+        {
+          name: "Ezviz CS-H3C (1080P) Color",
+          description: "1080p, Rangli tungi ko'rish, AI odam aniqlash, Aktiv himoya",
+          price: 45,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H3C/CS-H3C-color.png",
+          inStock: true,
+          features: ["1080p", "Color Night Vision", "AI Detection", "Active Defense"]
+        },
+        {
+          name: "Ezviz CS-H3C (3MP) Color",
+          description: "2K, Rangli tungi ko'rish, AI odam aniqlash, Aktiv himoya sirena",
+          price: 50,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H3C/CS-H3C-3MP.png",
+          inStock: true,
+          features: ["2K", "Color Night Vision", "AI Detection", "Active Defense"]
+        },
+        {
+          name: "Ezviz CS-H3C (4MP) Color",
+          description: "2K+, Rangli tungi ko'rish, AI odam aniqlash, Aktiv himoya sirena",
+          price: 52,
+          category: "ip_camera",
+          imageUrl: "https://www.ezvizlife.com/uploads/product/CS-H3C/CS-H3C-4MP.png",
+          inStock: true,
+          features: ["2K+", "Color Night Vision", "AI Detection", "Active Defense"]
         }
       ];
 
