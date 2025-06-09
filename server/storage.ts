@@ -44,43 +44,79 @@ export class DatabaseStorage implements IStorage {
         return; // Data already seeded
       }
 
-      // Seed products
+      // Seed products with different brands
       const sampleProducts: InsertProduct[] = [
         {
-          name: "Kamera Pro X1",
-          description: "4K Ultra HD, Tungi ko'rish, AI harakat aniqlash",
-          price: 199,
+          name: "Hikvision DS-2CD2143G0-I",
+          description: "4K Ultra HD dome kamera, Tungi ko'rish, IP67",
+          price: 299,
           category: "cameras",
-          imageUrl: "https://pixabay.com/get/g4748008a1fa9bf88b1d1dc20ffe8ad96e3b5281107f2670db10d992844240bcc3ec01fd3e89075b0aba909c46cee58f29a335516feebacae152bb569673d5467_1280.jpg",
+          imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["4K Ultra HD", "Night Vision", "AI Motion Detection", "Waterproof"]
+          features: ["4K Ultra HD", "Night Vision", "H.265+", "IP67"]
         },
         {
-          name: "SmartCam 360",
-          description: "360° ko'rish, Wi-Fi, Mobil ilovalar",
-          price: 249,
+          name: "Hilook IPC-B140H",
+          description: "4MP bullet kamera, POE quvvatlash, Smart IR",
+          price: 89,
           category: "cameras",
-          imageUrl: "https://pixabay.com/get/g11e07abbcc13f473ba051b23603aa83c485359dd5de9e87d8fc29ed4dccfcf6b9140aeb076cfa8a8514c838f254b2a52ed71091ae36ba25fe33b5247bb2d7ce4_1280.jpg",
+          imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["360° View", "Wi-Fi Connectivity", "Mobile App", "Cloud Storage"]
+          features: ["4MP Resolution", "POE Power", "Smart IR", "Metal Housing"]
         },
         {
-          name: "Smart Doorbell HD",
+          name: "Hiwatch DS-I220",
+          description: "2MP IP kamera, Fixed lens, DWDR",
+          price: 65,
+          category: "cameras",
+          imageUrl: "https://images.unsplash.com/photo-1567443120781-89bf8eeebe44?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          inStock: true,
+          features: ["2MP Resolution", "Fixed Lens", "DWDR", "ICR Day/Night"]
+        },
+        {
+          name: "Ezviz C3WN",
+          description: "Wi-Fi kamera, Rangli tungi ko'rish, Harakat aniqlash",
+          price: 159,
+          category: "cameras",
+          imageUrl: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          inStock: true,
+          features: ["Wi-Fi", "Color Night Vision", "Motion Detection", "Two-way Audio"]
+        },
+        {
+          name: "Dahua IPC-HDW1531S",
+          description: "5MP dome kamera, WDR, Smart Detection",
+          price: 125,
+          category: "cameras",
+          imageUrl: "https://images.unsplash.com/photo-1558618047-c99d7b6fdbad?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          inStock: true,
+          features: ["5MP Resolution", "WDR", "Smart Detection", "IP67 Rating"]
+        },
+        {
+          name: "Imou Bullet 2E",
+          description: "2MP Wi-Fi kamera, PIR aniqlash, Mobil app",
+          price: 79,
+          category: "cameras",
+          imageUrl: "https://images.unsplash.com/photo-1560472353-dc4de84ceb6a?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          inStock: true,
+          features: ["2MP Resolution", "PIR Detection", "Wi-Fi", "Mobile App"]
+        },
+        {
+          name: "Hikvision Video Doorbell",
           description: "Eshik qo'ng'irog'i, 1080p, Ikki tomonlama audio",
-          price: 149,
+          price: 199,
           category: "doorbells",
           imageUrl: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
           features: ["1080p HD", "Two-way Audio", "Motion Detection", "Night Vision"]
         },
         {
-          name: "Solar Security Kit",
-          description: "Quyosh paneli bilan, Uzoq masofada ishlash",
-          price: 399,
+          name: "Solar Security Kit Dahua",
+          description: "Quyosh paneli bilan, 4G/Wi-Fi, Uzoq masofada ishlash",
+          price: 899,
           category: "systems",
           imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
           inStock: true,
-          features: ["Solar Powered", "Wireless", "Remote Access", "Weather Resistant"]
+          features: ["Solar Powered", "4G/Wi-Fi", "Remote Access", "Weather Resistant"]
         }
       ];
 

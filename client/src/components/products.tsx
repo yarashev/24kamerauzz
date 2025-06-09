@@ -10,13 +10,32 @@ import { useCart } from "@/hooks/use-cart";
 import { productCategories, formatPrice } from "@/lib/products";
 import type { Product } from "@shared/schema";
 
+const cameraBrands = [
+  { id: "all", name: "Barcha", nameRu: "Все", nameEn: "All" },
+  { id: "hikvision", name: "Hikvision", nameRu: "Hikvision", nameEn: "Hikvision" },
+  { id: "hilook", name: "Hilook", nameRu: "Hilook", nameEn: "Hilook" },
+  { id: "hiwatch", name: "Hiwatch", nameRu: "Hiwatch", nameEn: "Hiwatch" },
+  { id: "ezviz", name: "Ezviz", nameRu: "Ezviz", nameEn: "Ezviz" },
+  { id: "dahua", name: "Dahua", nameRu: "Dahua", nameEn: "Dahua" },
+  { id: "imou", name: "Imou", nameRu: "Imou", nameEn: "Imou" }
+];
+
 export default function Products() {
   const { t, language } = useLanguage();
   const { addToCart, isAddingToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedBrand, setSelectedBrand] = useState("all");
 
-  const { data: products = [], isLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products", selectedCategory === "all" ? "" : `?category=${selectedCategory}`],
+  const { data: allProducts = [], isLoading } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
+  });
+
+  // Filter products by category and brand
+  const filteredProducts = allProducts.filter(product => {
+    const categoryMatch = selectedCategory === "all" || product.category === selectedCategory;
+    const brandMatch = selectedBrand === "all" || 
+      (product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase()));
+    return categoryMatch && brandMatch;
   });
 
   const handleAddToCart = (productId: number) => {
@@ -28,6 +47,14 @@ export default function Products() {
       case "en": return category.nameEn;
       case "ru": return category.nameRu;
       default: return category.name;
+    }
+  };
+
+  const getBrandName = (brand: any) => {
+    switch (language) {
+      case "en": return brand.nameEn;
+      case "ru": return brand.nameRu;
+      default: return brand.name;
     }
   };
 
@@ -46,7 +73,7 @@ export default function Products() {
         </div>
 
         {/* Product Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
+        <div className="flex flex-wrap justify-center gap-4 mb-6">
           {productCategories.map((category) => (
             <Button
               key={category.id}
@@ -57,6 +84,28 @@ export default function Products() {
               {getCategoryName(category)}
             </Button>
           ))}
+        </div>
+
+        {/* Brand Filter */}
+        <div className="mb-8">
+          <h4 className="text-lg font-semibold text-center mb-4">
+            {language === "uz" && "Brendlar"}
+            {language === "ru" && "Бренды"}
+            {language === "en" && "Brands"}
+          </h4>
+          <div className="flex flex-wrap justify-center gap-3">
+            {cameraBrands.map((brand) => (
+              <Button
+                key={brand.id}
+                variant={selectedBrand === brand.id ? "default" : "outline"}
+                onClick={() => setSelectedBrand(brand.id)}
+                className="min-w-[100px] text-sm"
+                size="sm"
+              >
+                {getBrandName(brand)}
+              </Button>
+            ))}
+          </div>
         </div>
 
         {/* Products Grid */}
@@ -77,7 +126,7 @@ export default function Products() {
               </Card>
             ))
           ) : (
-            products.map((product) => (
+            filteredProducts.map((product) => (
               <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <img
                   src={product.imageUrl}
