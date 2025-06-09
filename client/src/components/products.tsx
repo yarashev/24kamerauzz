@@ -111,8 +111,7 @@ const getProductImage = (productName: string): string => {
 };
 
 const cameraBrands = [
-  { id: "hilook", name: "Hilook", nameRu: "Hilook", nameEn: "Hilook" },
-  { id: "ezviz", name: "Ezviz", nameRu: "Ezviz", nameEn: "Ezviz" }
+  { id: "hilook", name: "Hilook", nameRu: "Hilook", nameEn: "Hilook" }
 ];
 
 export default function Products() {

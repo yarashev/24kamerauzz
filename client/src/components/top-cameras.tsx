@@ -13,10 +13,10 @@ import type { Product } from "@shared/schema";
 const topCameras = [
   { id: 69, name: "Hilook IPC-B140H", price: 65, category: "ip_camera" },
   { id: 70, name: "Hilook IPC-D140H", price: 62, category: "ip_camera" },
-  { id: 83, name: "Ezviz CS-H1C (1080P)", price: 30, category: "ip_camera" },
-  { id: 84, name: "Ezviz CS-H6C Pro (1080P)", price: 30, category: "ip_camera" },
-  { id: 85, name: "Ezviz CS-H6C Pro (4MP)", price: 44, category: "ip_camera" },
-  { id: 87, name: "Ezviz CS-H7C (4MP)", price: 52, category: "ip_camera" }
+  { id: 71, name: "Hilook IPC-B180H", price: 78, category: "ip_camera" },
+  { id: 72, name: "Hilook IPC-D180H", price: 75, category: "ip_camera" },
+  { id: 73, name: "Hilook THC-B140-P", price: 45, category: "turbo_hd_camera" },
+  { id: 74, name: "Hilook THC-D140-P", price: 42, category: "turbo_hd_camera" }
 ];
 
 export default function TopCameras() {
