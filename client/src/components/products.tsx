@@ -130,7 +130,7 @@ export default function Products() {
   // Filter products by category and brand
   const filteredProducts = selectedBrand === "ezviz" 
     ? products.filter(product => product.category === "ezviz")
-    : selectedBrand === "hilook" 
+    : selectedBrand === "hilook" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
     : [];
 
