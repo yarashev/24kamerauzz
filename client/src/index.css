@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Product image loading animation */
+.product-image {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.product-image:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
