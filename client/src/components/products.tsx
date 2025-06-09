@@ -247,20 +247,20 @@ export default function Products() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {filteredProducts.map((product) => (
-                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                  <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow duration-200">
                     <CardContent className="p-0">
                       <div className="relative">
                         <img
                           src={product.imageUrl || getProductImage(product.name)}
                           alt={product.name}
-                          className="w-full h-48 object-cover"
+                          className="w-full h-32 object-cover"
                           loading="lazy"
                         />
                         {!product.inStock && (
                           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                            <Badge variant="secondary" className="text-white bg-red-600">
+                            <Badge variant="secondary" className="text-white bg-red-600 text-xs">
                               {language === "uz" && "Mavjud emas"}
                               {language === "ru" && "Нет в наличии"}
                               {language === "en" && "Out of stock"}
@@ -269,34 +269,34 @@ export default function Products() {
                         )}
                       </div>
                       
-                      <div className="p-4">
-                        <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100 line-clamp-2">
+                      <div className="p-2">
+                        <h3 className="font-medium text-sm mb-1 text-gray-900 dark:text-gray-100 line-clamp-2 min-h-[2.5rem]">
                           {product.name}
                         </h3>
                         
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                          {product.description}
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2 min-h-[2rem]">
+                          {product.description.length > 60 ? product.description.substring(0, 60) + "..." : product.description}
                         </p>
                         
                         {product.features && product.features.length > 0 && (
-                          <div className="mb-3">
+                          <div className="mb-2">
                             <div className="flex flex-wrap gap-1">
-                              {product.features.slice(0, 3).map((feature, index) => (
-                                <Badge key={index} variant="outline" className="text-xs">
-                                  {feature}
+                              {product.features.slice(0, 2).map((feature, index) => (
+                                <Badge key={index} variant="outline" className="text-xs px-1 py-0">
+                                  {feature.length > 8 ? feature.substring(0, 8) + "..." : feature}
                                 </Badge>
                               ))}
-                              {product.features.length > 3 && (
-                                <Badge variant="outline" className="text-xs">
-                                  +{product.features.length - 3}
+                              {product.features.length > 2 && (
+                                <Badge variant="outline" className="text-xs px-1 py-0">
+                                  +{product.features.length - 2}
                                 </Badge>
                               )}
                             </div>
                           </div>
                         )}
                         
-                        <div className="flex items-center justify-between">
-                          <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm font-bold text-green-600 dark:text-green-400">
                             ${product.price}
                           </span>
                           
@@ -304,11 +304,11 @@ export default function Products() {
                             onClick={() => handleAddToCart(product.id)}
                             disabled={!product.inStock || isAddingToCart}
                             size="sm"
-                            className="flex items-center gap-1"
+                            className="w-full text-xs h-7"
                           >
-                            <ShoppingCart className="w-4 h-4" />
-                            {language === "uz" && "Qo'shish"}
-                            {language === "ru" && "Добавить"}
+                            <ShoppingCart className="w-3 h-3 mr-1" />
+                            {language === "uz" && "Qo'sh"}
+                            {language === "ru" && "Добав"}
                             {language === "en" && "Add"}
                           </Button>
                         </div>
