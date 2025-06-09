@@ -137,6 +137,10 @@ export default function Products() {
     ? products.filter(product => product.category === "ezviz")
     : selectedBrand === "hilook" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
+    : selectedBrand === "hikvision"
+    ? products.filter(product => product.category === "hikvision")
+    : selectedBrand === "hiwatch"
+    ? products.filter(product => product.category === "hiwatch")
     : [];
 
   const handleAddToCart = (productId: number) => {
@@ -184,11 +188,25 @@ export default function Products() {
         </div>
 
         {/* Brand Logos Display */}
-        <div className="flex justify-center gap-6 mb-8">
+        <div className="flex justify-center gap-4 mb-8">
+          {/* Hikvision Logo */}
+          <button 
+            onClick={() => setSelectedBrand("hikvision")}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={hikvisionLogo} 
+              alt="Hikvision Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
+
           {/* Ezviz Logo */}
           <button 
             onClick={() => setSelectedBrand("ezviz")}
-            className={`w-48 h-20 bg-black rounded-lg shadow-lg p-3 flex items-center justify-center transition-all duration-200 hover:scale-105 ${
+            className={`w-44 h-20 bg-black rounded-lg shadow-lg p-3 flex items-center justify-center transition-all duration-200 hover:scale-105 ${
               selectedBrand === "ezviz" ? "ring-4 ring-blue-500" : ""
             }`}
           >
@@ -205,13 +223,27 @@ export default function Products() {
               setSelectedBrand("hilook");
               setSelectedCategory("ip_camera"); // Default to IP camera category for Hilook
             }}
-            className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hilook" ? "ring-4 ring-blue-500" : ""
             }`}
           >
             <img 
               src={hilookLogo} 
               alt="Hilook Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
+
+          {/* HiWatch Logo */}
+          <button 
+            onClick={() => setSelectedBrand("hiwatch")}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "hiwatch" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={hiwatchLogo} 
+              alt="HiWatch Logo" 
               className="h-full w-auto object-contain"
             />
           </button>
