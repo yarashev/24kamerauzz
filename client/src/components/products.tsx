@@ -15,6 +15,7 @@ import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
 import hiwatchLogo from "@assets/4974HIWATCH 222222_1749477667922.jpg";
 import dahuaLogo from "@assets/DAHUA 22222_1749478235269.png";
 import tvtLogo from "@assets/tvt logo_1749478721840.png";
+import imouLogo from "@assets/imou logo_1749479083422.webp";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
@@ -289,6 +290,23 @@ export default function Products() {
             <img 
               src={tvtLogo} 
               alt="TVT Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
+
+          {/* Imou Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("imou");
+              setSelectedCategory("imou"); // No subcategories for Imou
+            }}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "imou" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={imouLogo} 
+              alt="Imou Logo" 
               className="h-full w-auto object-contain"
             />
           </button>
