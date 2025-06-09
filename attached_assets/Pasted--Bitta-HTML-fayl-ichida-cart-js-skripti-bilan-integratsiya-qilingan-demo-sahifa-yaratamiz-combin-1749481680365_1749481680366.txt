@@ -1,0 +1,109 @@
+# Bitta HTML fayl ichida cart.js skripti bilan integratsiya qilingan demo sahifa yaratamiz
+
+combined_html = """<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Kamera Do‘koni – Savatcha bilan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <h1 class="text-3xl font-bold mb-6">🛒 Kamera mahsulotlari</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+    <div class="border p-4 rounded-xl bg-white shadow">
+      <img src="https://tse1.mm.bing.net/th?q=ezviz+cs-h1c&pid=Api" class="w-full h-40 object-contain mb-2" alt="CS-H1C">
+      <h2 class="text-lg font-semibold">Ezviz CS-H1C</h2>
+      <p class="text-sm text-gray-600">1080p, IR, WiFi, Indoor</p>
+      <p class="text-green-600 font-bold mt-1">$30</p>
+      <button class="add-to-cart mt-2 bg-blue-600 text-white px-3 py-1 rounded" data-name="CS-H1C" data-price="30">Savatchaga qo‘shish</button>
+    </div>
+
+    <div class="border p-4 rounded-xl bg-white shadow">
+      <img src="https://tse1.mm.bing.net/th?q=hilook+ipc-b449h&pid=Api" class="w-full h-40 object-contain mb-2" alt="IPC-B449H">
+      <h2 class="text-lg font-semibold">Hilook IPC-B449H</h2>
+      <p class="text-sm text-gray-600">4MP, PoE, Outdoor</p>
+      <p class="text-green-600 font-bold mt-1">$90</p>
+      <button class="add-to-cart mt-2 bg-blue-600 text-white px-3 py-1 rounded" data-name="IPC-B449H" data-price="90">Savatchaga qo‘shish</button>
+    </div>
+  </div>
+
+  <h2 class="text-2xl font-bold mb-2">🧾 Savatcha</h2>
+  <div id="cart-list" class="bg-white p-4 rounded shadow mb-2"></div>
+  <p id="cart-total" class="font-bold text-lg"></p>
+
+  <script>
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function addToCart(name, price) {
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    saveCart();
+    renderCart();
+  }
+
+  function removeFromCart(name) {
+    cart = cart.filter(item => item.name !== name);
+    saveCart();
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartList = document.getElementById("cart-list");
+    const total = document.getElementById("cart-total");
+    cartList.innerHTML = "";
+    let sum = 0;
+
+    if (cart.length === 0) {
+      cartList.innerHTML = "<p class='text-gray-500'>Savatcha bo‘sh</p>";
+      total.textContent = "";
+      return;
+    }
+
+    cart.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "flex justify-between items-center border-b py-2";
+      row.innerHTML = `
+        <span>${item.name} x ${item.qty}</span>
+        <div>
+          <span class="font-semibold text-green-600">$${(item.price * item.qty).toFixed(2)}</span>
+          <button onclick="removeFromCart('${item.name}')" class="text-red-500 ml-2">❌</button>
+        </div>
+      `;
+      cartList.appendChild(row);
+      sum += item.price * item.qty;
+    });
+
+    total.textContent = `Jami: $${sum.toFixed(2)}`;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+      button.addEventListener("click", () => {
+        const name = button.getAttribute("data-name");
+        const price = parseFloat(button.getAttribute("data-price"));
+        addToCart(name, price);
+      });
+    });
+
+    renderCart();
+  });
+  </script>
+</body>
+</html>
+"""
+
+# Faylga yozamiz
+combined_file_path = "/mnt/data/replit_savatcha_demo.html"
+with open(combined_file_path, "w", encoding="utf-8") as f:
+    f.write(combined_html)
+
+combined_file_path
