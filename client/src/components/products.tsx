@@ -11,7 +11,7 @@ import { productCategories, formatPrice } from "@/lib/products";
 import type { Product } from "@shared/schema";
 import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
 import hilookLogo from "@assets/hilook logo_1749469268846.jpg";
-import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
+import hiwatchLogo from "@assets/hiwatch logo_1749476981901.png";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
@@ -136,8 +136,8 @@ export default function Products() {
     ? products.filter(product => product.category === "ezviz")
     : selectedBrand === "hilook" && selectedCategory
     ? products.filter(product => product.category === selectedCategory)
-    : selectedBrand === "hikvision" && selectedCategory
-    ? products.filter(product => product.category === selectedCategory)
+    : selectedBrand === "hiwatch"
+    ? products.filter(product => product.category === "hiwatch")
     : [];
 
   const handleAddToCart = (productId: number) => {
@@ -186,19 +186,16 @@ export default function Products() {
 
         {/* Brand Logos Display */}
         <div className="flex justify-center gap-6 mb-8">
-          {/* Hikvision Logo */}
+          {/* HiWatch Logo */}
           <button 
-            onClick={() => {
-              setSelectedBrand("hikvision");
-              setSelectedCategory("hikvision_nvr"); // Default to NVR category for Hikvision
-            }}
+            onClick={() => setSelectedBrand("hiwatch")}
             className={`w-48 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
-              selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
+              selectedBrand === "hiwatch" ? "ring-4 ring-blue-500" : ""
             }`}
           >
             <img 
-              src={hikvisionLogo} 
-              alt="Hikvision Logo" 
+              src={hiwatchLogo} 
+              alt="HiWatch Logo" 
               className="h-full w-auto object-contain"
             />
           </button>
@@ -275,43 +272,7 @@ export default function Products() {
           </div>
         )}
 
-        {/* Hikvision Category Buttons */}
-        {selectedBrand === "hikvision" && (
-          <div className="flex justify-center gap-3 mb-6">
-            <Button
-              onClick={() => setSelectedCategory("hikvision_nvr")}
-              variant={selectedCategory === "hikvision_nvr" ? "default" : "outline"}
-              size="sm"
-              className="text-sm"
-            >
-              NVR
-            </Button>
-            <Button
-              onClick={() => setSelectedCategory("hikvision_ip_camera")}
-              variant={selectedCategory === "hikvision_ip_camera" ? "default" : "outline"}
-              size="sm"
-              className="text-sm"
-            >
-              IP KAMERA
-            </Button>
-            <Button
-              onClick={() => setSelectedCategory("hikvision_dvr")}
-              variant={selectedCategory === "hikvision_dvr" ? "default" : "outline"}
-              size="sm"
-              className="text-sm"
-            >
-              DVR
-            </Button>
-            <Button
-              onClick={() => setSelectedCategory("hikvision_hd_camera")}
-              variant={selectedCategory === "hikvision_hd_camera" ? "default" : "outline"}
-              size="sm"
-              className="text-sm"
-            >
-              HD KAMERA
-            </Button>
-          </div>
-        )}
+
 
         {/* Products Display */}
         {!selectedBrand ? (
