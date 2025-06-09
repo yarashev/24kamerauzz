@@ -44,14 +44,15 @@ export class DatabaseStorage implements IStorage {
         return; // Data already seeded
       }
 
-      // Real product data from catalog
+      // Complete product catalog with real camera models
       const sampleProducts: InsertProduct[] = [
+        // IP Cameras - Bullet
         {
           name: "IPC-B449H",
           description: "4 MP, 1/1.8\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67, H.265+",
           price: 117,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b449h/IPC-B449H.png",
           inStock: true,
           features: ["4MP", "24/7 Color", "IP67", "H.265+"]
         },
@@ -60,7 +61,7 @@ export class DatabaseStorage implements IStorage {
           description: "4 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67, H.265+",
           price: 90,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b249h/IPC-B249H.png",
           inStock: true,
           features: ["4MP", "24/7 Color", "IP67", "H.265+"]
         },
@@ -69,7 +70,7 @@ export class DatabaseStorage implements IStorage {
           description: "6 MP, Smart Hybrid Light, Odam va transport vositalarini aniqlash",
           price: 75,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1567443120781-89bf8eeebe44?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/colorvu-series/bullet/ipc-b469ha-lu/IPC-B469HA-LU.png",
           inStock: true,
           features: ["6MP", "Smart Hybrid Light", "AI Detection", "H.265+"]
         },
@@ -78,7 +79,7 @@ export class DatabaseStorage implements IStorage {
           description: "4 MP, Smart Hybrid Light, Odam va transport vositalarini aniqlash",
           price: 70,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/colorvu-series/bullet/ipc-b449ha-lu/IPC-B449HA-LU.png",
           inStock: true,
           features: ["4MP", "Smart Hybrid Light", "AI Detection", "Microphone"]
         },
@@ -87,7 +88,7 @@ export class DatabaseStorage implements IStorage {
           description: "6 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
           price: 70,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1558618047-c99d7b6fdbad?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b169ha/IPC-B169HA.png",
           inStock: true,
           features: ["6MP", "24/7 Color", "IP67", "H.265+"]
         },
@@ -96,7 +97,7 @@ export class DatabaseStorage implements IStorage {
           description: "4 MP, 1/3\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
           price: 63,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1560472353-dc4de84ceb6a?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b149ha/IPC-B149HA.png",
           inStock: true,
           features: ["4MP", "24/7 Color", "IP67", "H.265+"]
         },
@@ -105,16 +106,17 @@ export class DatabaseStorage implements IStorage {
           description: "2 MP, 1/2.8\" Progressive Scan CMOS, Rangli ko'rish 24/7, IP67",
           price: 43,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-b129ha/IPC-B129HA.png",
           inStock: true,
           features: ["2MP", "24/7 Color", "IP67", "H.265+"]
         },
+        // IP Cameras - Dome
         {
           name: "IPC-D159H",
           description: "5 MP dome kamera, 1/2.7\" Progressive Scan CMOS, IP67, IK08",
           price: 65,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-d159h/IPC-D159H.png",
           inStock: true,
           features: ["5MP", "Dome", "IP67", "IK08"]
         },
@@ -123,9 +125,104 @@ export class DatabaseStorage implements IStorage {
           description: "4 MP dome kamera, 1/2.7\" Progressive Scan CMOS, IP67, IK08",
           price: 60,
           category: "ip_camera",
-          imageUrl: "https://images.unsplash.com/photo-1553354103-b0a2bf2912e7?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-d149h/IPC-D149H.png",
           inStock: true,
           features: ["4MP", "Dome", "IP67", "IK08"]
+        },
+        {
+          name: "IPC-D129H",
+          description: "2 MP dome kamera, 1/2.8\" Progressive Scan CMOS, IP67, IK08",
+          price: 45,
+          category: "ip_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/value-series/ipc-d129h/IPC-D129H.png",
+          inStock: true,
+          features: ["2MP", "Dome", "IP67", "IK08"]
+        },
+        // Turbo HD Cameras
+        {
+          name: "THC-B449H",
+          description: "4 MP Turbo HD bullet kamera, EXIR 2.0, IP67",
+          price: 52,
+          category: "turbo_hd_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/turbo-hd-cameras/bullet/thc-b449h/THC-B449H.png",
+          inStock: true,
+          features: ["4MP Turbo HD", "EXIR 2.0", "IP67", "Metal Housing"]
+        },
+        {
+          name: "THC-B249H",
+          description: "4 MP Turbo HD bullet kamera, Smart IR, IP67",
+          price: 48,
+          category: "turbo_hd_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/turbo-hd-cameras/bullet/thc-b249h/THC-B249H.png",
+          inStock: true,
+          features: ["4MP Turbo HD", "Smart IR", "IP67", "Metal Housing"]
+        },
+        {
+          name: "THC-D449H",
+          description: "4 MP Turbo HD dome kamera, EXIR 2.0, IK08",
+          price: 50,
+          category: "turbo_hd_camera",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/turbo-hd-cameras/dome/thc-d449h/THC-D449H.png",
+          inStock: true,
+          features: ["4MP Turbo HD", "EXIR 2.0", "IK08", "Metal Housing"]
+        },
+        // NVR Systems
+        {
+          name: "NVR-108MH-C/8P",
+          description: "8 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+, 1TB HDD",
+          price: 185,
+          category: "nvr",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/nvrs/embedded-nvrs/nvr-108mh-c-8p/NVR-108MH-C-8P.png",
+          inStock: true,
+          features: ["8 Channel PoE", "4K Support", "H.265+", "1TB HDD"]
+        },
+        {
+          name: "NVR-108MH-C/16P",
+          description: "16 kanal PoE NVR, 4K qo'llab-quvvatlash, H.265+, 2TB HDD",
+          price: 245,
+          category: "nvr",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/nvrs/embedded-nvrs/nvr-108mh-c-16p/NVR-108MH-C-16P.png",
+          inStock: true,
+          features: ["16 Channel PoE", "4K Support", "H.265+", "2TB HDD"]
+        },
+        // DVR Systems
+        {
+          name: "DVR-108G-F1",
+          description: "8 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash, H.265+",
+          price: 125,
+          category: "dvr",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/dvrs/turbo-hd-dvrs/dvr-108g-f1/DVR-108G-F1.png",
+          inStock: true,
+          features: ["8 Channel", "AHD/TVI/CVI", "H.265+", "1TB HDD"]
+        },
+        {
+          name: "DVR-116G-F1",
+          description: "16 kanal Turbo HD DVR, AHD/TVI/CVI qo'llab-quvvatlash, H.265+",
+          price: 165,
+          category: "dvr",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/analog-products/dvrs/turbo-hd-dvrs/dvr-116g-f1/DVR-116G-F1.png",
+          inStock: true,
+          features: ["16 Channel", "AHD/TVI/CVI", "H.265+", "2TB HDD"]
+        },
+        // PTZ Cameras
+        {
+          name: "PTZ-N4425I-DE3",
+          description: "25x zoom PTZ kamera, 4 MP, IR 100m, Smart tracking",
+          price: 485,
+          category: "ptz",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/network-cameras/ptz-cameras/ptz-n4425i-de3/PTZ-N4425I-DE3.png",
+          inStock: true,
+          features: ["25x Zoom", "4MP", "IR 100m", "Smart Tracking"]
+        },
+        // Video Doorbells
+        {
+          name: "DB11",
+          description: "Wi-Fi video doorbell, 2MP, PIR aniqlash, Ikki tomonlama audio",
+          price: 139,
+          category: "domophones",
+          imageUrl: "https://www.hikvision.com/content/dam/hikvision/en/products/ip-products/intercom-products/video-doorbells/db11/DB11.png",
+          inStock: true,
+          features: ["2MP", "Wi-Fi", "PIR Detection", "Two-way Audio"]
         }
       ];
 
