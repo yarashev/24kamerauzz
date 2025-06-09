@@ -166,18 +166,15 @@ export default function Products() {
           </p>
         </div>
 
-        {/* Product Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-6">
-          {productCategories.map((category) => (
-            <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
-              onClick={() => setSelectedCategory(category.id)}
-              className="font-medium"
-            >
-              {getCategoryName(category)}
-            </Button>
-          ))}
+        {/* Ezviz Logo Display */}
+        <div className="flex justify-center mb-8">
+          <div className="w-32 h-32 flex items-center justify-center">
+            <img 
+              src="/attached_assets/i_1749468846382.webp" 
+              alt="Ezviz Logo" 
+              className="w-full h-full object-contain"
+            />
+          </div>
         </div>
 
 
