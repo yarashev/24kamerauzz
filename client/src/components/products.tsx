@@ -13,6 +13,7 @@ import ezvizLogo from "@assets/ezviz logo_1749469085610.png";
 import hilookLogo from "@assets/hilook 222222_1749477480288.jpg";
 import hikvisionLogo from "@assets/hikvision_logo_1749475369969.png";
 import hiwatchLogo from "@assets/4974HIWATCH 222222_1749477667922.jpg";
+import dahuaLogo from "@assets/dahua_1749477793270.jpg";
 import ProductDetailModal from "./product-detail-modal";
 
 // Function to get product image based on model name
@@ -253,6 +254,23 @@ export default function Products() {
               className="h-full w-auto object-contain"
             />
           </button>
+
+          {/* Dahua Logo */}
+          <button 
+            onClick={() => {
+              setSelectedBrand("dahua");
+              setSelectedCategory("dahua_nvr"); // Default to NVR category for Dahua
+            }}
+            className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
+              selectedBrand === "dahua" ? "ring-4 ring-blue-500" : ""
+            }`}
+          >
+            <img 
+              src={dahuaLogo} 
+              alt="Dahua Logo" 
+              className="h-full w-auto object-contain"
+            />
+          </button>
         </div>
 
 
@@ -363,6 +381,44 @@ export default function Products() {
             <Button
               onClick={() => setSelectedCategory("hiwatch_hd_camera")}
               variant={selectedCategory === "hiwatch_hd_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              HD KAMERA
+            </Button>
+          </div>
+        )}
+
+        {/* Dahua Category Buttons */}
+        {selectedBrand === "dahua" && (
+          <div className="flex justify-center gap-3 mb-6">
+            <Button
+              onClick={() => setSelectedCategory("dahua_nvr")}
+              variant={selectedCategory === "dahua_nvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              NVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("dahua_ip_camera")}
+              variant={selectedCategory === "dahua_ip_camera" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              IP KAMERA
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("dahua_dvr")}
+              variant={selectedCategory === "dahua_dvr" ? "default" : "outline"}
+              size="sm"
+              className="text-sm"
+            >
+              DVR
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("dahua_hd_camera")}
+              variant={selectedCategory === "dahua_hd_camera" ? "default" : "outline"}
               size="sm"
               className="text-sm"
             >
