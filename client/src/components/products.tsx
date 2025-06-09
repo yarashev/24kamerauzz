@@ -128,11 +128,9 @@ export default function Products() {
   const products = Array.isArray(allProducts) ? allProducts : [];
 
   // Filter products by category and brand
-  const filteredProducts = selectedBrand ? products.filter(product => {
-    const categoryMatch = product.category === selectedCategory;
-    const brandMatch = product.name && product.name.toLowerCase().includes(selectedBrand.toLowerCase());
-    return categoryMatch && brandMatch;
-  }) : [];
+  const filteredProducts = selectedBrand 
+    ? products.filter(product => product.category === selectedBrand)
+    : [];
 
   const handleAddToCart = (productId: number) => {
     addToCart(productId, 1);
