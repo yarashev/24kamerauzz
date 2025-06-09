@@ -21,7 +21,6 @@ export default function Home() {
         <News />
         <JarvisChat />
         <Contact />
-        <Calculator />
       </main>
       <Footer />
     </div>
