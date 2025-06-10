@@ -47,6 +47,17 @@ export const articles = pgTable("articles", {
   publishedAt: timestamp("published_at").defaultNow(),
 });
 
+export const advertisements = pgTable("advertisements", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  imageUrl: text("image_url").notNull(),
+  buttonText: text("button_text").notNull(),
+  link: text("link").notNull(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
