@@ -117,6 +117,7 @@ export default function AdminPanel() {
   const [selectedPricingBrand, setSelectedPricingBrand] = useState<string>("all");
   const [selectedPricingCategory, setSelectedPricingCategory] = useState<string>("all");
   const [isApplyingPriceChange, setIsApplyingPriceChange] = useState(false);
+  const [showPriceHistory, setShowPriceHistory] = useState(false);
 
   const getRegionDisplayName = (regionKey: string): string => {
     return regionNames[regionKey] || regionKey;
@@ -668,28 +669,38 @@ export default function AdminPanel() {
           );
         }
 
-        // Apply price adjustment to each product
-        for (const product of productsToUpdate) {
+        // Prepare bulk update data with history
+        const updates = productsToUpdate.map(product => {
           const multiplier = 1 + (priceAdjustmentPercentage / 100);
           const newPrice = Math.round(product.price * multiplier);
           
-          const updatedProduct = {
-            ...product,
-            price: newPrice
+          return {
+            productId: product.id,
+            oldPrice: product.price,
+            newPrice: newPrice,
+            changePercentage: priceAdjustmentPercentage,
+            dollarRate: dollarRate,
+            brand: product.brand,
+            category: product.category,
+            changeReason: `Bulk adjustment ${priceAdjustmentPercentage > 0 ? '+' : ''}${priceAdjustmentPercentage}%`
           };
+        });
 
-          await fetch(`/api/products/${product.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedProduct)
-          });
+        // Use bulk update API with history tracking
+        const response = await fetch('/api/bulk-price-update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates })
+        });
+
+        if (response.ok) {
+          // Refresh products list
+          queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+          alert(`${productsToUpdate.length} ta mahsulot narxi muvaffaqiyatli o'zgartirildi va tarix saqlandi`);
+          setPriceAdjustmentPercentage(0);
+        } else {
+          alert('Narxlarni o\'zgartirishda xatolik yuz berdi');
         }
-
-        // Refresh products list
-        queryClient.invalidateQueries({ queryKey: ['/api/products'] });
-        
-        alert(`${productsToUpdate.length} ta mahsulot narxi muvaffaqiyatli o'zgartirildi`);
-        setPriceAdjustmentPercentage(0);
         
       } catch (error) {
         alert('Narxlarni o\'zgartirishda xatolik yuz berdi');
@@ -770,6 +781,12 @@ export default function AdminPanel() {
   // Fetch password recovery brands from API
   const { data: passwordBrands = [], isLoading: passwordBrandsLoading } = useQuery<PasswordRecoveryBrand[]>({
     queryKey: ["/api/password-recovery-brands"],
+  });
+
+  // Fetch price history from API
+  const { data: priceHistory = [], isLoading: priceHistoryLoading } = useQuery<any[]>({
+    queryKey: ["/api/price-history"],
+    enabled: showPriceHistory,
   });
 
   const getCurrentBrandProducts = () => {

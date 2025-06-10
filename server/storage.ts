@@ -1,4 +1,4 @@
-import { users, products, cartItems, chatMessages, articles, advertisements, masters, passwordRecoveryBrands, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement, type Master, type InsertMaster, type PasswordRecoveryBrand, type InsertPasswordRecoveryBrand } from "@shared/schema";
+import { users, products, cartItems, chatMessages, articles, advertisements, masters, passwordRecoveryBrands, priceHistory, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement, type Master, type InsertMaster, type PasswordRecoveryBrand, type InsertPasswordRecoveryBrand, type PriceHistory, type InsertPriceHistory } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -54,6 +54,12 @@ export interface IStorage {
   createPasswordRecoveryBrand(brand: InsertPasswordRecoveryBrand): Promise<PasswordRecoveryBrand>;
   updatePasswordRecoveryBrand(id: number, brand: InsertPasswordRecoveryBrand): Promise<PasswordRecoveryBrand | undefined>;
   deletePasswordRecoveryBrand(id: number): Promise<boolean>;
+  
+  // Price History methods
+  getPriceHistory(productId?: number): Promise<PriceHistory[]>;
+  savePriceHistory(history: InsertPriceHistory): Promise<PriceHistory>;
+  revertProductPrices(changeId: number): Promise<boolean>;
+  bulkUpdatePricesWithHistory(updates: { productId: number; newPrice: number; oldPrice: number; changePercentage: number; dollarRate?: number; brand?: string; category?: string; changeReason?: string }[]): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -562,6 +568,85 @@ export class DatabaseStorage implements IStorage {
       .delete(passwordRecoveryBrands)
       .where(eq(passwordRecoveryBrands.id, id));
     return (result.rowCount || 0) > 0;
+  }
+
+  // Price History methods implementation
+  async getPriceHistory(productId?: number): Promise<PriceHistory[]> {
+    try {
+      if (productId) {
+        return await db.select().from(priceHistory).where(eq(priceHistory.productId, productId));
+      }
+      return await db.select().from(priceHistory).orderBy(priceHistory.changedAt);
+    } catch (error) {
+      console.error('Error fetching price history:', error);
+      return [];
+    }
+  }
+
+  async savePriceHistory(history: InsertPriceHistory): Promise<PriceHistory> {
+    const [savedHistory] = await db.insert(priceHistory).values(history).returning();
+    return savedHistory;
+  }
+
+  async revertProductPrices(changeId: number): Promise<boolean> {
+    try {
+      // Get the price history record
+      const [historyRecord] = await db.select().from(priceHistory).where(eq(priceHistory.id, changeId));
+      
+      if (!historyRecord || !historyRecord.productId) {
+        return false;
+      }
+
+      // Revert the product price to old price
+      await db.update(products)
+        .set({ price: historyRecord.oldPrice })
+        .where(eq(products.id, historyRecord.productId));
+
+      // Save a new history record for the revert action
+      await this.savePriceHistory({
+        productId: historyRecord.productId,
+        oldPrice: historyRecord.newPrice,
+        newPrice: historyRecord.oldPrice,
+        changePercentage: -historyRecord.changePercentage,
+        dollarRate: historyRecord.dollarRate,
+        brand: historyRecord.brand,
+        category: historyRecord.category,
+        changeReason: `Reverted from change #${changeId}`
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error reverting product prices:', error);
+      return false;
+    }
+  }
+
+  async bulkUpdatePricesWithHistory(updates: { productId: number; newPrice: number; oldPrice: number; changePercentage: number; dollarRate?: number; brand?: string; category?: string; changeReason?: string }[]): Promise<boolean> {
+    try {
+      // Update all product prices
+      for (const update of updates) {
+        await db.update(products)
+          .set({ price: update.newPrice })
+          .where(eq(products.id, update.productId));
+        
+        // Save price history for each update
+        await this.savePriceHistory({
+          productId: update.productId,
+          oldPrice: update.oldPrice,
+          newPrice: update.newPrice,
+          changePercentage: update.changePercentage,
+          dollarRate: update.dollarRate,
+          brand: update.brand,
+          category: update.category,
+          changeReason: update.changeReason || "Bulk price adjustment"
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error bulk updating prices with history:', error);
+      return false;
+    }
   }
 }
 
