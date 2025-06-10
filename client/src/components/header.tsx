@@ -84,14 +84,14 @@ export default function Header() {
             >
               <Key className="h-4 w-4" />
               <span className="hidden lg:inline">
-                {language === "uz" && "Parol tiklash"}
-                {language === "ru" && "Пароль"}
-                {language === "en" && "Password"}
+                {language === "uz" && "Parolni tiklash"}
+                {language === "ru" && "Восстановление пароля"}
+                {language === "en" && "Password Recovery"}
               </span>
               <span className="lg:hidden">
-                {language === "uz" && "Parol"}
+                {language === "uz" && "Parolni tiklash"}
                 {language === "ru" && "Пароль"}
-                {language === "en" && "Pass"}
+                {language === "en" && "Password"}
               </span>
             </Button>
 
