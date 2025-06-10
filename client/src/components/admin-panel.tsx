@@ -181,7 +181,7 @@ export default function AdminPanel() {
     ]
   });
 
-  const [articles] = useState<Article[]>([
+  const [articles, setArticles] = useState<Article[]>([
     {
       id: 1,
       title: "Uy xavfsizligini oshirish bo'yicha maslahatlar",
@@ -191,7 +191,7 @@ export default function AdminPanel() {
     }
   ]);
 
-  const [stores] = useState<Store[]>([
+  const [stores, setStores] = useState<Store[]>([
     {
       id: 1,
       name: "24kamera Tashkent",
@@ -208,13 +208,63 @@ export default function AdminPanel() {
   };
 
   const handleSaveArticle = () => {
-    // Save article logic
+    if (!editingArticle) return;
+    
+    if (editingArticle.id === 0) {
+      // Yangi yangilik qo'shish
+      if (articles.length >= 50) {
+        alert('Maksimal 50 ta yangilik qo\'shish mumkin');
+        return;
+      }
+      
+      const newArticle = {
+        ...editingArticle,
+        id: Math.max(...articles.map(a => a.id), 0) + 1
+      };
+      setArticles([...articles, newArticle]);
+    } else {
+      // Mavjud yangilikni tahrirlash
+      setArticles(articles.map(article => 
+        article.id === editingArticle.id ? editingArticle : article
+      ));
+    }
     setEditingArticle(null);
   };
 
   const handleSaveStore = () => {
-    // Save store logic
+    if (!editingStore) return;
+    
+    if (editingStore.id === 0) {
+      // Yangi do'kon qo'shish
+      if (stores.length >= 50) {
+        alert('Maksimal 50 ta do\'kon qo\'shish mumkin');
+        return;
+      }
+      
+      const newStore = {
+        ...editingStore,
+        id: Math.max(...stores.map(s => s.id), 0) + 1
+      };
+      setStores([...stores, newStore]);
+    } else {
+      // Mavjud do'konni tahrirlash
+      setStores(stores.map(store => 
+        store.id === editingStore.id ? editingStore : store
+      ));
+    }
     setEditingStore(null);
+  };
+
+  const handleDeleteArticle = (id: number) => {
+    if (confirm('Haqiqatan ham bu yangilikni o\'chirmoqchimisiz?')) {
+      setArticles(articles.filter(article => article.id !== id));
+    }
+  };
+
+  const handleDeleteStore = (id: number) => {
+    if (confirm('Haqiqatan ham bu do\'konni o\'chirmoqchimisiz?')) {
+      setStores(stores.filter(store => store.id !== id));
+    }
   };
 
   const handleAddFeature = () => {
@@ -660,8 +710,20 @@ export default function AdminPanel() {
             {/* Articles Tab */}
             <TabsContent value="articles" className="space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Yangiliklar boshqaruvi</h3>
-                <Button onClick={() => setEditingArticle({ id: 0, title: '', content: '', date: new Date().toISOString().split('T')[0], imageUrl: '' })}>
+                <div>
+                  <h3 className="text-lg font-semibold">Yangiliklar boshqaruvi</h3>
+                  <p className="text-sm text-gray-600">{articles.length}/50 yangilik</p>
+                </div>
+                <Button 
+                  onClick={() => {
+                    if (articles.length >= 50) {
+                      alert('Maksimal 50 ta yangilik qo\'shish mumkin');
+                      return;
+                    }
+                    setEditingArticle({ id: 0, title: '', content: '', date: new Date().toISOString().split('T')[0], imageUrl: '' });
+                  }}
+                  disabled={articles.length >= 50}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Yangi yangilik
                 </Button>
@@ -736,7 +798,7 @@ export default function AdminPanel() {
                           <Button size="sm" variant="outline" onClick={() => setEditingArticle(article)}>
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={() => handleDeleteArticle(article.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -836,7 +898,7 @@ export default function AdminPanel() {
                           <Button size="sm" variant="outline" onClick={() => setEditingStore(store)}>
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={() => handleDeleteStore(store.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
