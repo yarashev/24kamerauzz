@@ -129,40 +129,36 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: allProducts = [], isLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products"],
-  });
+  // Map frontend brand names to database brand names
+  const brandMap: { [key: string]: string } = {
+    "ezviz": "EZVIZ",
+    "hilook": "HiLook", 
+    "hikvision": "Hikvision",
+    "hiwatch": "HiWatch",
+    "dahua": "Dahua",
+    "tvt": "TVT",
+    "imou": "Imou",
+    "tplink": "TP-Link"
+  };
 
-  // Ensure products is always an array
-  const products = Array.isArray(allProducts) ? allProducts : [];
+  // Build query parameters for API
+  const queryParams = new URLSearchParams();
+  if (selectedBrand) {
+    queryParams.append('brand', brandMap[selectedBrand]);
+  }
+  if (selectedCategory) {
+    queryParams.append('category', selectedCategory);
+  }
 
-
-
-  // Filter products by category and brand
-  const filteredProducts = products.filter(product => {
-    // First filter by brand
-    if (!selectedBrand) return false;
-    
-    // Map frontend brand names to database brand names
-    const brandMap: { [key: string]: string } = {
-      "ezviz": "EZVIZ",
-      "hilook": "HiLook", 
-      "hikvision": "Hikvision",
-      "hiwatch": "HiWatch",
-      "dahua": "Dahua",
-      "tvt": "TVT",
-      "imou": "Imou",
-      "tplink": "TP-Link"
-    };
-    
-    const dbBrandName = brandMap[selectedBrand];
-    if (product.brand !== dbBrandName) return false;
-    
-    // If no category selected, show all products for the brand
-    if (!selectedCategory) return true;
-    
-    // Filter by category if selected
-    return product.category === selectedCategory;
+  const { data: filteredProducts = [], isLoading } = useQuery<Product[]>({
+    queryKey: ["/api/products", selectedBrand, selectedCategory],
+    queryFn: async () => {
+      const url = `/api/products${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch products');
+      return response.json();
+    },
+    enabled: !!selectedBrand, // Only fetch when a brand is selected
   });
 
   const handleAddToCart = (productId: number) => {

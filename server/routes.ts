@@ -8,10 +8,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Products API
   app.get("/api/products", async (req, res) => {
     try {
-      const { category } = req.query;
-      const products = category 
+      const { category, brand } = req.query;
+      let products = category 
         ? await storage.getProductsByCategory(category as string)
         : await storage.getAllProducts();
+      
+      // Filter by brand if specified
+      if (brand) {
+        products = products.filter(product => 
+          product.brand?.toLowerCase() === (brand as string).toLowerCase()
+        );
+      }
+      
       res.json(products);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products" });
