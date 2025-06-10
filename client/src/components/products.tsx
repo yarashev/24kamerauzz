@@ -158,7 +158,7 @@ export default function Products() {
       if (!response.ok) throw new Error('Failed to fetch products');
       return response.json();
     },
-    enabled: !!selectedBrand, // Only fetch when a brand is selected
+    enabled: true, // Always fetch products
   });
 
   const handleAddToCart = (productId: number) => {
@@ -588,7 +588,7 @@ export default function Products() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2">
                 {filteredProducts.map((product) => (
                   <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer">
                     <CardContent className="p-0">
@@ -599,7 +599,7 @@ export default function Products() {
                         <img
                           src={product.imageUrl || getProductImage(product.name)}
                           alt={product.name}
-                          className="w-full h-32 object-cover hover:scale-105 transition-transform duration-200"
+                          className="w-full h-24 object-cover hover:scale-105 transition-transform duration-200"
                           loading="lazy"
                         />
                         {!product.inStock && (
@@ -614,42 +614,42 @@ export default function Products() {
                       </div>
                       
                       <div 
-                        className="p-2"
+                        className="p-1.5"
                         onClick={() => handleProductClick(product)}
                       >
-                        <h3 className="font-medium text-sm mb-1 text-gray-900 dark:text-gray-100 line-clamp-2 min-h-[2.5rem] hover:text-blue-600 transition-colors">
+                        <h3 className="font-medium text-xs mb-1 text-gray-900 dark:text-gray-100 line-clamp-1 hover:text-blue-600 transition-colors">
                           {product.name}
                         </h3>
                         
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2 min-h-[2rem]">
-                          {product.description.length > 60 ? product.description.substring(0, 60) + "..." : product.description}
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
+                          {product.description.length > 30 ? product.description.substring(0, 30) + "..." : product.description}
                         </p>
                         
                         {product.features && product.features.length > 0 && (
-                          <div className="mb-2">
-                            <div className="flex flex-wrap gap-1">
-                              {product.features.slice(0, 2).map((feature, index) => (
+                          <div className="mb-1">
+                            <div className="flex flex-wrap gap-0.5">
+                              {product.features.slice(0, 1).map((feature, index) => (
                                 <Badge key={index} variant="outline" className="text-xs px-1 py-0">
-                                  {feature.length > 8 ? feature.substring(0, 8) + "..." : feature}
+                                  {feature.length > 6 ? feature.substring(0, 6) + "..." : feature}
                                 </Badge>
                               ))}
-                              {product.features.length > 2 && (
+                              {product.features.length > 1 && (
                                 <Badge variant="outline" className="text-xs px-1 py-0">
-                                  +{product.features.length - 2}
+                                  +{product.features.length - 1}
                                 </Badge>
                               )}
                             </div>
                           </div>
                         )}
                         
-                        <div className="flex flex-col gap-1">
-                          <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-xs font-bold text-green-600 dark:text-green-400">
                             ${product.price}
                           </span>
                         </div>
                       </div>
                       
-                      <div className="p-2 pt-0">
+                      <div className="p-1.5 pt-0">
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -657,9 +657,9 @@ export default function Products() {
                           }}
                           disabled={!product.inStock || isAddingToCart}
                           size="sm"
-                          className="w-full text-xs h-7"
+                          className="w-full text-xs h-6"
                         >
-                          <ShoppingCart className="w-3 h-3 mr-1" />
+                          <ShoppingCart className="w-2 h-2 mr-1" />
                           {language === "uz" && "Qo'sh"}
                           {language === "ru" && "Добав"}
                           {language === "en" && "Add"}
