@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -202,9 +203,83 @@ export default function AdminPanel() {
     }
   ]);
 
-  const handleSaveProduct = () => {
-    // Save product logic
-    setEditingProduct(null);
+  const handleSaveProduct = async () => {
+    if (!editingProduct) return;
+    
+    try {
+      if (editingProduct.id === 0) {
+        // Yangi mahsulot qo'shish
+        const response = await fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: editingProduct.name,
+            description: editingProduct.description,
+            price: editingProduct.price,
+            category: editingProduct.category,
+            brand: editingProduct.brand,
+            imageUrl: editingProduct.imageUrl,
+            inStock: editingProduct.inStock,
+            features: editingProduct.features,
+            additionalImages: editingProduct.additionalImages || []
+          })
+        });
+        
+        if (response.ok) {
+          // Mahsulotlar ro'yxatini yangilash
+          queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+          setEditingProduct(null);
+        } else {
+          alert('Mahsulot qo\'shishda xatolik yuz berdi');
+        }
+      } else {
+        // Mavjud mahsulotni tahrirlash
+        const response = await fetch(`/api/products/${editingProduct.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: editingProduct.name,
+            description: editingProduct.description,
+            price: editingProduct.price,
+            category: editingProduct.category,
+            brand: editingProduct.brand,
+            imageUrl: editingProduct.imageUrl,
+            inStock: editingProduct.inStock,
+            features: editingProduct.features,
+            additionalImages: editingProduct.additionalImages || []
+          })
+        });
+        
+        if (response.ok) {
+          // Mahsulotlar ro'yxatini yangilash
+          queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+          setEditingProduct(null);
+        } else {
+          alert('Mahsulotni tahrirlashda xatolik yuz berdi');
+        }
+      }
+    } catch (error) {
+      alert('Tarmoq xatoligi yuz berdi');
+    }
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    if (confirm('Haqiqatan ham bu mahsulotni o\'chirmoqchimisiz?')) {
+      try {
+        const response = await fetch(`/api/products/${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          // Mahsulotlar ro'yxatini yangilash
+          queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+        } else {
+          alert('Mahsulotni o\'chirishda xatolik yuz berdi');
+        }
+      } catch (error) {
+        alert('Tarmoq xatoligi yuz berdi');
+      }
+    }
   };
 
   const handleSaveArticle = () => {
@@ -645,7 +720,7 @@ export default function AdminPanel() {
                               })}>
                                 <Edit className="h-3 w-3" />
                               </Button>
-                              <Button size="sm" variant="outline" className="h-7 w-7 p-0">
+                              <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => handleDeleteProduct(product.id)}>
                                 <Trash2 className="h-3 w-3" />
                               </Button>
                             </div>

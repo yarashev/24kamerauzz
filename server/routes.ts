@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { askJarvis, calculateCameraRecommendation } from "./openai";
-import { insertCartItemSchema, insertChatMessageSchema } from "@shared/schema";
+import { insertCartItemSchema, insertChatMessageSchema, insertProductSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products API
@@ -36,6 +36,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(product);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch product" });
+    }
+  });
+
+  app.post("/api/products", async (req, res) => {
+    try {
+      const productData = insertProductSchema.parse(req.body);
+      const product = await storage.createProduct(productData);
+      res.json(product);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid product data" });
+    }
+  });
+
+  app.put("/api/products/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const productData = insertProductSchema.parse(req.body);
+      const product = await storage.updateProduct(id, productData);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid product data" });
+    }
+  });
+
+  app.delete("/api/products/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteProduct(id);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete product" });
     }
   });
 

@@ -13,6 +13,8 @@ export interface IStorage {
   getProductsByCategory(category: string): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
+  updateProduct(id: number, product: InsertProduct): Promise<Product | undefined>;
+  deleteProduct(id: number): Promise<boolean>;
   
   // Cart methods
   getCartItems(sessionId: string): Promise<(CartItem & { product: Product })[]>;
