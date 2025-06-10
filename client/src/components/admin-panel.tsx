@@ -64,6 +64,9 @@ interface Master {
   imageUrl?: string;
   description?: string;
   services?: string[];
+  fullAddress?: string;
+  telegram?: string;
+  instagram?: string;
   isActive: boolean;
 }
 
@@ -1252,6 +1255,9 @@ export default function AdminPanel() {
                     imageUrl: '', 
                     description: '', 
                     services: [], 
+                    fullAddress: '', 
+                    telegram: '', 
+                    instagram: '', 
                     isActive: true 
                   })}
                 >
@@ -1302,6 +1308,7 @@ export default function AdminPanel() {
                           <option value="surkhandarya">Surxondaryo</option>
                           <option value="jizzakh">Jizzax</option>
                           <option value="sirdarya">Sirdaryo</option>
+                          <option value="navoiy">Navoiy</option>
                           <option value="khorezm">Xorazm</option>
                           <option value="karakalpakstan">Qoraqalpog'iston</option>
                         </select>
@@ -1358,9 +1365,35 @@ export default function AdminPanel() {
                       </div>
                     </div>
                     <div>
+                      <label className="text-sm font-medium">To'liq manzil</label>
+                      <Input 
+                        value={editingMaster.fullAddress || ''}
+                        onChange={(e) => setEditingMaster({...editingMaster, fullAddress: e.target.value})}
+                        placeholder="To'liq manzil: mahalla, ko'cha, uy raqami"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Telegram</label>
+                        <Input 
+                          value={editingMaster.telegram || ''}
+                          onChange={(e) => setEditingMaster({...editingMaster, telegram: e.target.value})}
+                          placeholder="@username yoki t.me/username"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Instagram</label>
+                        <Input 
+                          value={editingMaster.instagram || ''}
+                          onChange={(e) => setEditingMaster({...editingMaster, instagram: e.target.value})}
+                          placeholder="@username yoki instagram.com/username"
+                        />
+                      </div>
+                    </div>
+                    <div>
                       <label className="text-sm font-medium">Tavsif</label>
                       <Textarea 
-                        value={editingMaster.description}
+                        value={editingMaster.description || ''}
                         onChange={(e) => setEditingMaster({...editingMaster, description: e.target.value})}
                         placeholder="Usta haqida ma'lumot"
                         rows={3}
