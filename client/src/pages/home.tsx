@@ -4,6 +4,7 @@ import Features from "@/components/features";
 import TopCameras from "@/components/top-cameras";
 import Products from "@/components/products";
 import Masters from "@/components/masters";
+import PasswordRecovery from "@/components/password-recovery";
 import News from "@/components/news";
 import FloatingJarvis from "@/components/floating-jarvis";
 import Contact from "@/components/contact";
@@ -20,6 +21,7 @@ export default function Home() {
         <Features />
         <TopCameras />
         <Masters />
+        <PasswordRecovery />
         <News />
         <Contact />
       </main>

@@ -70,6 +70,17 @@ interface Master {
   isActive: boolean;
 }
 
+interface PasswordRecoveryBrand {
+  id: number;
+  name: string;
+  logo: string;
+  telegramSupport?: string;
+  whatsappSupport?: string;
+  phoneSupport?: string;
+  emailSupport?: string;
+  isActive: boolean;
+}
+
 const regionNames: Record<string, string> = {
   "tashkent": "Toshkent",
   "samarkand": "Samarqand", 
@@ -93,6 +104,7 @@ export default function AdminPanel() {
   const [editingStore, setEditingStore] = useState<Store | null>(null);
   const [editingAdvertisement, setEditingAdvertisement] = useState<Advertisement | null>(null);
   const [editingMaster, setEditingMaster] = useState<Master | null>(null);
+  const [editingPasswordBrand, setEditingPasswordBrand] = useState<PasswordRecoveryBrand | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRegion, setSelectedRegion] = useState<string>("all");

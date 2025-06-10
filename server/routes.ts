@@ -343,6 +343,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Password Recovery Brands API
+  app.get("/api/password-recovery-brands", async (req, res) => {
+    try {
+      const brands = await storage.getAllPasswordRecoveryBrands();
+      res.json(brands);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch password recovery brands" });
+    }
+  });
+
+  app.post("/api/password-recovery-brands", async (req, res) => {
+    try {
+      const brand = await storage.createPasswordRecoveryBrand(req.body);
+      res.status(201).json(brand);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create password recovery brand" });
+    }
+  });
+
+  app.put("/api/password-recovery-brands/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const brand = await storage.updatePasswordRecoveryBrand(id, req.body);
+      if (!brand) {
+        return res.status(404).json({ message: "Password recovery brand not found" });
+      }
+      res.json(brand);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update password recovery brand" });
+    }
+  });
+
+  app.delete("/api/password-recovery-brands/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deletePasswordRecoveryBrand(id);
+      if (!success) {
+        return res.status(404).json({ message: "Password recovery brand not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete password recovery brand" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

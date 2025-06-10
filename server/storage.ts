@@ -47,6 +47,13 @@ export interface IStorage {
   updateMaster(id: number, master: InsertMaster): Promise<Master | undefined>;
   deleteMaster(id: number): Promise<boolean>;
   updateMasterRating(id: number, rating: number): Promise<Master | undefined>;
+  
+  // Password Recovery Brand methods
+  getAllPasswordRecoveryBrands(): Promise<PasswordRecoveryBrand[]>;
+  getPasswordRecoveryBrand(id: number): Promise<PasswordRecoveryBrand | undefined>;
+  createPasswordRecoveryBrand(brand: InsertPasswordRecoveryBrand): Promise<PasswordRecoveryBrand>;
+  updatePasswordRecoveryBrand(id: number, brand: InsertPasswordRecoveryBrand): Promise<PasswordRecoveryBrand | undefined>;
+  deletePasswordRecoveryBrand(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -522,6 +529,39 @@ export class DatabaseStorage implements IStorage {
       .where(eq(masters.id, id))
       .returning();
     return master || undefined;
+  }
+
+  async getAllPasswordRecoveryBrands(): Promise<PasswordRecoveryBrand[]> {
+    return await db.select().from(passwordRecoveryBrands).where(eq(passwordRecoveryBrands.isActive, true));
+  }
+
+  async getPasswordRecoveryBrand(id: number): Promise<PasswordRecoveryBrand | undefined> {
+    const [brand] = await db.select().from(passwordRecoveryBrands).where(eq(passwordRecoveryBrands.id, id));
+    return brand || undefined;
+  }
+
+  async createPasswordRecoveryBrand(insertBrand: InsertPasswordRecoveryBrand): Promise<PasswordRecoveryBrand> {
+    const [brand] = await db
+      .insert(passwordRecoveryBrands)
+      .values(insertBrand)
+      .returning();
+    return brand;
+  }
+
+  async updatePasswordRecoveryBrand(id: number, insertBrand: InsertPasswordRecoveryBrand): Promise<PasswordRecoveryBrand | undefined> {
+    const [brand] = await db
+      .update(passwordRecoveryBrands)
+      .set(insertBrand)
+      .where(eq(passwordRecoveryBrands.id, id))
+      .returning();
+    return brand || undefined;
+  }
+
+  async deletePasswordRecoveryBrand(id: number): Promise<boolean> {
+    const result = await db
+      .delete(passwordRecoveryBrands)
+      .where(eq(passwordRecoveryBrands.id, id));
+    return (result.rowCount || 0) > 0;
   }
 }
 
