@@ -297,11 +297,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
-    const [product] = await db
-      .insert(products)
-      .values(insertProduct)
-      .returning();
-    return product;
+    try {
+      const [product] = await db
+        .insert(products)
+        .values(insertProduct as any)
+        .returning();
+      return product;
+    } catch (error) {
+      console.error('Error creating product:', error);
+      throw error;
+    }
   }
 
   // Cart methods
