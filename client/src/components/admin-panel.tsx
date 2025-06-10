@@ -70,6 +70,22 @@ interface Master {
   isActive: boolean;
 }
 
+const regionNames: Record<string, string> = {
+  "tashkent": "Toshkent",
+  "samarkand": "Samarqand", 
+  "bukhara": "Buxoro",
+  "andijan": "Andijon",
+  "fergana": "Farg'ona",
+  "namangan": "Namangan",
+  "kashkadarya": "Qashqadaryo",
+  "surkhandarya": "Surxondaryo",
+  "jizzakh": "Jizzax",
+  "sirdarya": "Sirdaryo",
+  "navoiy": "Navoiy",
+  "khorezm": "Xorazm",
+  "karakalpakstan": "Qoraqalpog'iston"
+};
+
 export default function AdminPanel() {
   const [isVisible, setIsVisible] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -79,8 +95,19 @@ export default function AdminPanel() {
   const [editingMaster, setEditingMaster] = useState<Master | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
+
+  const getRegionDisplayName = (regionKey: string): string => {
+    return regionNames[regionKey] || regionKey;
+  };
+
+  // Ustalarni filtrlash funksiyasi
+  const getFilteredMasters = () => {
+    if (selectedRegion === "all") return masters;
+    return masters.filter(master => master.region === selectedRegion);
+  };
 
   // Brendlar ro'yxati
   const brands = [
@@ -1233,29 +1260,42 @@ export default function AdminPanel() {
                   <h3 className="text-lg font-semibold">Ustalar boshqaruvi</h3>
                   <p className="text-sm text-gray-600">{masters.length} usta</p>
                 </div>
-                <Button 
-                  onClick={() => setEditingMaster({ 
-                    id: 0, 
-                    name: '', 
-                    specialization: '', 
-                    region: 'tashkent', 
-                    city: '', 
-                    phone: '', 
-                    experience: 1, 
-                    rating: 0, 
-                    reviewCount: 0, 
-                    imageUrl: '', 
-                    description: '', 
-                    services: [], 
-                    fullAddress: '', 
-                    telegram: '', 
-                    instagram: '', 
-                    isActive: true 
-                  })}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Yangi usta
-                </Button>
+                <div className="flex gap-2">
+                  <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Viloyat bo'yicha filtrlash" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Barcha viloyatlar</SelectItem>
+                      {Object.entries(regionNames).map(([key, name]) => (
+                        <SelectItem key={key} value={key}>{name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button 
+                    onClick={() => setEditingMaster({ 
+                      id: 0, 
+                      name: '', 
+                      specialization: '', 
+                      region: 'tashkent', 
+                      city: '', 
+                      phone: '', 
+                      experience: 1, 
+                      rating: 0, 
+                      reviewCount: 0, 
+                      imageUrl: '', 
+                      description: '', 
+                      services: [], 
+                      fullAddress: '', 
+                      telegram: '', 
+                      instagram: '', 
+                      isActive: true 
+                    })}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Yangi usta
+                  </Button>
+                </div>
               </div>
 
               {editingMaster && (
@@ -1421,7 +1461,7 @@ export default function AdminPanel() {
                 </div>
               ) : (
                 <div className="grid gap-4">
-                  {masters.map((master) => (
+                  {getFilteredMasters().map((master) => (
                     <Card key={master.id}>
                       <CardContent className="p-4">
                         <div className="flex gap-4">
@@ -1453,7 +1493,10 @@ export default function AdminPanel() {
                               <Badge variant={master.isActive ? "default" : "secondary"} className="text-xs">
                                 {master.isActive ? "Faol" : "Nofaol"}
                               </Badge>
-                              <span className="text-xs text-gray-500">{master.region}, {master.city}</span>
+                              <Badge variant="outline" className="text-xs">
+                                {getRegionDisplayName(master.region)}
+                              </Badge>
+                              <span className="text-xs text-gray-500">{master.city}</span>
                               <span className="text-xs text-gray-500">{master.experience} yil</span>
                               <span className="text-xs text-gray-500">★ {master.rating}</span>
                             </div>
@@ -1462,15 +1505,20 @@ export default function AdminPanel() {
                       </CardContent>
                     </Card>
                   ))}
-                  {masters.length === 0 && (
+                  {getFilteredMasters().length === 0 && (
                     <Card>
                       <CardContent className="p-8 text-center">
-                        <p className="text-gray-500 mb-4">Hech qanday usta topilmadi</p>
+                        <p className="text-gray-500 mb-4">
+                          {selectedRegion === "all" 
+                            ? "Hech qanday usta topilmadi" 
+                            : `${getRegionDisplayName(selectedRegion)} viloyatida ustalar mavjud emas`
+                          }
+                        </p>
                         <Button onClick={() => setEditingMaster({ 
                           id: 0, 
                           name: '', 
                           specialization: '', 
-                          region: 'tashkent', 
+                          region: selectedRegion === "all" ? 'tashkent' : selectedRegion, 
                           city: '', 
                           phone: '', 
                           experience: 1, 
@@ -1479,10 +1527,13 @@ export default function AdminPanel() {
                           imageUrl: '', 
                           description: '', 
                           services: [], 
+                          fullAddress: '', 
+                          telegram: '', 
+                          instagram: '', 
                           isActive: true 
                         })}>
                           <Plus className="h-4 w-4 mr-2" />
-                          Birinchi ustani qo'shish
+                          {selectedRegion === "all" ? "Birinchi ustani qo'shish" : "Bu viloyatga usta qo'shish"}
                         </Button>
                       </CardContent>
                     </Card>
