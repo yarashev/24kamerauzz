@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, Phone, MapPin, Clock, Wrench } from "lucide-react";
+import { Star, Phone, MapPin, Clock, Wrench, MessageCircle, Instagram } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { useQuery } from "@tanstack/react-query";
 
@@ -221,15 +221,58 @@ export default function Masters() {
                         </div>
                       )}
                       
-                      <Button
-                        className="w-full bg-green-600 hover:bg-green-700 text-white"
-                        onClick={() => window.open(`tel:${master.phone}`, '_self')}
-                      >
-                        <Phone className="h-4 w-4 mr-2" />
-                        {language === "uz" && "Qo'ng'iroq qilish"}
-                        {language === "ru" && "Позвонить"}
-                        {language === "en" && "Call"}
-                      </Button>
+                      <div className="space-y-2">
+                        <Button
+                          className="w-full bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => window.open(`tel:${master.phone}`, '_self')}
+                        >
+                          <Phone className="h-4 w-4 mr-2" />
+                          {language === "uz" && "Qo'ng'iroq qilish"}
+                          {language === "ru" && "Позвонить"}
+                          {language === "en" && "Call"}
+                        </Button>
+                        
+                        {(master.telegram || master.instagram) && (
+                          <div className="flex gap-2">
+                            {master.telegram && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1"
+                                onClick={() => {
+                                  const telegramUrl = master.telegram?.startsWith('@') 
+                                    ? `https://t.me/${master.telegram.slice(1)}`
+                                    : master.telegram?.startsWith('t.me/') 
+                                    ? `https://${master.telegram}`
+                                    : `https://t.me/${master.telegram}`;
+                                  window.open(telegramUrl, '_blank');
+                                }}
+                              >
+                                <MessageCircle className="h-4 w-4 mr-1" />
+                                Telegram
+                              </Button>
+                            )}
+                            {master.instagram && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1"
+                                onClick={() => {
+                                  const instagramUrl = master.instagram?.startsWith('@') 
+                                    ? `https://instagram.com/${master.instagram.slice(1)}`
+                                    : master.instagram?.startsWith('instagram.com/') 
+                                    ? `https://${master.instagram}`
+                                    : `https://instagram.com/${master.instagram}`;
+                                  window.open(instagramUrl, '_blank');
+                                }}
+                              >
+                                <Instagram className="h-4 w-4 mr-1" />
+                                Instagram
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                   
