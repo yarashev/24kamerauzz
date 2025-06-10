@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Eye, EyeOff, Plus, Edit, Trash2, Save, X, Upload, Camera } from "lucide-react";
+import type { Product as DBProduct } from "@shared/schema";
 
 interface Product {
   id: number;
@@ -250,16 +252,30 @@ export default function AdminPanel() {
     }
   };
 
+  // Fetch real products from API
+  const { data: allDbProducts = [], isLoading: productsLoading } = useQuery<DBProduct[]>({
+    queryKey: ["/api/products"],
+  });
+
   const getCurrentBrandProducts = () => {
-    return productsByBrand[selectedBrand] || [];
+    if (selectedBrand === 'all') return allDbProducts;
+    return allDbProducts.filter(product => {
+      const brandMap: { [key: string]: string } = {
+        "ezviz": "EZVIZ",
+        "hilook": "HiLook", 
+        "hikvision": "Hikvision",
+        "hiwatch": "HiWatch",
+        "dahua": "Dahua",
+        "tvt": "TVT",
+        "imou": "Imou",
+        "tplink": "TP-Link"
+      };
+      return product.brand === brandMap[selectedBrand];
+    });
   };
 
   const getAllProducts = () => {
-    const allProducts: Product[] = [];
-    Object.values(productsByBrand).forEach(brandProducts => {
-      allProducts.push(...brandProducts);
-    });
-    return allProducts;
+    return allDbProducts;
   };
 
   const getSelectedBrandInfo = () => {
@@ -267,7 +283,7 @@ export default function AdminPanel() {
   };
 
   const getDisplayProducts = () => {
-    return selectedBrand === 'all' ? getAllProducts() : getCurrentBrandProducts();
+    return getCurrentBrandProducts();
   };
 
   if (!isVisible) {
@@ -539,87 +555,106 @@ export default function AdminPanel() {
                 </Card>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {getDisplayProducts().map((product: Product) => (
-                  <Card key={product.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-3">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <img src={product.imageUrl} alt={product.name} className="w-12 h-12 object-cover rounded" />
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm truncate">{product.name}</h4>
+              {productsLoading ? (
+                <div className="col-span-full text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Mahsulotlar yuklanmoqda...</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {getDisplayProducts().map((product) => (
+                    <Card key={product.id} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-3">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-2">
+                            <img src={product.imageUrl || '/placeholder.jpg'} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-sm truncate">{product.name}</h4>
+                              <Badge variant="outline" className="text-xs">
+                                {product.brand}
+                              </Badge>
+                            </div>
+                          </div>
+                          
+                          <p className="text-xs text-gray-600 line-clamp-2">{product.description}</p>
+                          
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm font-bold text-primary">${product.price}</p>
+                            <div className="flex gap-1">
+                              <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => setEditingProduct({
+                                id: product.id,
+                                name: product.name,
+                                description: product.description,
+                                price: product.price,
+                                category: product.category,
+                                brand: product.brand || '',
+                                imageUrl: product.imageUrl || '',
+                                inStock: product.inStock,
+                                features: product.features || [],
+                                additionalImages: product.additionalImages || []
+                              })}>
+                                <Edit className="h-3 w-3" />
+                              </Button>
+                              <Button size="sm" variant="outline" className="h-7 w-7 p-0">
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-1">
+                            <Badge variant={product.inStock ? "default" : "secondary"} className="text-xs">
+                              {product.inStock ? "Mavjud" : "Tugagan"}
+                            </Badge>
                             <Badge variant="outline" className="text-xs">
-                              {brands.find(b => b.id === product.brand)?.name}
+                              {product.category}
                             </Badge>
                           </div>
-                        </div>
-                        
-                        <p className="text-xs text-gray-600 line-clamp-2">{product.description}</p>
-                        
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-bold text-primary">{product.price.toLocaleString()} so'm</p>
-                          <div className="flex gap-1">
-                            <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => setEditingProduct(product)}>
-                              <Edit className="h-3 w-3" />
-                            </Button>
-                            <Button size="sm" variant="outline" className="h-7 w-7 p-0">
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
+                          
+                          <div className="flex flex-wrap gap-1">
+                            {(product.features || []).slice(0, 2).map((feature, index) => (
+                              <span key={index} className="text-xs bg-gray-100 px-1 py-0.5 rounded">
+                                {feature}
+                              </span>
+                            ))}
+                            {(product.features || []).length > 2 && (
+                              <span className="text-xs text-gray-500">+{(product.features || []).length - 2}</span>
+                            )}
                           </div>
                         </div>
-                        
-                        <div className="flex items-center gap-1">
-                          <Badge variant={product.inStock ? "default" : "secondary"} className="text-xs">
-                            {product.inStock ? "Mavjud" : "Tugagan"}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {product.category}
-                          </Badge>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-1">
-                          {product.features.slice(0, 2).map((feature, index) => (
-                            <span key={index} className="text-xs bg-gray-100 px-1 py-0.5 rounded">
-                              {feature}
-                            </span>
-                          ))}
-                          {product.features.length > 2 && (
-                            <span className="text-xs text-gray-500">+{product.features.length - 2}</span>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-                {getDisplayProducts().length === 0 && selectedBrand !== 'all' && (
-                  <Card>
-                    <CardContent className="p-8 text-center">
-                      <Camera className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                      <h4 className="text-lg font-medium text-gray-600 mb-2">
-                        {getSelectedBrandInfo()?.name} brendida mahsulotlar yo'q
-                      </h4>
-                      <p className="text-sm text-gray-500 mb-4">
-                        Yangi mahsulot qo'shish uchun yuqoridagi "Yangi mahsulot" tugmasini bosing
-                      </p>
-                      <Button onClick={() => setEditingProduct({ 
-                        id: 0, 
-                        name: '', 
-                        description: '', 
-                        price: 0, 
-                        category: '', 
-                        brand: selectedBrand,
-                        imageUrl: '', 
-                        inStock: true, 
-                        features: [],
-                        additionalImages: []
-                      })}>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Birinchi mahsulotni qo'shish
-                      </Button>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+              
+              {getDisplayProducts().length === 0 && selectedBrand !== 'all' && !productsLoading && (
+                <Card>
+                  <CardContent className="p-8 text-center">
+                    <Camera className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                    <h4 className="text-lg font-medium text-gray-600 mb-2">
+                      {getSelectedBrandInfo()?.name} brendida mahsulotlar yo'q
+                    </h4>
+                    <p className="text-sm text-gray-500 mb-4">
+                      Yangi mahsulot qo'shish uchun yuqoridagi "Yangi mahsulot" tugmasini bosing
+                    </p>
+                    <Button onClick={() => setEditingProduct({ 
+                      id: 0, 
+                      name: '', 
+                      description: '', 
+                      price: 0, 
+                      category: '', 
+                      brand: selectedBrand,
+                      imageUrl: '', 
+                      inStock: true, 
+                      features: [],
+                      additionalImages: []
+                    })}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Birinchi mahsulotni qo'shish
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
 
             {/* Articles Tab */}
