@@ -1,4 +1,4 @@
-import { users, products, cartItems, chatMessages, articles, advertisements, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement } from "@shared/schema";
+import { users, products, cartItems, chatMessages, articles, advertisements, masters, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement, type Master, type InsertMaster } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -38,6 +38,15 @@ export interface IStorage {
   createAdvertisement(advertisement: InsertAdvertisement): Promise<Advertisement>;
   updateAdvertisement(id: number, advertisement: InsertAdvertisement): Promise<Advertisement | undefined>;
   deleteAdvertisement(id: number): Promise<boolean>;
+  
+  // Master methods
+  getAllMasters(): Promise<Master[]>;
+  getMastersByRegion(region: string): Promise<Master[]>;
+  getMaster(id: number): Promise<Master | undefined>;
+  createMaster(master: InsertMaster): Promise<Master>;
+  updateMaster(id: number, master: InsertMaster): Promise<Master | undefined>;
+  deleteMaster(id: number): Promise<boolean>;
+  updateMasterRating(id: number, rating: number): Promise<Master | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {

@@ -58,6 +58,24 @@ export const advertisements = pgTable("advertisements", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const masters = pgTable("masters", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  specialization: text("specialization").notNull(),
+  region: text("region").notNull(),
+  city: text("city").notNull(),
+  phone: text("phone").notNull(),
+  experience: integer("experience").notNull(),
+  rating: real("rating").default(0),
+  reviewCount: integer("review_count").default(0),
+  imageUrl: text("image_url"),
+  description: text("description"),
+  services: text("services").array(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -85,6 +103,12 @@ export const insertArticleSchema = createInsertSchema(articles).omit({
 export const insertAdvertisementSchema = createInsertSchema(advertisements).omit({
   id: true,
   createdAt: true,
+});
+
+export const insertMasterSchema = createInsertSchema(masters).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 // Relations
@@ -116,3 +140,5 @@ export type Article = typeof articles.$inferSelect;
 export type InsertArticle = z.infer<typeof insertArticleSchema>;
 export type Advertisement = typeof advertisements.$inferSelect;
 export type InsertAdvertisement = z.infer<typeof insertAdvertisementSchema>;
+export type Master = typeof masters.$inferSelect;
+export type InsertMaster = z.infer<typeof insertMasterSchema>;
