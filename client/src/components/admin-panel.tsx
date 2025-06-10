@@ -812,8 +812,20 @@ export default function AdminPanel() {
             {/* Stores Tab */}
             <TabsContent value="stores" className="space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Do'konlar boshqaruvi</h3>
-                <Button onClick={() => setEditingStore({ id: 0, name: '', address: '', phone: '', hours: '', rating: 5.0 })}>
+                <div>
+                  <h3 className="text-lg font-semibold">Do'konlar boshqaruvi</h3>
+                  <p className="text-sm text-gray-600">{stores.length}/50 do'kon</p>
+                </div>
+                <Button 
+                  onClick={() => {
+                    if (stores.length >= 50) {
+                      alert('Maksimal 50 ta do\'kon qo\'shish mumkin');
+                      return;
+                    }
+                    setEditingStore({ id: 0, name: '', address: '', phone: '', hours: '', rating: 5.0 });
+                  }}
+                  disabled={stores.length >= 50}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Yangi do'kon
                 </Button>
