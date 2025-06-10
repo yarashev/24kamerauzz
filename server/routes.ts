@@ -388,6 +388,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Price History routes
+  app.get("/api/price-history", async (req, res) => {
+    try {
+      const productId = req.query.productId ? parseInt(req.query.productId as string) : undefined;
+      const history = await storage.getPriceHistory(productId);
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch price history" });
+    }
+  });
+
+  app.post("/api/bulk-price-update", async (req, res) => {
+    try {
+      const { updates } = req.body;
+      const success = await storage.bulkUpdatePricesWithHistory(updates);
+      if (success) {
+        res.json({ message: "Prices updated successfully" });
+      } else {
+        res.status(400).json({ message: "Failed to update prices" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update prices" });
+    }
+  });
+
+  app.post("/api/revert-prices/:changeId", async (req, res) => {
+    try {
+      const changeId = parseInt(req.params.changeId);
+      const success = await storage.revertProductPrices(changeId);
+      if (success) {
+        res.json({ message: "Prices reverted successfully" });
+      } else {
+        res.status(404).json({ message: "Change not found or unable to revert" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to revert prices" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
