@@ -139,15 +139,31 @@ export default function Products() {
 
 
   // Filter products by category and brand
-  const filteredProducts = selectedBrand === "ezviz" 
-    ? products.filter(product => product.category === "ezviz")
-    : selectedBrand === "hilook" && selectedCategory
-    ? products.filter(product => product.category === selectedCategory)
-    : selectedBrand === "hikvision" && selectedCategory
-    ? products.filter(product => product.category === selectedCategory)
-    : selectedBrand === "hiwatch" && selectedCategory
-    ? products.filter(product => product.category === selectedCategory)
-    : [];
+  const filteredProducts = products.filter(product => {
+    // First filter by brand
+    if (!selectedBrand) return false;
+    
+    // Map frontend brand names to database brand names
+    const brandMap: { [key: string]: string } = {
+      "ezviz": "EZVIZ",
+      "hilook": "HiLook", 
+      "hikvision": "Hikvision",
+      "hiwatch": "HiWatch",
+      "dahua": "Dahua",
+      "tvt": "TVT",
+      "imou": "Imou",
+      "tplink": "TP-Link"
+    };
+    
+    const dbBrandName = brandMap[selectedBrand];
+    if (product.brand !== dbBrandName) return false;
+    
+    // If no category selected, show all products for the brand
+    if (!selectedCategory) return true;
+    
+    // Filter by category if selected
+    return product.category === selectedCategory;
+  });
 
   const handleAddToCart = (productId: number) => {
     addToCart(productId, 1);
@@ -196,7 +212,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("hikvision");
-              setSelectedCategory("hikvision_nvr"); // Default to NVR category for Hikvision
+              setSelectedCategory(""); // Show all Hikvision products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hikvision" ? "ring-4 ring-blue-500" : ""
@@ -211,7 +227,10 @@ export default function Products() {
 
           {/* Ezviz Logo */}
           <button 
-            onClick={() => setSelectedBrand("ezviz")}
+            onClick={() => {
+              setSelectedBrand("ezviz");
+              setSelectedCategory(""); // Show all EZVIZ products initially
+            }}
             className={`w-44 h-20 bg-black rounded-lg shadow-lg p-3 flex items-center justify-center transition-all duration-200 hover:scale-105 ${
               selectedBrand === "ezviz" ? "ring-4 ring-blue-500" : ""
             }`}
@@ -227,7 +246,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("hilook");
-              setSelectedCategory("ip_camera"); // Default to IP camera category for Hilook
+              setSelectedCategory(""); // Show all HiLook products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hilook" ? "ring-4 ring-blue-500" : ""
@@ -244,7 +263,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("hiwatch");
-              setSelectedCategory("hiwatch_nvr"); // Default to NVR category for HiWatch
+              setSelectedCategory(""); // Show all HiWatch products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "hiwatch" ? "ring-4 ring-blue-500" : ""
