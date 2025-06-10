@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingCart, Menu, X, Globe } from "lucide-react";
+import { ShoppingCart, Menu, X, Globe, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -77,6 +77,24 @@ export default function Header() {
               {language === "en" && "Masters"}
             </Button>
 
+            {/* Password Recovery Button */}
+            <Button 
+              onClick={() => handleScrollTo('password-recovery')}
+              className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 flex items-center gap-2"
+            >
+              <Key className="h-4 w-4" />
+              <span className="hidden lg:inline">
+                {language === "uz" && "Parol tiklash"}
+                {language === "ru" && "Пароль"}
+                {language === "en" && "Password"}
+              </span>
+              <span className="lg:hidden">
+                {language === "uz" && "Parol"}
+                {language === "ru" && "Пароль"}
+                {language === "en" && "Pass"}
+              </span>
+            </Button>
+
             {/* Language Selector */}
             <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
               <SelectTrigger className="w-12 h-10 border-0 bg-transparent hover:bg-gray-100 rounded-full">
@@ -115,6 +133,42 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col space-y-4 mt-8">
                   <NavigationLinks className="flex flex-col space-y-4" />
+                  
+                  {/* Mobile Menu Buttons */}
+                  <div className="border-t pt-4 space-y-3">
+                    <CatalogModal>
+                      <Button className="w-full bg-primary text-white justify-start">
+                        {language === "uz" && "Katalog"}
+                        {language === "ru" && "Каталог"}
+                        {language === "en" && "Catalog"}
+                      </Button>
+                    </CatalogModal>
+                    
+                    <Button 
+                      onClick={() => {
+                        handleScrollTo('masters');
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full bg-green-600 text-white justify-start hover:bg-green-700"
+                    >
+                      {language === "uz" && "Ustalar"}
+                      {language === "ru" && "Мастера"}
+                      {language === "en" && "Masters"}
+                    </Button>
+                    
+                    <Button 
+                      onClick={() => {
+                        handleScrollTo('password-recovery');
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full bg-red-600 text-white justify-start hover:bg-red-700 flex items-center gap-2"
+                    >
+                      <Key className="h-4 w-4" />
+                      {language === "uz" && "Parol tiklash"}
+                      {language === "ru" && "Восстановление пароля"}
+                      {language === "en" && "Password Recovery"}
+                    </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

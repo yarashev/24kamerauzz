@@ -61,7 +61,7 @@ export default function PasswordRecovery() {
   const selectedBrandData = brands.find(brand => brand.id.toString() === selectedBrand);
 
   return (
-    <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
+    <section id="password-recovery" className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-6">
