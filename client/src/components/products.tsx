@@ -195,8 +195,8 @@ export default function Products() {
     <section id="products" className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="text-gray-600 text-lg">
-            {language === "uz" && "Ishonchli brendlar"}
+          <p className="text-gray-600 text-lg bg-[#0f0c0c00]">
+            {language === "uz" && "SIZ QAYSI BRENDNI TANLAYSIZ BIZDA XAMMASIDAN BOR"}
             {language === "ru" && "Лучшие камеры и электронные устройства"}
             {language === "en" && "Best cameras and electronic devices"}
           </p>
@@ -541,21 +541,7 @@ export default function Products() {
 
 
         {/* Products Display */}
-        {!selectedBrand ? (
-          <div className="text-center py-12">
-            <Camera className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-              {language === "uz" && "Brend tanlang"}
-              {language === "ru" && "Выберите бренд"}
-              {language === "en" && "Select a brand"}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400">
-              {language === "uz" && "Mahsulotlarni ko'rish uchun yuqorida brend logosini bosing"}
-              {language === "ru" && "Нажмите на логотип бренда выше, чтобы увидеть продукты"}
-              {language === "en" && "Click on a brand logo above to view products"}
-            </p>
-          </div>
-        ) : (
+        {selectedBrand && (
           <>
             {isLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -581,11 +567,7 @@ export default function Products() {
                   {language === "ru" && "Товары не найдены"}
                   {language === "en" && "No products found"}
                 </h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  {language === "uz" && "Ushbu brend uchun mahsulotlar mavjud emas"}
-                  {language === "ru" && "Нет доступных продуктов для этого бренда"}
-                  {language === "en" && "No products available for this brand"}
-                </p>
+                
               </div>
             ) : (
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2">
@@ -673,7 +655,6 @@ export default function Products() {
           </>
         )}
       </div>
-      
       {/* Product Detail Modal */}
       <ProductDetailModal
         product={selectedProduct}
