@@ -412,6 +412,22 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return article;
   }
+
+  async updateProduct(id: number, insertProduct: InsertProduct): Promise<Product | undefined> {
+    const [product] = await db
+      .update(products)
+      .set(insertProduct)
+      .where(eq(products.id, id))
+      .returning();
+    return product || undefined;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const result = await db
+      .delete(products)
+      .where(eq(products.id, id));
+    return result.rowCount > 0;
+  }
 }
 
 export const storage = new DatabaseStorage();
