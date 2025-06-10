@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "vite build && esbuild server/index.ts --bundle --platform=node --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
@@ -12,7 +12,9 @@
     "vite": "^5.4.14",
     "pg": "^8.11.1",
     "drizzle-orm": "^0.29.1",
-    "zod": "^3.22.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
     "esbuild": "^0.19.11"
   },
   "engines": {
