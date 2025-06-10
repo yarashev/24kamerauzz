@@ -92,6 +92,19 @@ export const passwordRecoveryBrands = pgTable("password_recovery_brands", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const priceHistory = pgTable("price_history", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").references(() => products.id),
+  oldPrice: integer("old_price").notNull(),
+  newPrice: integer("new_price").notNull(),
+  changePercentage: real("change_percentage").notNull(),
+  dollarRate: integer("dollar_rate"),
+  brand: text("brand"),
+  category: text("category"),
+  changedAt: timestamp("changed_at", { withTimezone: true }).defaultNow().notNull(),
+  changeReason: text("change_reason").default("Manual adjustment"),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -133,6 +146,11 @@ export const insertPasswordRecoveryBrandSchema = createInsertSchema(passwordReco
   updatedAt: true,
 });
 
+export const insertPriceHistorySchema = createInsertSchema(priceHistory).omit({
+  id: true,
+  changedAt: true,
+});
+
 // Relations
 export const productsRelations = relations(products, ({ many }) => ({
   cartItems: many(cartItems),
@@ -166,3 +184,5 @@ export type Master = typeof masters.$inferSelect;
 export type InsertMaster = z.infer<typeof insertMasterSchema>;
 export type PasswordRecoveryBrand = typeof passwordRecoveryBrands.$inferSelect;
 export type InsertPasswordRecoveryBrand = z.infer<typeof insertPasswordRecoveryBrandSchema>;
+export type PriceHistory = typeof priceHistory.$inferSelect;
+export type InsertPriceHistory = z.infer<typeof insertPriceHistorySchema>;
