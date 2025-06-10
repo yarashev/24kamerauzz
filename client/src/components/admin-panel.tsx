@@ -539,49 +539,53 @@ export default function AdminPanel() {
                 </Card>
               )}
 
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {getDisplayProducts().map((product: Product) => (
-                  <Card key={product.id}>
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start">
-                        <div className="flex gap-4">
-                          <img src={product.imageUrl} alt={product.name} className="w-16 h-16 object-cover rounded" />
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-semibold">{product.name}</h4>
-                              <Badge variant="outline" className="text-xs">
-                                {brands.find(b => b.id === product.brand)?.name}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-gray-600 mb-1">{product.description}</p>
-                            <p className="text-lg font-bold text-primary mb-2">{product.price.toLocaleString()} so'm</p>
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge variant={product.inStock ? "default" : "secondary"}>
-                                {product.inStock ? "Mavjud" : "Tugagan"}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {product.category}
-                              </Badge>
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {product.features.slice(0, 3).map((feature, index) => (
-                                <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
-                                  {feature}
-                                </span>
-                              ))}
-                              {product.features.length > 3 && (
-                                <span className="text-xs text-gray-500">+{product.features.length - 3} ko'proq</span>
-                              )}
-                            </div>
+                  <Card key={product.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-3">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <img src={product.imageUrl} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm truncate">{product.name}</h4>
+                            <Badge variant="outline" className="text-xs">
+                              {brands.find(b => b.id === product.brand)?.name}
+                            </Badge>
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => setEditingProduct(product)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        
+                        <p className="text-xs text-gray-600 line-clamp-2">{product.description}</p>
+                        
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-bold text-primary">{product.price.toLocaleString()} so'm</p>
+                          <div className="flex gap-1">
+                            <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => setEditingProduct(product)}>
+                              <Edit className="h-3 w-3" />
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-7 w-7 p-0">
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-1">
+                          <Badge variant={product.inStock ? "default" : "secondary"} className="text-xs">
+                            {product.inStock ? "Mavjud" : "Tugagan"}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {product.category}
+                          </Badge>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-1">
+                          {product.features.slice(0, 2).map((feature, index) => (
+                            <span key={index} className="text-xs bg-gray-100 px-1 py-0.5 rounded">
+                              {feature}
+                            </span>
+                          ))}
+                          {product.features.length > 2 && (
+                            <span className="text-xs text-gray-500">+{product.features.length - 2}</span>
+                          )}
                         </div>
                       </div>
                     </CardContent>
