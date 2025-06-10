@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Send, Phone, Mail } from "lucide-react";
+import { MessageCircle, Send, Phone, Mail, Shield, Key } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { useQuery } from "@tanstack/react-query";
 
@@ -64,16 +64,29 @@ export default function PasswordRecovery() {
     <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            {language === "uz" && "Parolni Tiklash"}
-            {language === "ru" && "Восстановление Пароля"}
-            {language === "en" && "Password Recovery"}
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="bg-red-100 p-3 rounded-full">
+              <Key className="h-8 w-8 text-red-600" />
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900">
+              {language === "uz" && "Parolni Tiklash"}
+              {language === "ru" && "Восстановление Пароля"}
+              {language === "en" && "Password Recovery"}
+            </h2>
+          </div>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             {language === "uz" && "Kamera parolingizni unutdingizmi? Brendingizni tanlang va texnik yordam olish uchun biz bilan bog'laning"}
             {language === "ru" && "Забыли пароль от камеры? Выберите ваш бренд и свяжитесь с нами для технической поддержки"}
             {language === "en" && "Forgot your camera password? Select your brand and contact us for technical support"}
           </p>
+          <div className="mt-6 flex items-center justify-center gap-2">
+            <Shield className="h-5 w-5 text-green-600" />
+            <span className="text-sm text-green-600 font-medium">
+              {language === "uz" && "Xavfsiz va tez yordam"}
+              {language === "ru" && "Безопасная и быстрая помощь"}
+              {language === "en" && "Safe and fast support"}
+            </span>
+          </div>
         </div>
 
         <div className="max-w-4xl mx-auto">
