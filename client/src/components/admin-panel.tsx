@@ -41,11 +41,22 @@ interface Store {
   rating: number;
 }
 
+interface Advertisement {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  buttonText: string;
+  link: string;
+  isActive?: boolean;
+}
+
 export default function AdminPanel() {
   const [isVisible, setIsVisible] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [editingStore, setEditingStore] = useState<Store | null>(null);
+  const [editingAdvertisement, setEditingAdvertisement] = useState<Advertisement | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
@@ -353,6 +364,81 @@ export default function AdminPanel() {
     }
   };
 
+  const handleSaveAdvertisement = async () => {
+    if (!editingAdvertisement) return;
+    
+    try {
+      if (editingAdvertisement.id === 0) {
+        // Yangi reklama qo'shish
+        if (advertisements.length >= 10) {
+          alert('Maksimal 10 ta reklama qo\'shish mumkin');
+          return;
+        }
+        
+        const response = await fetch('/api/advertisements', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: editingAdvertisement.title,
+            description: editingAdvertisement.description,
+            imageUrl: editingAdvertisement.imageUrl,
+            buttonText: editingAdvertisement.buttonText,
+            link: editingAdvertisement.link,
+            isActive: editingAdvertisement.isActive ?? true
+          })
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/advertisements'] });
+          setEditingAdvertisement(null);
+        } else {
+          alert('Reklama qo\'shishda xatolik yuz berdi');
+        }
+      } else {
+        // Mavjud reklamani tahrirlash
+        const response = await fetch(`/api/advertisements/${editingAdvertisement.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: editingAdvertisement.title,
+            description: editingAdvertisement.description,
+            imageUrl: editingAdvertisement.imageUrl,
+            buttonText: editingAdvertisement.buttonText,
+            link: editingAdvertisement.link,
+            isActive: editingAdvertisement.isActive ?? true
+          })
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/advertisements'] });
+          setEditingAdvertisement(null);
+        } else {
+          alert('Reklamani tahrirlashda xatolik yuz berdi');
+        }
+      }
+    } catch (error) {
+      alert('Tarmoq xatoligi yuz berdi');
+    }
+  };
+
+  const handleDeleteAdvertisement = async (id: number) => {
+    if (confirm('Haqiqatan ham bu reklamani o\'chirmoqchimisiz?')) {
+      try {
+        const response = await fetch(`/api/advertisements/${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/advertisements'] });
+        } else {
+          alert('Reklamani o\'chirishda xatolik yuz berdi');
+        }
+      } catch (error) {
+        alert('Tarmoq xatoligi yuz berdi');
+      }
+    }
+  };
+
   const handleAddFeature = () => {
     if (editingProduct && newFeature.trim()) {
       setEditingProduct({
@@ -391,6 +477,11 @@ export default function AdminPanel() {
   // Fetch real products from API
   const { data: allDbProducts = [], isLoading: productsLoading } = useQuery<DBProduct[]>({
     queryKey: ["/api/products"],
+  });
+
+  // Fetch advertisements from API
+  const { data: advertisements = [], isLoading: advertisementsLoading } = useQuery<Advertisement[]>({
+    queryKey: ["/api/advertisements"],
   });
 
   const getCurrentBrandProducts = () => {
@@ -463,8 +554,9 @@ export default function AdminPanel() {
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="products">Mahsulotlar</TabsTrigger>
+              <TabsTrigger value="advertisements">Reklamalar</TabsTrigger>
               <TabsTrigger value="articles">Yangiliklar</TabsTrigger>
               <TabsTrigger value="stores">Do'konlar</TabsTrigger>
               <TabsTrigger value="settings">Sozlamalar</TabsTrigger>
@@ -866,6 +958,171 @@ export default function AdminPanel() {
                     </Button>
                   </CardContent>
                 </Card>
+              )}
+            </TabsContent>
+
+            {/* Advertisements Tab */}
+            <TabsContent value="advertisements" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Reklamalar boshqaruvi</h3>
+                  <p className="text-sm text-gray-600">{advertisements.length}/10 reklama</p>
+                </div>
+                <Button 
+                  onClick={() => {
+                    if (advertisements.length >= 10) {
+                      alert('Maksimal 10 ta reklama qo\'shish mumkin');
+                      return;
+                    }
+                    setEditingAdvertisement({ 
+                      id: 0, 
+                      title: '', 
+                      description: '', 
+                      imageUrl: '', 
+                      buttonText: '', 
+                      link: '', 
+                      isActive: true 
+                    });
+                  }}
+                  disabled={advertisements.length >= 10}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Yangi reklama
+                </Button>
+              </div>
+
+              {editingAdvertisement && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{editingAdvertisement.id === 0 ? 'Yangi reklama' : 'Reklamani tahrirlash'}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium">Sarlavha</label>
+                      <Input 
+                        value={editingAdvertisement.title}
+                        onChange={(e) => setEditingAdvertisement({...editingAdvertisement, title: e.target.value})}
+                        placeholder="Reklama sarlavhasi"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Tavsif</label>
+                      <Textarea 
+                        value={editingAdvertisement.description}
+                        onChange={(e) => setEditingAdvertisement({...editingAdvertisement, description: e.target.value})}
+                        placeholder="Reklama tavsifi"
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Rasm URL</label>
+                      <Input 
+                        value={editingAdvertisement.imageUrl}
+                        onChange={(e) => setEditingAdvertisement({...editingAdvertisement, imageUrl: e.target.value})}
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Tugma matni</label>
+                        <Input 
+                          value={editingAdvertisement.buttonText}
+                          onChange={(e) => setEditingAdvertisement({...editingAdvertisement, buttonText: e.target.value})}
+                          placeholder="Batafsil ma'lumot"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Havola</label>
+                        <Input 
+                          value={editingAdvertisement.link}
+                          onChange={(e) => setEditingAdvertisement({...editingAdvertisement, link: e.target.value})}
+                          placeholder="https://example.com"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="isActive"
+                        checked={editingAdvertisement.isActive}
+                        onChange={(e) => setEditingAdvertisement({...editingAdvertisement, isActive: e.target.checked})}
+                      />
+                      <label htmlFor="isActive" className="text-sm font-medium">Faol reklama</label>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={handleSaveAdvertisement}>
+                        <Save className="h-4 w-4 mr-2" />
+                        Saqlash
+                      </Button>
+                      <Button variant="outline" onClick={() => setEditingAdvertisement(null)}>
+                        <X className="h-4 w-4 mr-2" />
+                        Bekor qilish
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {advertisementsLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Reklamalar yuklanmoqda...</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {advertisements.map((advertisement) => (
+                    <Card key={advertisement.id}>
+                      <CardContent className="p-4">
+                        <div className="flex gap-4">
+                          <img 
+                            src={advertisement.imageUrl} 
+                            alt={advertisement.title}
+                            className="w-24 h-16 object-cover rounded"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">{advertisement.title}</h4>
+                              <div className="flex gap-2">
+                                <Button size="sm" variant="outline" onClick={() => setEditingAdvertisement(advertisement)}>
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button size="sm" variant="outline" onClick={() => handleDeleteAdvertisement(advertisement.id)}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">{advertisement.description}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant={advertisement.isActive ? "default" : "secondary"} className="text-xs">
+                                {advertisement.isActive ? "Faol" : "Nofaol"}
+                              </Badge>
+                              <span className="text-xs text-gray-500">Tugma: {advertisement.buttonText}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  {advertisements.length === 0 && (
+                    <Card>
+                      <CardContent className="p-8 text-center">
+                        <p className="text-gray-500 mb-4">Hech qanday reklama topilmadi</p>
+                        <Button onClick={() => setEditingAdvertisement({ 
+                          id: 0, 
+                          title: '', 
+                          description: '', 
+                          imageUrl: '', 
+                          buttonText: '', 
+                          link: '', 
+                          isActive: true 
+                        })}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Birinchi reklamani qo'shish
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
               )}
             </TabsContent>
 
