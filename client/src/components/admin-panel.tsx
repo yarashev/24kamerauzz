@@ -546,6 +546,45 @@ export default function AdminPanel() {
                 </CardContent>
               </Card>
 
+              {/* Statistika */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <Card>
+                  <CardContent className="p-3 text-center">
+                    <div className="text-2xl font-bold text-blue-600">{getDisplayProducts().length}</div>
+                    <div className="text-sm text-gray-600">
+                      {selectedBrand === 'all' && selectedCategory === 'all' ? 'Jami mahsulotlar' :
+                       selectedBrand !== 'all' && selectedCategory === 'all' ? `${getSelectedBrandInfo()?.name} mahsulotlari` :
+                       selectedBrand === 'all' && selectedCategory !== 'all' ? `${categories.find(c => c.id === selectedCategory)?.name}` :
+                       `${getSelectedBrandInfo()?.name} - ${categories.find(c => c.id === selectedCategory)?.name}`}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-3 text-center">
+                    <div className="text-2xl font-bold text-green-600">
+                      {getDisplayProducts().filter(p => p.inStock).length}
+                    </div>
+                    <div className="text-sm text-gray-600">Mavjud</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-3 text-center">
+                    <div className="text-2xl font-bold text-red-600">
+                      {getDisplayProducts().filter(p => !p.inStock).length}
+                    </div>
+                    <div className="text-sm text-gray-600">Tugagan</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-3 text-center">
+                    <div className="text-2xl font-bold text-purple-600">
+                      {allDbProducts.length}
+                    </div>
+                    <div className="text-sm text-gray-600">Umumiy</div>
+                  </CardContent>
+                </Card>
+              </div>
+
               {editingProduct && (
                 <Card>
                   <CardHeader>
@@ -604,7 +643,21 @@ export default function AdminPanel() {
                       </div>
                       <div>
                         <label className="text-sm font-medium">Brend</label>
-                        <Input value={getSelectedBrandInfo()?.name || ""} disabled />
+                        <Select value={editingProduct.brand} onValueChange={(value) => setEditingProduct({...editingProduct, brand: value})}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Brend tanlang" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Hikvision">Hikvision</SelectItem>
+                            <SelectItem value="HiLook">HiLook</SelectItem>
+                            <SelectItem value="HiWatch">HiWatch</SelectItem>
+                            <SelectItem value="EZVIZ">EZVIZ</SelectItem>
+                            <SelectItem value="Dahua">Dahua</SelectItem>
+                            <SelectItem value="TVT">TVT</SelectItem>
+                            <SelectItem value="Imou">Imou</SelectItem>
+                            <SelectItem value="TP-Link">TP-Link</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="flex items-center gap-2">
                         <input 
