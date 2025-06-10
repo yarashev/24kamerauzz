@@ -572,6 +572,70 @@ export default function AdminPanel() {
     }
   };
 
+  const handleSavePasswordBrand = async () => {
+    if (!editingPasswordBrand) return;
+    
+    try {
+      const brandData = {
+        name: editingPasswordBrand.name,
+        logo: editingPasswordBrand.logo,
+        telegramSupport: editingPasswordBrand.telegramSupport,
+        whatsappSupport: editingPasswordBrand.whatsappSupport,
+        phoneSupport: editingPasswordBrand.phoneSupport,
+        emailSupport: editingPasswordBrand.emailSupport,
+        isActive: editingPasswordBrand.isActive
+      };
+
+      if (editingPasswordBrand.id === 0) {
+        const response = await fetch('/api/password-recovery-brands', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(brandData)
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/password-recovery-brands'] });
+          setEditingPasswordBrand(null);
+        } else {
+          alert('Brend qo\'shishda xatolik yuz berdi');
+        }
+      } else {
+        const response = await fetch(`/api/password-recovery-brands/${editingPasswordBrand.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(brandData)
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/password-recovery-brands'] });
+          setEditingPasswordBrand(null);
+        } else {
+          alert('Brendni tahrirlashda xatolik yuz berdi');
+        }
+      }
+    } catch (error) {
+      alert('Tarmoq xatoligi yuz berdi');
+    }
+  };
+
+  const handleDeletePasswordBrand = async (id: number) => {
+    if (confirm('Haqiqatan ham bu brendni o\'chirmoqchimisiz?')) {
+      try {
+        const response = await fetch(`/api/password-recovery-brands/${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/password-recovery-brands'] });
+        } else {
+          alert('Brendni o\'chirishda xatolik yuz berdi');
+        }
+      } catch (error) {
+        alert('Tarmoq xatoligi yuz berdi');
+      }
+    }
+  };
+
   const handleAddFeature = () => {
     if (editingProduct && newFeature.trim()) {
       setEditingProduct({
@@ -620,6 +684,11 @@ export default function AdminPanel() {
   // Fetch masters from API
   const { data: masters = [], isLoading: mastersLoading } = useQuery<Master[]>({
     queryKey: ["/api/masters"],
+  });
+
+  // Fetch password recovery brands from API
+  const { data: passwordBrands = [], isLoading: passwordBrandsLoading } = useQuery<PasswordRecoveryBrand[]>({
+    queryKey: ["/api/password-recovery-brands"],
   });
 
   const getCurrentBrandProducts = () => {
@@ -692,10 +761,11 @@ export default function AdminPanel() {
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-7">
               <TabsTrigger value="products">Mahsulotlar</TabsTrigger>
               <TabsTrigger value="advertisements">Reklamalar</TabsTrigger>
               <TabsTrigger value="masters">Ustalar</TabsTrigger>
+              <TabsTrigger value="password-recovery">Parol tiklash</TabsTrigger>
               <TabsTrigger value="articles">Yangiliklar</TabsTrigger>
               <TabsTrigger value="stores">Do'konlar</TabsTrigger>
               <TabsTrigger value="settings">Sozlamalar</TabsTrigger>
@@ -1546,6 +1616,185 @@ export default function AdminPanel() {
                         })}>
                           <Plus className="h-4 w-4 mr-2" />
                           {selectedRegion === "all" ? "Birinchi ustani qo'shish" : "Bu viloyatga usta qo'shish"}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
+            </TabsContent>
+
+            {/* Password Recovery Brands Tab */}
+            <TabsContent value="password-recovery" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Parol tiklash brendlari</h3>
+                  <p className="text-sm text-gray-600">{passwordBrands.length} brend</p>
+                </div>
+                <Button 
+                  onClick={() => setEditingPasswordBrand({ 
+                    id: 0, 
+                    name: '', 
+                    logo: '🎥', 
+                    telegramSupport: '', 
+                    whatsappSupport: '', 
+                    phoneSupport: '', 
+                    emailSupport: '', 
+                    isActive: true 
+                  })}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Yangi brend
+                </Button>
+              </div>
+
+              {editingPasswordBrand && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{editingPasswordBrand.id === 0 ? 'Yangi brend' : 'Brendni tahrirlash'}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Brend nomi</label>
+                        <Input 
+                          value={editingPasswordBrand.name}
+                          onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, name: e.target.value})}
+                          placeholder="Brend nomi"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Logo (emoji)</label>
+                        <Input 
+                          value={editingPasswordBrand.logo}
+                          onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, logo: e.target.value})}
+                          placeholder="🎥"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Telegram qo'llab-quvvatlash</label>
+                        <Input 
+                          value={editingPasswordBrand.telegramSupport || ''}
+                          onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, telegramSupport: e.target.value})}
+                          placeholder="@support_username"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">WhatsApp qo'llab-quvvatlash</label>
+                        <Input 
+                          value={editingPasswordBrand.whatsappSupport || ''}
+                          onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, whatsappSupport: e.target.value})}
+                          placeholder="+998901234567"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Telefon qo'llab-quvvatlash</label>
+                        <Input 
+                          value={editingPasswordBrand.phoneSupport || ''}
+                          onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, phoneSupport: e.target.value})}
+                          placeholder="+998901234567"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Email qo'llab-quvvatlash</label>
+                        <Input 
+                          value={editingPasswordBrand.emailSupport || ''}
+                          onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, emailSupport: e.target.value})}
+                          placeholder="support@brand.com"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="brandIsActive"
+                        checked={editingPasswordBrand.isActive}
+                        onChange={(e) => setEditingPasswordBrand({...editingPasswordBrand, isActive: e.target.checked})}
+                      />
+                      <label htmlFor="brandIsActive" className="text-sm font-medium">Faol brend</label>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={() => handleSavePasswordBrand()}>
+                        <Save className="h-4 w-4 mr-2" />
+                        Saqlash
+                      </Button>
+                      <Button variant="outline" onClick={() => setEditingPasswordBrand(null)}>
+                        <X className="h-4 w-4 mr-2" />
+                        Bekor qilish
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {passwordBrandsLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Brendlar yuklanmoqda...</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {passwordBrands.map((brand) => (
+                    <Card key={brand.id}>
+                      <CardContent className="p-4">
+                        <div className="flex gap-4">
+                          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-2xl">
+                            {brand.logo}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">{brand.name}</h4>
+                              <div className="flex gap-2">
+                                <Button size="sm" variant="outline" onClick={() => setEditingPasswordBrand(brand)}>
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button size="sm" variant="outline" onClick={() => handleDeletePasswordBrand(brand.id)}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4 mt-2">
+                              <Badge variant={brand.isActive ? "default" : "secondary"} className="text-xs">
+                                {brand.isActive ? "Faol" : "Nofaol"}
+                              </Badge>
+                              {brand.telegramSupport && (
+                                <span className="text-xs text-blue-600">📱 Telegram</span>
+                              )}
+                              {brand.whatsappSupport && (
+                                <span className="text-xs text-green-600">💬 WhatsApp</span>
+                              )}
+                              {brand.phoneSupport && (
+                                <span className="text-xs text-gray-600">📞 Telefon</span>
+                              )}
+                              {brand.emailSupport && (
+                                <span className="text-xs text-red-600">📧 Email</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  {passwordBrands.length === 0 && (
+                    <Card>
+                      <CardContent className="p-8 text-center">
+                        <p className="text-gray-500 mb-4">Hech qanday brend topilmadi</p>
+                        <Button onClick={() => setEditingPasswordBrand({ 
+                          id: 0, 
+                          name: '', 
+                          logo: '🎥', 
+                          telegramSupport: '', 
+                          whatsappSupport: '', 
+                          phoneSupport: '', 
+                          emailSupport: '', 
+                          isActive: true 
+                        })}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Birinchi brendni qo'shish
                         </Button>
                       </CardContent>
                     </Card>
