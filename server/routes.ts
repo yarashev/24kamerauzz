@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { askJarvis, calculateCameraRecommendation } from "./openai";
-import { insertCartItemSchema, insertChatMessageSchema, insertProductSchema } from "@shared/schema";
+import { insertCartItemSchema, insertChatMessageSchema, insertProductSchema, insertAdvertisementSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products API
@@ -211,6 +211,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(articles);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch articles" });
+    }
+  });
+
+  // Advertisements API
+  app.get("/api/advertisements", async (req, res) => {
+    try {
+      const advertisements = await storage.getAllAdvertisements();
+      res.json(advertisements);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch advertisements" });
+    }
+  });
+
+  app.post("/api/advertisements", async (req, res) => {
+    try {
+      const advertisementData = insertAdvertisementSchema.parse(req.body);
+      const advertisement = await storage.createAdvertisement(advertisementData);
+      res.json(advertisement);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid advertisement data" });
+    }
+  });
+
+  app.put("/api/advertisements/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const advertisementData = insertAdvertisementSchema.parse(req.body);
+      const advertisement = await storage.updateAdvertisement(id, advertisementData);
+      if (!advertisement) {
+        return res.status(404).json({ message: "Advertisement not found" });
+      }
+      res.json(advertisement);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid advertisement data" });
+    }
+  });
+
+  app.delete("/api/advertisements/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteAdvertisement(id);
+      if (!success) {
+        return res.status(404).json({ message: "Advertisement not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete advertisement" });
     }
   });
 

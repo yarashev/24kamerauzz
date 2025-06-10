@@ -82,6 +82,11 @@ export const insertArticleSchema = createInsertSchema(articles).omit({
   publishedAt: true,
 });
 
+export const insertAdvertisementSchema = createInsertSchema(advertisements).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Relations
 export const productsRelations = relations(products, ({ many }) => ({
   cartItems: many(cartItems),
@@ -109,3 +114,5 @@ export type ChatMessage = typeof chatMessages.$inferSelect;
 export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
 export type Article = typeof articles.$inferSelect;
 export type InsertArticle = z.infer<typeof insertArticleSchema>;
+export type Advertisement = typeof advertisements.$inferSelect;
+export type InsertAdvertisement = z.infer<typeof insertAdvertisementSchema>;

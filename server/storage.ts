@@ -1,4 +1,4 @@
-import { users, products, cartItems, chatMessages, articles, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle } from "@shared/schema";
+import { users, products, cartItems, chatMessages, articles, advertisements, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -31,6 +31,13 @@ export interface IStorage {
   getAllArticles(): Promise<Article[]>;
   getArticle(id: number): Promise<Article | undefined>;
   createArticle(article: InsertArticle): Promise<Article>;
+  
+  // Advertisement methods
+  getAllAdvertisements(): Promise<Advertisement[]>;
+  getAdvertisement(id: number): Promise<Advertisement | undefined>;
+  createAdvertisement(advertisement: InsertAdvertisement): Promise<Advertisement>;
+  updateAdvertisement(id: number, advertisement: InsertAdvertisement): Promise<Advertisement | undefined>;
+  deleteAdvertisement(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -426,6 +433,39 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(products)
       .where(eq(products.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async getAllAdvertisements(): Promise<Advertisement[]> {
+    return await db.select().from(advertisements).where(eq(advertisements.isActive, true));
+  }
+
+  async getAdvertisement(id: number): Promise<Advertisement | undefined> {
+    const [advertisement] = await db.select().from(advertisements).where(eq(advertisements.id, id));
+    return advertisement || undefined;
+  }
+
+  async createAdvertisement(insertAdvertisement: InsertAdvertisement): Promise<Advertisement> {
+    const [advertisement] = await db
+      .insert(advertisements)
+      .values(insertAdvertisement)
+      .returning();
+    return advertisement;
+  }
+
+  async updateAdvertisement(id: number, insertAdvertisement: InsertAdvertisement): Promise<Advertisement | undefined> {
+    const [advertisement] = await db
+      .update(advertisements)
+      .set(insertAdvertisement)
+      .where(eq(advertisements.id, id))
+      .returning();
+    return advertisement || undefined;
+  }
+
+  async deleteAdvertisement(id: number): Promise<boolean> {
+    const result = await db
+      .delete(advertisements)
+      .where(eq(advertisements.id, id));
     return (result.rowCount || 0) > 0;
   }
 }
