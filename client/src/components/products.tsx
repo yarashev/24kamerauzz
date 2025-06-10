@@ -283,7 +283,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("dahua");
-              setSelectedCategory("dahua_nvr"); // Default to NVR category for Dahua
+              setSelectedCategory(""); // Show all Dahua products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "dahua" ? "ring-4 ring-blue-500" : ""
@@ -300,7 +300,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("tvt");
-              setSelectedCategory("tvt_nvr"); // Default to NVR category for TVT
+              setSelectedCategory(""); // Show all TVT products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "tvt" ? "ring-4 ring-blue-500" : ""
@@ -317,7 +317,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("imou");
-              setSelectedCategory("imou"); // No subcategories for Imou
+              setSelectedCategory(""); // Show all Imou products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "imou" ? "ring-4 ring-blue-500" : ""
@@ -334,7 +334,7 @@ export default function Products() {
           <button 
             onClick={() => {
               setSelectedBrand("tplink");
-              setSelectedCategory("tplink"); // No subcategories for TP-Link
+              setSelectedCategory(""); // Show all TP-Link products initially
             }}
             className={`w-44 h-20 bg-white rounded-lg shadow-lg p-3 flex items-center justify-center border border-gray-200 transition-all duration-200 hover:scale-105 ${
               selectedBrand === "tplink" ? "ring-4 ring-blue-500" : ""
