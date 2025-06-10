@@ -73,6 +73,7 @@ export default function AdminPanel() {
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [editingStore, setEditingStore] = useState<Store | null>(null);
   const [editingAdvertisement, setEditingAdvertisement] = useState<Advertisement | null>(null);
+  const [editingMaster, setEditingMaster] = useState<Master | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
@@ -455,6 +456,88 @@ export default function AdminPanel() {
     }
   };
 
+  const handleSaveMaster = async () => {
+    if (!editingMaster) return;
+    
+    try {
+      if (editingMaster.id === 0) {
+        // Yangi usta qo'shish
+        const response = await fetch('/api/masters', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: editingMaster.name,
+            specialization: editingMaster.specialization,
+            region: editingMaster.region,
+            city: editingMaster.city,
+            phone: editingMaster.phone,
+            experience: editingMaster.experience,
+            rating: editingMaster.rating,
+            reviewCount: editingMaster.reviewCount,
+            imageUrl: editingMaster.imageUrl,
+            description: editingMaster.description,
+            services: editingMaster.services || [],
+            isActive: editingMaster.isActive
+          })
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/masters'] });
+          setEditingMaster(null);
+        } else {
+          alert('Usta qo\'shishda xatolik yuz berdi');
+        }
+      } else {
+        // Mavjud ustani tahrirlash
+        const response = await fetch(`/api/masters/${editingMaster.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: editingMaster.name,
+            specialization: editingMaster.specialization,
+            region: editingMaster.region,
+            city: editingMaster.city,
+            phone: editingMaster.phone,
+            experience: editingMaster.experience,
+            rating: editingMaster.rating,
+            reviewCount: editingMaster.reviewCount,
+            imageUrl: editingMaster.imageUrl,
+            description: editingMaster.description,
+            services: editingMaster.services || [],
+            isActive: editingMaster.isActive
+          })
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/masters'] });
+          setEditingMaster(null);
+        } else {
+          alert('Ustani tahrirlashda xatolik yuz berdi');
+        }
+      }
+    } catch (error) {
+      alert('Tarmoq xatoligi yuz berdi');
+    }
+  };
+
+  const handleDeleteMaster = async (id: number) => {
+    if (confirm('Haqiqatan ham bu ustani o\'chirmoqchimisiz?')) {
+      try {
+        const response = await fetch(`/api/masters/${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          queryClient.invalidateQueries({ queryKey: ['/api/masters'] });
+        } else {
+          alert('Ustani o\'chirishda xatolik yuz berdi');
+        }
+      } catch (error) {
+        alert('Tarmoq xatoligi yuz berdi');
+      }
+    }
+  };
+
   const handleAddFeature = () => {
     if (editingProduct && newFeature.trim()) {
       setEditingProduct({
@@ -498,6 +581,11 @@ export default function AdminPanel() {
   // Fetch advertisements from API
   const { data: advertisements = [], isLoading: advertisementsLoading } = useQuery<Advertisement[]>({
     queryKey: ["/api/advertisements"],
+  });
+
+  // Fetch masters from API
+  const { data: masters = [], isLoading: mastersLoading } = useQuery<Master[]>({
+    queryKey: ["/api/masters"],
   });
 
   const getCurrentBrandProducts = () => {
@@ -570,9 +658,10 @@ export default function AdminPanel() {
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="products">Mahsulotlar</TabsTrigger>
               <TabsTrigger value="advertisements">Reklamalar</TabsTrigger>
+              <TabsTrigger value="masters">Ustalar</TabsTrigger>
               <TabsTrigger value="articles">Yangiliklar</TabsTrigger>
               <TabsTrigger value="stores">Do'konlar</TabsTrigger>
               <TabsTrigger value="settings">Sozlamalar</TabsTrigger>
@@ -1134,6 +1223,241 @@ export default function AdminPanel() {
                         })}>
                           <Plus className="h-4 w-4 mr-2" />
                           Birinchi reklamani qo'shish
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
+            </TabsContent>
+
+            {/* Masters Tab */}
+            <TabsContent value="masters" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Ustalar boshqaruvi</h3>
+                  <p className="text-sm text-gray-600">{masters.length} usta</p>
+                </div>
+                <Button 
+                  onClick={() => setEditingMaster({ 
+                    id: 0, 
+                    name: '', 
+                    specialization: '', 
+                    region: 'tashkent', 
+                    city: '', 
+                    phone: '', 
+                    experience: 1, 
+                    rating: 0, 
+                    reviewCount: 0, 
+                    imageUrl: '', 
+                    description: '', 
+                    services: [], 
+                    isActive: true 
+                  })}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Yangi usta
+                </Button>
+              </div>
+
+              {editingMaster && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{editingMaster.id === 0 ? 'Yangi usta' : 'Ustani tahrirlash'}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Ism</label>
+                        <Input 
+                          value={editingMaster.name}
+                          onChange={(e) => setEditingMaster({...editingMaster, name: e.target.value})}
+                          placeholder="Usta ismi"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Mutaxassislik</label>
+                        <Input 
+                          value={editingMaster.specialization}
+                          onChange={(e) => setEditingMaster({...editingMaster, specialization: e.target.value})}
+                          placeholder="Mutaxassislik"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Viloyat</label>
+                        <select 
+                          value={editingMaster.region}
+                          onChange={(e) => setEditingMaster({...editingMaster, region: e.target.value})}
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="tashkent">Toshkent</option>
+                          <option value="samarkand">Samarqand</option>
+                          <option value="bukhara">Buxoro</option>
+                          <option value="andijan">Andijon</option>
+                          <option value="fergana">Farg'ona</option>
+                          <option value="namangan">Namangan</option>
+                          <option value="kashkadarya">Qashqadaryo</option>
+                          <option value="surkhandarya">Surxondaryo</option>
+                          <option value="jizzakh">Jizzax</option>
+                          <option value="sirdarya">Sirdaryo</option>
+                          <option value="khorezm">Xorazm</option>
+                          <option value="karakalpakstan">Qoraqalpog'iston</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Shahar</label>
+                        <Input 
+                          value={editingMaster.city}
+                          onChange={(e) => setEditingMaster({...editingMaster, city: e.target.value})}
+                          placeholder="Shahar nomi"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Telefon</label>
+                        <Input 
+                          value={editingMaster.phone}
+                          onChange={(e) => setEditingMaster({...editingMaster, phone: e.target.value})}
+                          placeholder="+998901234567"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Tajriba (yil)</label>
+                        <Input 
+                          type="number"
+                          value={editingMaster.experience}
+                          onChange={(e) => setEditingMaster({...editingMaster, experience: parseInt(e.target.value) || 1})}
+                          placeholder="1"
+                          min="1"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Reyting (1-5)</label>
+                        <Input 
+                          type="number"
+                          value={editingMaster.rating}
+                          onChange={(e) => setEditingMaster({...editingMaster, rating: parseFloat(e.target.value) || 0})}
+                          placeholder="0"
+                          min="0"
+                          max="5"
+                          step="0.1"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Rasm URL</label>
+                        <Input 
+                          value={editingMaster.imageUrl}
+                          onChange={(e) => setEditingMaster({...editingMaster, imageUrl: e.target.value})}
+                          placeholder="https://example.com/image.jpg"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Tavsif</label>
+                      <Textarea 
+                        value={editingMaster.description}
+                        onChange={(e) => setEditingMaster({...editingMaster, description: e.target.value})}
+                        placeholder="Usta haqida ma'lumot"
+                        rows={3}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="masterIsActive"
+                        checked={editingMaster.isActive}
+                        onChange={(e) => setEditingMaster({...editingMaster, isActive: e.target.checked})}
+                      />
+                      <label htmlFor="masterIsActive" className="text-sm font-medium">Faol usta</label>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={() => handleSaveMaster()}>
+                        <Save className="h-4 w-4 mr-2" />
+                        Saqlash
+                      </Button>
+                      <Button variant="outline" onClick={() => setEditingMaster(null)}>
+                        <X className="h-4 w-4 mr-2" />
+                        Bekor qilish
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {mastersLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Ustalar yuklanmoqda...</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {masters.map((master) => (
+                    <Card key={master.id}>
+                      <CardContent className="p-4">
+                        <div className="flex gap-4">
+                          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                            {master.imageUrl ? (
+                              <img 
+                                src={master.imageUrl} 
+                                alt={master.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="text-gray-400 text-xs">Rasm</div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">{master.name}</h4>
+                              <div className="flex gap-2">
+                                <Button size="sm" variant="outline" onClick={() => setEditingMaster(master)}>
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button size="sm" variant="outline" onClick={() => handleDeleteMaster(master.id)}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">{master.specialization}</p>
+                            <div className="flex items-center gap-4 mt-2">
+                              <Badge variant={master.isActive ? "default" : "secondary"} className="text-xs">
+                                {master.isActive ? "Faol" : "Nofaol"}
+                              </Badge>
+                              <span className="text-xs text-gray-500">{master.region}, {master.city}</span>
+                              <span className="text-xs text-gray-500">{master.experience} yil</span>
+                              <span className="text-xs text-gray-500">★ {master.rating}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  {masters.length === 0 && (
+                    <Card>
+                      <CardContent className="p-8 text-center">
+                        <p className="text-gray-500 mb-4">Hech qanday usta topilmadi</p>
+                        <Button onClick={() => setEditingMaster({ 
+                          id: 0, 
+                          name: '', 
+                          specialization: '', 
+                          region: 'tashkent', 
+                          city: '', 
+                          phone: '', 
+                          experience: 1, 
+                          rating: 0, 
+                          reviewCount: 0, 
+                          imageUrl: '', 
+                          description: '', 
+                          services: [], 
+                          isActive: true 
+                        })}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Birinchi ustani qo'shish
                         </Button>
                       </CardContent>
                     </Card>
