@@ -463,25 +463,30 @@ export default function AdminPanel() {
     if (!editingMaster) return;
     
     try {
+      const masterData = {
+        name: editingMaster.name,
+        specialization: editingMaster.specialization,
+        region: editingMaster.region,
+        city: editingMaster.city,
+        phone: editingMaster.phone,
+        experience: editingMaster.experience,
+        rating: editingMaster.rating,
+        reviewCount: editingMaster.reviewCount,
+        imageUrl: editingMaster.imageUrl,
+        description: editingMaster.description,
+        services: editingMaster.services || [],
+        fullAddress: editingMaster.fullAddress,
+        telegram: editingMaster.telegram,
+        instagram: editingMaster.instagram,
+        isActive: editingMaster.isActive
+      };
+
       if (editingMaster.id === 0) {
         // Yangi usta qo'shish
         const response = await fetch('/api/masters', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: editingMaster.name,
-            specialization: editingMaster.specialization,
-            region: editingMaster.region,
-            city: editingMaster.city,
-            phone: editingMaster.phone,
-            experience: editingMaster.experience,
-            rating: editingMaster.rating,
-            reviewCount: editingMaster.reviewCount,
-            imageUrl: editingMaster.imageUrl,
-            description: editingMaster.description,
-            services: editingMaster.services || [],
-            isActive: editingMaster.isActive
-          })
+          body: JSON.stringify(masterData)
         });
         
         if (response.ok) {
@@ -495,20 +500,7 @@ export default function AdminPanel() {
         const response = await fetch(`/api/masters/${editingMaster.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: editingMaster.name,
-            specialization: editingMaster.specialization,
-            region: editingMaster.region,
-            city: editingMaster.city,
-            phone: editingMaster.phone,
-            experience: editingMaster.experience,
-            rating: editingMaster.rating,
-            reviewCount: editingMaster.reviewCount,
-            imageUrl: editingMaster.imageUrl,
-            description: editingMaster.description,
-            services: editingMaster.services || [],
-            isActive: editingMaster.isActive
-          })
+          body: JSON.stringify(masterData)
         });
         
         if (response.ok) {

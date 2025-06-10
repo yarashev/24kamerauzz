@@ -19,6 +19,9 @@ interface Master {
   imageUrl?: string;
   description?: string;
   services?: string[];
+  fullAddress?: string;
+  telegram?: string;
+  instagram?: string;
   isActive: boolean;
 }
 
@@ -33,6 +36,7 @@ const uzbekistanRegions = [
   { key: "surkhandarya", uz: "Surxondaryo", ru: "Сурхандарья", en: "Surkhandarya" },
   { key: "jizzakh", uz: "Jizzax", ru: "Джизак", en: "Jizzakh" },
   { key: "sirdarya", uz: "Sirdaryo", ru: "Сырдарья", en: "Sirdarya" },
+  { key: "navoiy", uz: "Navoiy", ru: "Навои", en: "Navoiy" },
   { key: "khorezm", uz: "Xorazm", ru: "Хорезм", en: "Khorezm" },
   { key: "karakalpakstan", uz: "Qoraqalpog'iston", ru: "Каракалпакстан", en: "Karakalpakstan" }
 ];
@@ -184,7 +188,12 @@ export default function Masters() {
                       
                       <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
                         <MapPin className="h-4 w-4" />
-                        <span>{getRegionName(master.region)}, {master.city}</span>
+                        <span>
+                          {master.fullAddress 
+                            ? master.fullAddress 
+                            : `${getRegionName(master.region)}, ${master.city}`
+                          }
+                        </span>
                       </div>
                       
                       <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
