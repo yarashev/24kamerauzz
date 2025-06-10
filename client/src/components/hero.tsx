@@ -53,7 +53,7 @@ export default function Hero() {
   const currentAd = advertisements[currentAdIndex];
 
   return (
-    <section id="hero" className="relative bg-gradient-to-r from-blue-900 to-blue-700 py-6">
+    <section id="hero" className="relative bg-gradient-to-r from-blue-900 to-blue-700 py-10">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         {advertisements.length > 0 && currentAd ? (
           <div className="relative bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
