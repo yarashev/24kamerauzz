@@ -110,6 +110,13 @@ export default function AdminPanel() {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
+  
+  // Pricing management states
+  const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState<number>(0);
+  const [dollarRate, setDollarRate] = useState<number>(12500);
+  const [selectedPricingBrand, setSelectedPricingBrand] = useState<string>("all");
+  const [selectedPricingCategory, setSelectedPricingCategory] = useState<string>("all");
+  const [isApplyingPriceChange, setIsApplyingPriceChange] = useState(false);
 
   const getRegionDisplayName = (regionKey: string): string => {
     return regionNames[regionKey] || regionKey;
@@ -636,6 +643,80 @@ export default function AdminPanel() {
     }
   };
 
+  const handlePriceAdjustment = async () => {
+    if (priceAdjustmentPercentage === 0) {
+      alert('Iltimos, foiz miqdorini kiriting');
+      return;
+    }
+
+    if (confirm(`Haqiqatan ham narxlarni ${priceAdjustmentPercentage > 0 ? '+' : ''}${priceAdjustmentPercentage}% o'zgartirmoqchimisiz?`)) {
+      setIsApplyingPriceChange(true);
+      
+      try {
+        // Filter products based on selected brand and category
+        let productsToUpdate = allDbProducts;
+        
+        if (selectedPricingBrand !== 'all') {
+          productsToUpdate = productsToUpdate.filter(product => 
+            product.brand?.toLowerCase() === selectedPricingBrand.toLowerCase()
+          );
+        }
+        
+        if (selectedPricingCategory !== 'all') {
+          productsToUpdate = productsToUpdate.filter(product => 
+            product.category?.toLowerCase() === selectedPricingCategory.toLowerCase()
+          );
+        }
+
+        // Apply price adjustment to each product
+        for (const product of productsToUpdate) {
+          const multiplier = 1 + (priceAdjustmentPercentage / 100);
+          const newPrice = Math.round(product.price * multiplier);
+          
+          const updatedProduct = {
+            ...product,
+            price: newPrice
+          };
+
+          await fetch(`/api/products/${product.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedProduct)
+          });
+        }
+
+        // Refresh products list
+        queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+        
+        alert(`${productsToUpdate.length} ta mahsulot narxi muvaffaqiyatli o'zgartirildi`);
+        setPriceAdjustmentPercentage(0);
+        
+      } catch (error) {
+        alert('Narxlarni o\'zgartirishda xatolik yuz berdi');
+      } finally {
+        setIsApplyingPriceChange(false);
+      }
+    }
+  };
+
+  const getFilteredProductsForPricing = () => {
+    let filtered = allDbProducts;
+    
+    if (selectedPricingBrand !== 'all') {
+      filtered = filtered.filter(product => 
+        product.brand?.toLowerCase() === selectedPricingBrand.toLowerCase()
+      );
+    }
+    
+    if (selectedPricingCategory !== 'all') {
+      filtered = filtered.filter(product => 
+        product.category?.toLowerCase() === selectedPricingCategory.toLowerCase()
+      );
+    }
+    
+    return filtered;
+  };
+
   const handleAddFeature = () => {
     if (editingProduct && newFeature.trim()) {
       setEditingProduct({
@@ -761,11 +842,12 @@ export default function AdminPanel() {
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-7">
+            <TabsList className="grid w-full grid-cols-8">
               <TabsTrigger value="products">Mahsulotlar</TabsTrigger>
               <TabsTrigger value="advertisements">Reklamalar</TabsTrigger>
               <TabsTrigger value="masters">Ustalar</TabsTrigger>
               <TabsTrigger value="password-recovery">Parol tiklash</TabsTrigger>
+              <TabsTrigger value="pricing">Narxlar</TabsTrigger>
               <TabsTrigger value="articles">Yangiliklar</TabsTrigger>
               <TabsTrigger value="stores">Do'konlar</TabsTrigger>
               <TabsTrigger value="settings">Sozlamalar</TabsTrigger>
@@ -1801,6 +1883,187 @@ export default function AdminPanel() {
                   )}
                 </div>
               )}
+            </TabsContent>
+
+            {/* Pricing Management Tab */}
+            <TabsContent value="pricing" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Narxlarni boshqarish</h3>
+                  <p className="text-sm text-gray-600">Foizlik sistema orqali narxlarni ommaviy o'zgartirish</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Price Adjustment Controls */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Narx o'zgartirish sozlamalari</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Brendni tanlang</label>
+                        <Select value={selectedPricingBrand} onValueChange={setSelectedPricingBrand}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Brend tanlang" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">Barcha brendlar</SelectItem>
+                            {Array.from(new Set(allDbProducts.map(p => p.brand))).filter(Boolean).map((brand) => (
+                              <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Kategoriyani tanlang</label>
+                        <Select value={selectedPricingCategory} onValueChange={setSelectedPricingCategory}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Kategoriya tanlang" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">Barcha kategoriyalar</SelectItem>
+                            <SelectItem value="IP kameralar">IP kameralar</SelectItem>
+                            <SelectItem value="Turbo HD kameralar">Turbo HD kameralar</SelectItem>
+                            <SelectItem value="NVR">NVR</SelectItem>
+                            <SelectItem value="DVR">DVR</SelectItem>
+                            <SelectItem value="Videoanalitika">Videoanalitika</SelectItem>
+                            <SelectItem value="Aksessuarlar">Aksessuarlar</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium">Dollar kursi (UZS)</label>
+                      <Input
+                        type="number"
+                        value={dollarRate}
+                        onChange={(e) => setDollarRate(Number(e.target.value))}
+                        placeholder="12500"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Joriy dollar kursi: {dollarRate.toLocaleString()} so'm</p>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium">Narx o'zgartirish foizi (-100% dan +100% gacha)</label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="number"
+                          min="-100"
+                          max="100"
+                          value={priceAdjustmentPercentage}
+                          onChange={(e) => setPriceAdjustmentPercentage(Number(e.target.value))}
+                          placeholder="0"
+                        />
+                        <span className="text-sm text-gray-500">%</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Masalan: +10% = narxni 10% oshirish, -15% = narxni 15% kamaytirish
+                      </p>
+                    </div>
+
+                    <Button 
+                      onClick={handlePriceAdjustment}
+                      disabled={isApplyingPriceChange || priceAdjustmentPercentage === 0}
+                      className="w-full"
+                    >
+                      {isApplyingPriceChange ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          O'zgartirilmoqda...
+                        </>
+                      ) : (
+                        `${getFilteredProductsForPricing().length} ta mahsulot narxini o'zgartirish`
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Preview Changes */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>O'zgarishlar ko'rish</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center text-sm">
+                        <span>Tanlangan mahsulotlar:</span>
+                        <span className="font-semibold">{getFilteredProductsForPricing().length} ta</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span>Foiz o'zgarishi:</span>
+                        <span className={`font-semibold ${priceAdjustmentPercentage > 0 ? 'text-green-600' : priceAdjustmentPercentage < 0 ? 'text-red-600' : 'text-gray-600'}`}>
+                          {priceAdjustmentPercentage > 0 ? '+' : ''}{priceAdjustmentPercentage}%
+                        </span>
+                      </div>
+                      {priceAdjustmentPercentage !== 0 && getFilteredProductsForPricing().length > 0 && (
+                        <div className="border-t pt-3 space-y-2">
+                          <h5 className="text-sm font-medium">Namuna mahsulotlar:</h5>
+                          {getFilteredProductsForPricing().slice(0, 3).map((product) => {
+                            const multiplier = 1 + (priceAdjustmentPercentage / 100);
+                            const newPrice = Math.round(product.price * multiplier);
+                            return (
+                              <div key={product.id} className="text-xs bg-gray-50 p-2 rounded">
+                                <div className="font-medium">{product.name}</div>
+                                <div className="flex justify-between">
+                                  <span>Eski: {product.price.toLocaleString()} so'm</span>
+                                  <span className={newPrice > product.price ? 'text-green-600' : 'text-red-600'}>
+                                    Yangi: {newPrice.toLocaleString()} so'm
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                          {getFilteredProductsForPricing().length > 3 && (
+                            <p className="text-xs text-gray-500">va yana {getFilteredProductsForPricing().length - 3} ta mahsulot...</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Tez harakatlar</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <Button 
+                      variant="outline"
+                      onClick={() => setPriceAdjustmentPercentage(5)}
+                      className="text-green-600 border-green-600 hover:bg-green-50"
+                    >
+                      +5% oshirish
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setPriceAdjustmentPercentage(10)}
+                      className="text-green-600 border-green-600 hover:bg-green-50"
+                    >
+                      +10% oshirish
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setPriceAdjustmentPercentage(-5)}
+                      className="text-red-600 border-red-600 hover:bg-red-50"
+                    >
+                      -5% kamaytirish
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setPriceAdjustmentPercentage(-10)}
+                      className="text-red-600 border-red-600 hover:bg-red-50"
+                    >
+                      -10% kamaytirish
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             {/* Articles Tab */}
