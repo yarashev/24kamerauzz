@@ -51,6 +51,22 @@ interface Advertisement {
   isActive?: boolean;
 }
 
+interface Master {
+  id: number;
+  name: string;
+  specialization: string;
+  region: string;
+  city: string;
+  phone: string;
+  experience: number;
+  rating: number;
+  reviewCount: number;
+  imageUrl?: string;
+  description?: string;
+  services?: string[];
+  isActive: boolean;
+}
+
 export default function AdminPanel() {
   const [isVisible, setIsVisible] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);

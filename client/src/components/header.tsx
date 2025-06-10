@@ -67,6 +67,16 @@ export default function Header() {
               </Button>
             </CatalogModal>
 
+            {/* Masters Button */}
+            <Button 
+              onClick={() => window.location.hash = '#masters'}
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+            >
+              {language === "uz" && "Ustalar"}
+              {language === "ru" && "Мастера"}
+              {language === "en" && "Masters"}
+            </Button>
+
             {/* Language Selector */}
             <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
               <SelectTrigger className="w-12 h-10 border-0 bg-transparent hover:bg-gray-100 rounded-full">

@@ -274,6 +274,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Masters routes
+  app.get("/api/masters", async (req, res) => {
+    try {
+      const masters = await storage.getAllMasters();
+      res.json(masters);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch masters" });
+    }
+  });
+
+  app.get("/api/masters/region/:region", async (req, res) => {
+    try {
+      const region = req.params.region;
+      const masters = await storage.getMastersByRegion(region);
+      res.json(masters);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch masters by region" });
+    }
+  });
+
+  app.post("/api/masters", async (req, res) => {
+    try {
+      const master = await storage.createMaster(req.body);
+      res.status(201).json(master);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create master" });
+    }
+  });
+
+  app.put("/api/masters/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const master = await storage.updateMaster(id, req.body);
+      if (!master) {
+        return res.status(404).json({ message: "Master not found" });
+      }
+      res.json(master);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update master" });
+    }
+  });
+
+  app.delete("/api/masters/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteMaster(id);
+      if (!success) {
+        return res.status(404).json({ message: "Master not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete master" });
+    }
+  });
+
+  app.put("/api/masters/:id/rating", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { rating } = req.body;
+      const master = await storage.updateMasterRating(id, rating);
+      if (!master) {
+        return res.status(404).json({ message: "Master not found" });
+      }
+      res.json(master);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update master rating" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

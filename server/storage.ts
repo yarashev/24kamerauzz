@@ -477,6 +477,52 @@ export class DatabaseStorage implements IStorage {
       .where(eq(advertisements.id, id));
     return (result.rowCount || 0) > 0;
   }
+
+  async getAllMasters(): Promise<Master[]> {
+    return await db.select().from(masters).where(eq(masters.isActive, true));
+  }
+
+  async getMastersByRegion(region: string): Promise<Master[]> {
+    return await db.select().from(masters).where(eq(masters.region, region));
+  }
+
+  async getMaster(id: number): Promise<Master | undefined> {
+    const [master] = await db.select().from(masters).where(eq(masters.id, id));
+    return master || undefined;
+  }
+
+  async createMaster(insertMaster: InsertMaster): Promise<Master> {
+    const [master] = await db
+      .insert(masters)
+      .values(insertMaster)
+      .returning();
+    return master;
+  }
+
+  async updateMaster(id: number, insertMaster: InsertMaster): Promise<Master | undefined> {
+    const [master] = await db
+      .update(masters)
+      .set(insertMaster)
+      .where(eq(masters.id, id))
+      .returning();
+    return master || undefined;
+  }
+
+  async deleteMaster(id: number): Promise<boolean> {
+    const result = await db
+      .delete(masters)
+      .where(eq(masters.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async updateMasterRating(id: number, rating: number): Promise<Master | undefined> {
+    const [master] = await db
+      .update(masters)
+      .set({ rating })
+      .where(eq(masters.id, id))
+      .returning();
+    return master || undefined;
+  }
 }
 
 export const storage = new DatabaseStorage();
