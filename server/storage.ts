@@ -1,4 +1,4 @@
-import { users, products, cartItems, chatMessages, articles, advertisements, masters, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement, type Master, type InsertMaster } from "@shared/schema";
+import { users, products, cartItems, chatMessages, articles, advertisements, masters, passwordRecoveryBrands, type User, type InsertUser, type Product, type InsertProduct, type CartItem, type InsertCartItem, type ChatMessage, type InsertChatMessage, type Article, type InsertArticle, type Advertisement, type InsertAdvertisement, type Master, type InsertMaster, type PasswordRecoveryBrand, type InsertPasswordRecoveryBrand } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 

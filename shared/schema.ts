@@ -79,6 +79,19 @@ export const masters = pgTable("masters", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const passwordRecoveryBrands = pgTable("password_recovery_brands", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  logo: text("logo").notNull(),
+  telegramSupport: text("telegram_support"),
+  whatsappSupport: text("whatsapp_support"),
+  phoneSupport: text("phone_support"),
+  emailSupport: text("email_support"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -109,6 +122,12 @@ export const insertAdvertisementSchema = createInsertSchema(advertisements).omit
 });
 
 export const insertMasterSchema = createInsertSchema(masters).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPasswordRecoveryBrandSchema = createInsertSchema(passwordRecoveryBrands).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -145,3 +164,5 @@ export type Advertisement = typeof advertisements.$inferSelect;
 export type InsertAdvertisement = z.infer<typeof insertAdvertisementSchema>;
 export type Master = typeof masters.$inferSelect;
 export type InsertMaster = z.infer<typeof insertMasterSchema>;
+export type PasswordRecoveryBrand = typeof passwordRecoveryBrands.$inferSelect;
+export type InsertPasswordRecoveryBrand = z.infer<typeof insertPasswordRecoveryBrandSchema>;
