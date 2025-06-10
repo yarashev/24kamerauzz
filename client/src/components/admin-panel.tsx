@@ -47,6 +47,7 @@ export default function AdminPanel() {
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [editingStore, setEditingStore] = useState<Store | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
 
@@ -60,6 +61,16 @@ export default function AdminPanel() {
     { id: "imou", name: "Imou", logo: "🏠" },
     { id: "tp_link", name: "TP-Link", logo: "📡" },
     { id: "tvt", name: "TVT", logo: "📱" }
+  ];
+
+  // Kategoriyalar ro'yxati
+  const categories = [
+    { id: "ip_camera", name: "IP Kameralar" },
+    { id: "turbo_hd_camera", name: "HD Kameralar" },
+    { id: "nvr", name: "NVR" },
+    { id: "dvr", name: "DVR" },
+    { id: "analog_camera", name: "Analog Kameralar" },
+    { id: "accessories", name: "Aksessuarlar" }
   ];
 
   // Brendlar bo'yicha mahsulotlar
@@ -408,7 +419,14 @@ export default function AdminPanel() {
   };
 
   const getDisplayProducts = () => {
-    return getCurrentBrandProducts();
+    let products = getCurrentBrandProducts();
+    
+    // Kategoriya bo'yicha filterlash
+    if (selectedCategory !== 'all') {
+      products = products.filter(product => product.category === selectedCategory);
+    }
+    
+    return products;
   };
 
   if (!isVisible) {
@@ -463,11 +481,27 @@ export default function AdminPanel() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">
-                        📋 Barcha mahsulotlar
+                        📋 Barcha brendlar
                       </SelectItem>
                       {brands.map(brand => (
                         <SelectItem key={brand.id} value={brand.id}>
                           {brand.logo} {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Kategoriyani tanlang" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">
+                        📦 Barcha kategoriyalar
+                      </SelectItem>
+                      {categories.map(category => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -559,12 +593,12 @@ export default function AdminPanel() {
                             <SelectValue placeholder="Kategoriya tanlang" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="ip_camera">IP kameralar</SelectItem>
-                            <SelectItem value="turbo_hd">Turbo HD</SelectItem>
-                            <SelectItem value="wifi_camera">Wi-Fi kameralar</SelectItem>
-                            <SelectItem value="ahd_camera">AHD kameralar</SelectItem>
+                            <SelectItem value="ip_camera">IP Kameralar</SelectItem>
+                            <SelectItem value="turbo_hd_camera">HD Kameralar</SelectItem>
                             <SelectItem value="nvr">NVR</SelectItem>
                             <SelectItem value="dvr">DVR</SelectItem>
+                            <SelectItem value="analog_camera">Analog Kameralar</SelectItem>
+                            <SelectItem value="accessories">Aksessuarlar</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
