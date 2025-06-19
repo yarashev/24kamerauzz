@@ -81,6 +81,14 @@ interface PasswordRecoveryBrand {
   isActive: boolean;
 }
 
+interface Brand {
+  id: string;
+  name: string;
+  logo: string;
+  categories: string[];
+  isActive: boolean;
+}
+
 const regionNames: Record<string, string> = {
   "tashkent": "Toshkent",
   "samarkand": "Samarqand", 
@@ -105,11 +113,13 @@ export default function AdminPanel() {
   const [editingAdvertisement, setEditingAdvertisement] = useState<Advertisement | null>(null);
   const [editingMaster, setEditingMaster] = useState<Master | null>(null);
   const [editingPasswordBrand, setEditingPasswordBrand] = useState<PasswordRecoveryBrand | null>(null);
+  const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [newFeature, setNewFeature] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
+  const [showBrandCategoryButtons, setShowBrandCategoryButtons] = useState<{[key: string]: boolean}>({});
   
   // Pricing management states
   const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState<number>(0);
@@ -130,16 +140,16 @@ export default function AdminPanel() {
   };
 
   // Brendlar ro'yxati
-  const brands = [
-    { id: "hikvision", name: "Hikvision", logo: "🎥" },
-    { id: "dahua", name: "Dahua", logo: "📹" },
-    { id: "hilook", name: "HiLook", logo: "👁️" },
-    { id: "hiwatch", name: "HiWatch", logo: "📺" },
-    { id: "ezviz", name: "EZVIZ", logo: "🔒" },
-    { id: "imou", name: "Imou", logo: "🏠" },
-    { id: "tp_link", name: "TP-Link", logo: "📡" },
-    { id: "tvt", name: "TVT", logo: "📱" }
-  ];
+  const [brands, setBrands] = useState<Brand[]>([
+    { id: "hikvision", name: "Hikvision", logo: "🎥", categories: ["ip_camera", "turbo_hd_camera", "nvr", "dvr"], isActive: true },
+    { id: "dahua", name: "Dahua", logo: "📹", categories: ["ip_camera", "turbo_hd_camera", "nvr", "dvr"], isActive: true },
+    { id: "hilook", name: "HiLook", logo: "👁️", categories: ["ip_camera", "turbo_hd_camera", "nvr", "dvr"], isActive: true },
+    { id: "hiwatch", name: "HiWatch", logo: "📺", categories: ["ip_camera", "turbo_hd_camera", "nvr", "dvr"], isActive: true },
+    { id: "ezviz", name: "EZVIZ", logo: "🔒", categories: ["ip_camera"], isActive: true },
+    { id: "imou", name: "Imou", logo: "🏠", categories: ["ip_camera"], isActive: true },
+    { id: "tp_link", name: "TP-Link", logo: "📡", categories: ["ip_camera"], isActive: true },
+    { id: "tvt", name: "TVT", logo: "📱", categories: ["ip_camera", "turbo_hd_camera", "nvr", "dvr"], isActive: true }
+  ]);
 
   // Kategoriyalar ro'yxati
   const categories = [
@@ -836,6 +846,46 @@ export default function AdminPanel() {
     return filtered;
   };
 
+  // Brend boshqaruv funksiyalari
+  const handleCreateBrand = async (brand: Omit<Brand, 'id'>) => {
+    try {
+      const newBrand: Brand = {
+        ...brand,
+        id: Date.now().toString()
+      };
+      setBrands(prev => [...prev, newBrand]);
+      setEditingBrand(null);
+    } catch (error) {
+      console.error('Brend yaratishda xato:', error);
+    }
+  };
+
+  const handleUpdateBrand = async (brandId: string, updates: Partial<Brand>) => {
+    try {
+      setBrands(prev => prev.map(brand => 
+        brand.id === brandId ? { ...brand, ...updates } : brand
+      ));
+      setEditingBrand(null);
+    } catch (error) {
+      console.error('Brendni yangilashda xato:', error);
+    }
+  };
+
+  const handleDeleteBrand = async (brandId: string) => {
+    try {
+      setBrands(prev => prev.filter(brand => brand.id !== brandId));
+    } catch (error) {
+      console.error('Brendni o\'chirishda xato:', error);
+    }
+  };
+
+  const toggleBrandCategoryButtons = (brandId: string) => {
+    setShowBrandCategoryButtons(prev => ({
+      ...prev,
+      [brandId]: !prev[brandId]
+    }));
+  };
+
   if (!isVisible) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
@@ -870,8 +920,9 @@ export default function AdminPanel() {
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-8">
+            <TabsList className="grid w-full grid-cols-9">
               <TabsTrigger value="products">Mahsulotlar</TabsTrigger>
+              <TabsTrigger value="brands">Brendlar</TabsTrigger>
               <TabsTrigger value="advertisements">Reklamalar</TabsTrigger>
               <TabsTrigger value="masters">Ustalar</TabsTrigger>
               <TabsTrigger value="password-recovery">Parol tiklash</TabsTrigger>
@@ -1278,6 +1329,180 @@ export default function AdminPanel() {
                   </CardContent>
                 </Card>
               )}
+            </TabsContent>
+
+            {/* Brands Tab */}
+            <TabsContent value="brands" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Brendlar boshqaruvi</h3>
+                  <p className="text-sm text-gray-600">{brands.length} ta brend</p>
+                </div>
+                <Button onClick={() => setEditingBrand({ 
+                  id: '', 
+                  name: '', 
+                  logo: '', 
+                  categories: [],
+                  isActive: true 
+                })}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Yangi brend
+                </Button>
+              </div>
+
+              {/* Brand Editing Form */}
+              {editingBrand && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{editingBrand.id === '' ? 'Yangi brend' : 'Brendni tahrirlash'}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Brend nomi</label>
+                        <Input 
+                          value={editingBrand.name}
+                          onChange={(e) => setEditingBrand({...editingBrand, name: e.target.value})}
+                          placeholder="Hikvision"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Logo (emoji yoki URL)</label>
+                        <Input 
+                          value={editingBrand.logo}
+                          onChange={(e) => setEditingBrand({...editingBrand, logo: e.target.value})}
+                          placeholder="🎥 yoki logo URL"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium">Kategoriyalar</label>
+                      <div className="grid grid-cols-3 gap-2 mt-2">
+                        {categories.map(category => (
+                          <label key={category.id} className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              checked={editingBrand.categories.includes(category.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setEditingBrand({
+                                    ...editingBrand,
+                                    categories: [...editingBrand.categories, category.id]
+                                  });
+                                } else {
+                                  setEditingBrand({
+                                    ...editingBrand,
+                                    categories: editingBrand.categories.filter(c => c !== category.id)
+                                  });
+                                }
+                              }}
+                            />
+                            <span className="text-sm">{category.name}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={editingBrand.isActive}
+                        onChange={(e) => setEditingBrand({...editingBrand, isActive: e.target.checked})}
+                      />
+                      <span className="text-sm">Faol</span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button 
+                        onClick={() => {
+                          if (editingBrand.id === '') {
+                            handleCreateBrand(editingBrand);
+                          } else {
+                            handleUpdateBrand(editingBrand.id, editingBrand);
+                          }
+                        }}
+                        disabled={!editingBrand.name || !editingBrand.logo}
+                      >
+                        <Save className="h-4 w-4 mr-2" />
+                        Saqlash
+                      </Button>
+                      <Button variant="outline" onClick={() => setEditingBrand(null)}>
+                        <X className="h-4 w-4 mr-2" />
+                        Bekor qilish
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Brands List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {brands.map((brand) => (
+                  <Card key={brand.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">{brand.logo}</span>
+                          <div>
+                            <h4 className="font-medium">{brand.name}</h4>
+                            <Badge variant={brand.isActive ? "default" : "secondary"} className="text-xs">
+                              {brand.isActive ? "Faol" : "Nofaol"}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setEditingBrand(brand)}
+                          >
+                            <Edit className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleDeleteBrand(brand.id)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs font-medium text-gray-600">Kategoriyalar:</label>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {brand.categories.map(catId => {
+                              const category = categories.find(c => c.id === catId);
+                              return category ? (
+                                <Badge key={catId} variant="outline" className="text-xs">
+                                  {category.name}
+                                </Badge>
+                              ) : null;
+                            })}
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-medium text-gray-600">
+                            Kategoriya tugmalari:
+                          </label>
+                          <Button
+                            size="sm"
+                            variant={showBrandCategoryButtons[brand.id] ? "default" : "outline"}
+                            onClick={() => toggleBrandCategoryButtons(brand.id)}
+                            className="text-xs h-6"
+                          >
+                            {showBrandCategoryButtons[brand.id] ? "Yashirish" : "Ko'rsatish"}
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
             {/* Advertisements Tab */}
