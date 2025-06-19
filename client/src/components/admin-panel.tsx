@@ -115,6 +115,11 @@ export default function AdminPanel() {
   const [selectedProducts, setSelectedProducts] = useState<Set<number>>(new Set());
   const [selectAll, setSelectAll] = useState(false);
   
+  // Brand management states
+  const [customBrands, setCustomBrands] = useState<string[]>([]);
+  const [newBrandName, setNewBrandName] = useState("");
+  const [showAddBrand, setShowAddBrand] = useState(false);
+  
   // Pricing management states
   const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState<number>(0);
   const [dollarRate, setDollarRate] = useState<number>(12500);
@@ -133,17 +138,36 @@ export default function AdminPanel() {
     return masters.filter(master => master.region === selectedRegion);
   };
 
-  // Brendlar ro'yxati
-  const brands = [
-    { id: "hikvision", name: "Hikvision", logo: "🎥" },
-    { id: "dahua", name: "Dahua", logo: "📹" },
-    { id: "hilook", name: "HiLook", logo: "👁️" },
-    { id: "hiwatch", name: "HiWatch", logo: "📺" },
-    { id: "ezviz", name: "EZVIZ", logo: "🔒" },
-    { id: "imou", name: "Imou", logo: "🏠" },
-    { id: "tp_link", name: "TP-Link", logo: "📡" },
-    { id: "tvt", name: "TVT", logo: "📱" }
-  ];
+  // Yangi brend qo'shish funksiyasi
+  const handleAddBrand = () => {
+    if (newBrandName.trim() && !customBrands.includes(newBrandName.trim())) {
+      setCustomBrands([...customBrands, newBrandName.trim()]);
+      setNewBrandName("");
+      setShowAddBrand(false);
+    }
+  };
+
+  // Brendlar ro'yxati (asosiy + qo'shilgan)
+  const getAllBrands = () => {
+    const baseBrands = [
+      { id: "Hikvision", name: "Hikvision", logo: "🎥" },
+      { id: "Dahua", name: "Dahua", logo: "📹" },
+      { id: "HiLook", name: "HiLook", logo: "👁️" },
+      { id: "HiWatch", name: "HiWatch", logo: "📺" },
+      { id: "EZVIZ", name: "EZVIZ", logo: "🔒" },
+      { id: "Imou", name: "Imou", logo: "🏠" },
+      { id: "TP-Link", name: "TP-Link", logo: "📡" },
+      { id: "TVT", name: "TVT", logo: "📱" }
+    ];
+    
+    const customBrandList = customBrands.map(brand => ({
+      id: brand,
+      name: brand,
+      logo: "🏢"
+    }));
+    
+    return [...baseBrands, ...customBrandList];
+  };
 
   // Kategoriyalar ro'yxati
   const categories = [
@@ -782,6 +806,29 @@ export default function AdminPanel() {
     }
   };
 
+  // Mahsulotlarni bazadan filtrlash funksiyasi
+  const getDisplayProducts = () => {
+    if (!allDbProducts) return [];
+    
+    let filtered = allDbProducts;
+    
+    // Brend bo'yicha filtrlash
+    if (selectedBrand !== 'all') {
+      filtered = filtered.filter(product => 
+        product.brand?.toLowerCase() === selectedBrand.toLowerCase()
+      );
+    }
+    
+    // Kategoriya bo'yicha filtrlash
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(product => 
+        product.category?.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+    
+    return filtered;
+  };
+
   const getFilteredProductsForPricing = () => {
     let filtered = allDbProducts;
     
@@ -798,6 +845,11 @@ export default function AdminPanel() {
     }
     
     return filtered;
+  };
+
+  // Tanlangan brendning ma'lumotlarini olish
+  const getSelectedBrandInfo = () => {
+    return getAllBrands().find(brand => brand.id.toLowerCase() === selectedBrand.toLowerCase());
   };
 
   const handleAddFeature = () => {
@@ -882,20 +934,7 @@ export default function AdminPanel() {
     return allDbProducts;
   };
 
-  const getSelectedBrandInfo = () => {
-    return brands.find(b => b.id === selectedBrand);
-  };
 
-  const getDisplayProducts = () => {
-    let products = getCurrentBrandProducts();
-    
-    // Kategoriya bo'yicha filterlash
-    if (selectedCategory !== 'all') {
-      products = products.filter(product => product.category === selectedCategory);
-    }
-    
-    return products;
-  };
 
   if (!isVisible) {
     return (
