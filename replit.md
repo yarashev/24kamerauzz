@@ -1,134 +1,92 @@
-# 24kamera.uz - Smart Camera and Electronics Platform
+# 24kamera.uz - Camera & Electronics E-commerce Platform
 
 ## Overview
 
-24kamera.uz is a comprehensive e-commerce platform specializing in security cameras, solar panels, and electronic systems. The application serves the Uzbekistan market with multilingual support (Uzbek, Russian, English) and features an AI-powered assistant called Jarvis for customer support and product recommendations.
+This is a full-stack e-commerce application for 24kamera.uz, specializing in security cameras, solar panels, and electronic devices. The platform provides a comprehensive solution for selling security equipment with features like AI-powered customer support (Jarvis), product catalog management, cart functionality, master craftsman directory, and password recovery services.
 
 ## System Architecture
 
-### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **Build Tool**: Vite for fast development and optimized builds
-- **UI Framework**: shadcn/ui components built on Radix UI primitives
-- **Styling**: Tailwind CSS with custom design system
-- **State Management**: React Query for server state, React Context for client state
-- **Routing**: Wouter for lightweight client-side routing
+The application follows a modern full-stack architecture with clear separation between frontend and backend:
 
-### Backend Architecture
-- **Runtime**: Node.js with Express.js REST API
-- **Language**: TypeScript with ES modules
+- **Frontend**: React 18 with TypeScript, built using Vite
+- **Backend**: Express.js with TypeScript, running on Node.js
 - **Database**: PostgreSQL with Drizzle ORM
-- **Session Management**: Express sessions with PostgreSQL store
-- **AI Integration**: Dual AI provider support (OpenAI GPT-4o and X.AI Grok-2)
-
-### Monorepo Structure
-```
-├── client/          # React frontend application
-├── server/          # Express.js backend API
-├── shared/          # Shared TypeScript schemas and types
-├── migrations/      # Database migration files
-└── attached_assets/ # Static assets and brand logos
-```
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Development Environment**: Replit with auto-deployment
 
 ## Key Components
 
+### Frontend Architecture
+- **Framework**: React 18 with functional components and hooks
+- **State Management**: TanStack React Query for server state, React Context for global state (cart, language)
+- **Routing**: Wouter for client-side routing
+- **UI Library**: Custom component library built on top of Radix UI primitives
+- **Internationalization**: Custom translation system supporting Uzbek, Russian, and English
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+
+### Backend Architecture
+- **API**: RESTful API built with Express.js
+- **Database Layer**: Drizzle ORM with PostgreSQL
+- **AI Integration**: 
+  - OpenAI GPT-4o for customer support
+  - X.AI Grok-2 as alternative AI provider
+- **Session Management**: Express sessions with PostgreSQL store
+- **File Structure**: Modular approach with separate routes, storage, and database modules
+
 ### Database Schema
-The application uses PostgreSQL with Drizzle ORM for type-safe database operations:
+The application uses PostgreSQL with the following main entities:
 - **Users**: Authentication and user management
 - **Products**: Product catalog with categories, brands, and features
-- **Cart Items**: Session-based shopping cart functionality
-- **Chat Messages**: AI assistant conversation history
-- **Articles**: News and blog content management
-- **Advertisements**: Dynamic promotional content
-- **Masters**: Service provider directory with regional filtering
-- **Password Recovery Brands**: Brand-specific technical support contacts
-
-### AI Assistant (Jarvis)
-- Primary integration with OpenAI GPT-4o for customer support
-- Secondary integration with X.AI Grok-2 for specialized camera recommendations
-- Multilingual support for Uzbek, Russian, and English
-- Context-aware responses for security camera and electronics expertise
-- Session-based conversation history
-
-### E-commerce Features
-- Product catalog with advanced filtering by category and brand
-- Shopping cart with session persistence
-- Multi-brand support (Hikvision, Dahua, HiLook, HiWatch, EZVIZ, Imou, TP-Link, TVT)
-- Dynamic product image mapping based on model numbers
-- Price formatting and inventory management
-
-### Content Management
-- Dynamic advertisements with carousel display
-- News/articles system for company updates
-- Service provider (masters) directory with regional filtering
-- Brand-specific technical support contact system
+- **Cart Items**: Shopping cart functionality with session-based storage
+- **Chat Messages**: AI chat history storage
+- **Articles**: News and blog content
+- **Advertisements**: Promotional content management
+- **Masters**: Directory of installation specialists
+- **Password Recovery Brands**: Brand-specific support information
 
 ## Data Flow
 
-### Client-Server Communication
-1. Frontend makes API requests to Express.js backend
-2. Backend validates requests and interacts with PostgreSQL database
-3. Drizzle ORM provides type-safe database operations
-4. Response data flows back through React Query for state management
-
-### AI Integration Flow
-1. User sends chat message to Jarvis
-2. Backend routes to appropriate AI provider (OpenAI or X.AI)
-3. AI response is processed and stored in chat history
-4. Frontend displays conversation with typing indicators
-
-### Session Management
-- Session-based cart persistence without requiring user authentication
-- PostgreSQL session store for scalability
-- Cross-request state maintenance for shopping experience
+1. **Client Requests**: Frontend makes API calls using TanStack React Query
+2. **API Processing**: Express.js routes handle requests and validate data
+3. **Database Operations**: Drizzle ORM manages database interactions
+4. **AI Integration**: Chat requests are processed through OpenAI or Grok APIs
+5. **Response Handling**: Data is returned to frontend and cached appropriately
 
 ## External Dependencies
 
 ### Core Dependencies
-- **Database**: PostgreSQL with connection pooling
-- **ORM**: Drizzle with automatic migrations
-- **UI Components**: Radix UI primitives for accessibility
-- **Styling**: Tailwind CSS with PostCSS processing
-- **State Management**: TanStack React Query for server state
-
-### AI Services
-- **OpenAI API**: Primary AI assistant using GPT-4o model
-- **X.AI API**: Secondary AI for specialized camera recommendations using Grok-2
+- **Drizzle ORM**: Database ORM and migrations
+- **OpenAI API**: Primary AI service for Jarvis assistant
+- **X.AI Grok API**: Alternative AI service
+- **Radix UI**: Headless UI component primitives
+- **TanStack React Query**: Server state management
+- **Tailwind CSS**: Utility-first CSS framework
 
 ### Development Tools
-- **TypeScript**: Full-stack type safety
-- **ESBuild**: Production bundling for server code
-- **Vite**: Development server with HMR and build optimization
+- **Vite**: Build tool and development server
+- **TypeScript**: Type safety across the stack
+- **ESBuild**: Backend bundling for production
+- **TSX**: TypeScript execution for development
 
 ## Deployment Strategy
 
+The application is configured for Replit deployment with:
+
+- **Development**: `npm run dev` - Runs Express server with Vite middleware
+- **Build**: `npm run build` - Builds frontend and bundles backend
+- **Production**: `npm run start` - Serves built application
+- **Database**: PostgreSQL provisioned through Replit
+- **Auto-scaling**: Configured for Replit's autoscale deployment target
+
 ### Environment Configuration
-- Development: Local development with Vite dev server and tsx
-- Production: Built static assets served by Express with ESBuild bundling
-- Database: PostgreSQL with SSL support in production
-
-### Build Process
-1. Frontend: Vite builds React app to `dist/public`
-2. Backend: ESBuild bundles server code to `dist/index.js`
-3. Database: Drizzle migrations applied automatically
-
-### Hosting Platform
-- **Platform**: Replit with autoscale deployment
-- **Port Configuration**: Internal port 5000, external port 80
-- **Asset Management**: Static assets served from build directory
+- **Development**: Vite dev server with HMR and error overlay
+- **Production**: Optimized builds with static file serving
+- **Database Migrations**: Drizzle migrations managed through `npm run db:push`
 
 ## Changelog
 
-```
-Changelog:
-- June 13, 2025. Initial setup
-- June 13, 2025. Migrated from Replit Agent to Replit environment
-- June 13, 2025. Added product catalog with 200+ camera and security products
-- June 13, 2025. Imported Ezviz, Hilook IP cameras, Turbo HD cameras, accessories, DVR units, and PTZ cameras
-```
+- June 19, 2025. Initial setup
 
 ## User Preferences
 
-```
 Preferred communication style: Simple, everyday language.
-```

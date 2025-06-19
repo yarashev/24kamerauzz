@@ -76,16 +76,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Delete all products
-  app.delete("/api/products", async (req, res) => {
-    try {
-      const success = await storage.deleteAllProducts();
-      res.json({ success, message: "All products deleted" });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete all products" });
-    }
-  });
-
   // Cart API
   app.get("/api/cart", async (req, res) => {
     try {
