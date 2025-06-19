@@ -914,24 +914,14 @@ export default function AdminPanel() {
   });
 
   const getCurrentBrandProducts = () => {
-    if (selectedBrand === 'all') return allDbProducts;
-    return allDbProducts.filter(product => {
-      const brandMap: { [key: string]: string } = {
-        "ezviz": "EZVIZ",
-        "hilook": "HiLook", 
-        "hikvision": "Hikvision",
-        "hiwatch": "HiWatch",
-        "dahua": "Dahua",
-        "tvt": "TVT",
-        "imou": "Imou",
-        "tplink": "TP-Link"
-      };
-      return product.brand === brandMap[selectedBrand];
-    });
+    if (selectedBrand === 'all') return allDbProducts || [];
+    return (allDbProducts || []).filter(product => 
+      product.brand?.toLowerCase() === selectedBrand.toLowerCase()
+    );
   };
 
   const getAllProducts = () => {
-    return allDbProducts;
+    return allDbProducts || [];
   };
 
 
@@ -994,7 +984,7 @@ export default function AdminPanel() {
                       <SelectItem value="all">
                         📋 Barcha brendlar
                       </SelectItem>
-                      {brands.map(brand => (
+                      {getAllBrands().map(brand => (
                         <SelectItem key={brand.id} value={brand.id}>
                           {brand.logo} {brand.name}
                         </SelectItem>
@@ -1032,6 +1022,11 @@ export default function AdminPanel() {
                     <Plus className="h-4 w-4 mr-2" />
                     Yangi mahsulot
                   </Button>
+                  
+                  <Button onClick={() => setShowAddBrand(true)} variant="outline">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Yangi brend
+                  </Button>
                   {selectedProducts.size > 0 && (
                     <Button 
                       onClick={handleDeleteSelected}
@@ -1066,7 +1061,7 @@ export default function AdminPanel() {
                       </h4>
                       <p className="text-sm text-gray-600">
                         {selectedBrand === 'all' 
-                          ? `${getAllProducts().length} ta mahsulot (${brands.length} ta brenddan)`
+                          ? `${getAllProducts().length} ta mahsulot (${getAllBrands().length} ta brenddan)`
                           : `${getCurrentBrandProducts().length} ta mahsulot mavjud`
                         }
                       </p>
@@ -1177,14 +1172,11 @@ export default function AdminPanel() {
                             <SelectValue placeholder="Brend tanlang" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Hikvision">Hikvision</SelectItem>
-                            <SelectItem value="HiLook">HiLook</SelectItem>
-                            <SelectItem value="HiWatch">HiWatch</SelectItem>
-                            <SelectItem value="EZVIZ">EZVIZ</SelectItem>
-                            <SelectItem value="Dahua">Dahua</SelectItem>
-                            <SelectItem value="TVT">TVT</SelectItem>
-                            <SelectItem value="Imou">Imou</SelectItem>
-                            <SelectItem value="TP-Link">TP-Link</SelectItem>
+                            {getAllBrands().map(brand => (
+                              <SelectItem key={brand.id} value={brand.id}>
+                                {brand.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
@@ -1423,6 +1415,38 @@ export default function AdminPanel() {
                       <Plus className="h-4 w-4 mr-2" />
                       Birinchi mahsulotni qo'shish
                     </Button>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Yangi brend qo'shish modal */}
+              {showAddBrand && (
+                <Card className="mb-4">
+                  <CardHeader>
+                    <CardTitle>Yangi brend qo'shish</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium">Brend nomi</label>
+                      <Input 
+                        value={newBrandName}
+                        onChange={(e) => setNewBrandName(e.target.value)}
+                        placeholder="Yangi brend nomini kiriting"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={handleAddBrand}>
+                        <Plus className="h-4 w-4 mr-2" />
+                        Qo'shish
+                      </Button>
+                      <Button variant="outline" onClick={() => {
+                        setShowAddBrand(false);
+                        setNewBrandName("");
+                      }}>
+                        <X className="h-4 w-4 mr-2" />
+                        Bekor qilish
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               )}
