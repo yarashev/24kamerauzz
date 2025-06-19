@@ -371,6 +371,26 @@ export default function AdminPanel() {
     }
   };
 
+  const handleDeleteAllProducts = async () => {
+    if (confirm('Haqiqatan ham barcha mahsulotlarni o\'chirmoqchimisiz? Bu amalni bekor qilib bo\'lmaydi!')) {
+      try {
+        const response = await fetch('/api/products', {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          // Mahsulotlar ro'yxatini yangilash
+          queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+          alert('Barcha mahsulotlar o\'chirildi');
+        } else {
+          alert('Mahsulotlarni o\'chirishda xatolik yuz berdi');
+        }
+      } catch (error) {
+        alert('Tarmoq xatoligi yuz berdi');
+      }
+    }
+  };
+
   const handleSaveArticle = () => {
     if (!editingArticle) return;
     
@@ -920,6 +940,14 @@ export default function AdminPanel() {
                   })}>
                     <Plus className="h-4 w-4 mr-2" />
                     Yangi mahsulot
+                  </Button>
+                  <Button 
+                    onClick={handleDeleteAllProducts}
+                    variant="destructive"
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Barchasini o'chirish
                   </Button>
                 </div>
               </div>
