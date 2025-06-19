@@ -153,13 +153,19 @@ export default function AdminPanel() {
 
   // Kategoriyalar ro'yxati
   const categories = [
-    { id: "ip_camera", name: "IP Kameralar" },
-    { id: "turbo_hd_camera", name: "HD Kameralar" },
-    { id: "nvr", name: "NVR" },
-    { id: "dvr", name: "DVR" },
-    { id: "analog_camera", name: "Analog Kameralar" },
-    { id: "accessories", name: "Aksessuarlar" }
+    { id: "ip_camera", name: "IP Kameralar", dbValue: "ip_camera" },
+    { id: "turbo_hd_camera", name: "HD Kameralar", dbValue: "turbo_hd_camera" },
+    { id: "nvr", name: "NVR", dbValue: "nvr" },
+    { id: "dvr", name: "DVR", dbValue: "dvr" },
+    { id: "analog_camera", name: "Analog Kameralar", dbValue: "analog_camera" },
+    { id: "accessories", name: "Aksessuarlar", dbValue: "accessories" }
   ];
+
+  // Kategoriya nomini olish
+  const getCategoryName = (categoryId: string) => {
+    const category = categories.find(cat => cat.id === categoryId || cat.dbValue === categoryId);
+    return category ? category.name : categoryId;
+  };
 
   const getRegionDisplayName = (regionKey: string): string => {
     return regionNames[regionKey] || regionKey;
@@ -207,11 +213,17 @@ export default function AdminPanel() {
     // Kategoriya bo'yicha filtrlash
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(product => 
-        product.category?.toLowerCase() === selectedCategory.toLowerCase()
+        product.category === selectedCategory
       );
     }
     
     return filtered;
+  };
+
+  // Kategoriya bo'yicha mahsulotlar sonini hisoblash
+  const getProductCountByCategory = (categoryId: string) => {
+    if (!allDbProducts) return 0;
+    return allDbProducts.filter(product => product.category === categoryId).length;
   };
 
   // Tanlangan brendning ma'lumotlarini olish
@@ -506,7 +518,7 @@ export default function AdminPanel() {
                       </SelectItem>
                       {categories.map(category => (
                         <SelectItem key={category.id} value={category.id}>
-                          {category.name}
+                          {category.name} ({getProductCountByCategory(category.id)})
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -682,6 +694,32 @@ export default function AdminPanel() {
                 </Card>
               )}
 
+              {/* Kategoriyalar bo'yicha statistika */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+                {categories.map(category => (
+                  <Card key={category.id} className={`cursor-pointer transition-all hover:shadow-md ${selectedCategory === category.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`} onClick={() => setSelectedCategory(category.id)}>
+                    <CardContent className="p-3 text-center">
+                      <div className="text-lg font-bold text-blue-600">
+                        {getProductCountByCategory(category.id)}
+                      </div>
+                      <div className="text-xs text-gray-600 mt-1">
+                        {category.name}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedCategory === 'all' ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`} onClick={() => setSelectedCategory('all')}>
+                  <CardContent className="p-3 text-center">
+                    <div className="text-lg font-bold text-purple-600">
+                      {allDbProducts?.length || 0}
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      Jami
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
               {productsLoading ? (
                 <div className="col-span-full text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
@@ -762,7 +800,7 @@ export default function AdminPanel() {
                                 {product.inStock ? "Mavjud" : "Tugagan"}
                               </Badge>
                               <Badge variant="outline" className="text-xs">
-                                {product.category}
+                                {getCategoryName(product.category)}
                               </Badge>
                             </div>
                           </div>
