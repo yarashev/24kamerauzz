@@ -111,6 +111,10 @@ export default function AdminPanel() {
   const [newFeature, setNewFeature] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
   
+  // Bulk selection states
+  const [selectedProducts, setSelectedProducts] = useState<Set<number>>(new Set());
+  const [selectAll, setSelectAll] = useState(false);
+  
   // Pricing management states
   const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState<number>(0);
   const [dollarRate, setDollarRate] = useState<number>(12500);
@@ -381,12 +385,60 @@ export default function AdminPanel() {
         if (response.ok) {
           // Mahsulotlar ro'yxatini yangilash
           queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+          setSelectedProducts(new Set());
+          setSelectAll(false);
           alert('Barcha mahsulotlar o\'chirildi');
         } else {
           alert('Mahsulotlarni o\'chirishda xatolik yuz berdi');
         }
       } catch (error) {
         alert('Tarmoq xatoligi yuz berdi');
+      }
+    }
+  };
+
+  const handleSelectProduct = (productId: number) => {
+    const newSelected = new Set(selectedProducts);
+    if (newSelected.has(productId)) {
+      newSelected.delete(productId);
+    } else {
+      newSelected.add(productId);
+    }
+    setSelectedProducts(newSelected);
+    setSelectAll(false);
+  };
+
+  const handleSelectAll = () => {
+    const displayProducts = getDisplayProducts();
+    if (selectAll) {
+      setSelectedProducts(new Set());
+      setSelectAll(false);
+    } else {
+      setSelectedProducts(new Set(displayProducts.map(p => p.id)));
+      setSelectAll(true);
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedProducts.size === 0) {
+      alert('Hech qanday mahsulot tanlanmagan');
+      return;
+    }
+
+    if (confirm(`${selectedProducts.size} ta mahsulotni o'chirmoqchimisiz?`)) {
+      try {
+        for (const productId of Array.from(selectedProducts)) {
+          await fetch(`/api/products/${productId}`, {
+            method: 'DELETE'
+          });
+        }
+        
+        queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+        setSelectedProducts(new Set());
+        setSelectAll(false);
+        alert(`${selectedProducts.size} ta mahsulot o'chirildi`);
+      } catch (error) {
+        alert('Mahsulotlarni o\'chirishda xatolik yuz berdi');
       }
     }
   };
@@ -941,6 +993,16 @@ export default function AdminPanel() {
                     <Plus className="h-4 w-4 mr-2" />
                     Yangi mahsulot
                   </Button>
+                  {selectedProducts.size > 0 && (
+                    <Button 
+                      onClick={handleDeleteSelected}
+                      variant="destructive"
+                      className="bg-orange-600 hover:bg-orange-700"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Tanlanganlarni o'chirish ({selectedProducts.size})
+                    </Button>
+                  )}
                   <Button 
                     onClick={handleDeleteAllProducts}
                     variant="destructive"
@@ -1201,20 +1263,49 @@ export default function AdminPanel() {
                   <p className="mt-2 text-gray-600">Mahsulotlar yuklanmoqda...</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {getDisplayProducts().map((product) => (
-                    <Card key={product.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-3">
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-2">
-                            <img src={product.imageUrl || '/placeholder.jpg'} alt={product.name} className="w-12 h-12 object-cover rounded" />
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-sm truncate">{product.name}</h4>
-                              <Badge variant="outline" className="text-xs">
-                                {product.brand}
-                              </Badge>
+                <>
+                  {/* Bulk Selection Controls */}
+                  {getDisplayProducts().length > 0 && (
+                    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectAll}
+                          onChange={handleSelectAll}
+                          className="w-4 h-4"
+                        />
+                        <span className="text-sm font-medium">
+                          Barchasini tanlash ({getDisplayProducts().length})
+                        </span>
+                      </label>
+                      {selectedProducts.size > 0 && (
+                        <span className="text-sm text-blue-600">
+                          {selectedProducts.size} ta mahsulot tanlandi
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {getDisplayProducts().map((product) => (
+                      <Card key={product.id} className={`hover:shadow-md transition-shadow ${selectedProducts.has(product.id) ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`}>
+                        <CardContent className="p-3">
+                          <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={selectedProducts.has(product.id)}
+                                onChange={() => handleSelectProduct(product.id)}
+                                className="w-4 h-4"
+                              />
+                              <img src={product.imageUrl || '/placeholder.jpg'} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-sm truncate">{product.name}</h4>
+                                <Badge variant="outline" className="text-xs">
+                                  {product.brand}
+                                </Badge>
+                              </div>
                             </div>
-                          </div>
                           
                           <p className="text-xs text-gray-600 line-clamp-2">{product.description}</p>
                           
@@ -1264,7 +1355,8 @@ export default function AdminPanel() {
                       </CardContent>
                     </Card>
                   ))}
-                </div>
+                  </div>
+                </>
               )}
               
               {getDisplayProducts().length === 0 && selectedBrand !== 'all' && !productsLoading && (
