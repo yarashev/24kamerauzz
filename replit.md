@@ -122,6 +122,9 @@ The application uses PostgreSQL with Drizzle ORM for type-safe database operatio
 ```
 Changelog:
 - June 13, 2025. Initial setup
+- June 13, 2025. Migrated from Replit Agent to Replit environment
+- June 13, 2025. Added product catalog with 200+ camera and security products
+- June 13, 2025. Imported Ezviz, Hilook IP cameras, Turbo HD cameras, accessories, DVR units, and PTZ cameras
 ```
 
 ## User Preferences
