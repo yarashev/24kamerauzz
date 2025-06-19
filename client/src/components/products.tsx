@@ -413,14 +413,6 @@ export default function Products() {
             >
               DVR
             </Button>
-            <Button
-              onClick={() => setSelectedCategory("hikvision_hd_camera")}
-              variant={selectedCategory === "hikvision_hd_camera" ? "default" : "outline"}
-              size="sm"
-              className="text-sm"
-            >
-              HD KAMERA
-            </Button>
           </div>
         )}
 
