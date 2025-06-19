@@ -342,23 +342,9 @@ export default function Products() {
               className="h-full w-auto object-contain"
             />
           </button>
-
-
         </div>
 
-
-
-
-
-
-
         
-
-
-
-
-
-
 
         {/* Products Display */}
         {selectedBrand && (
