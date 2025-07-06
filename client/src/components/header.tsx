@@ -44,12 +44,14 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="flex justify-between items-center py-2 sm:py-3 lg:py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary bg-[#27226e00]">
-              <span className="bg-primary text-white px-2 py-1 rounded-md">24</span>kamera.uz
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
+              <span className="bg-primary text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md text-sm sm:text-base lg:text-lg">24</span>
+              <span className="hidden xs:inline">kamera.uz</span>
+              <span className="xs:hidden">k.uz</span>
             </h1>
           </div>
 
@@ -57,20 +59,20 @@ export default function Header() {
           <NavigationLinks className="hidden md:flex space-x-8" />
 
           {/* Right Side */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             {/* Catalog Button */}
             <CatalogModal>
-              <Button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+              <Button className="bg-primary text-white px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 rounded-md hover:bg-primary/90 text-xs sm:text-sm">
                 {language === "uz" && "Katalog"}
                 {language === "ru" && "Каталог"}
                 {language === "en" && "Catalog"}
               </Button>
             </CatalogModal>
 
-            {/* Masters Button */}
+            {/* Masters Button - Hidden on mobile */}
             <Button 
               onClick={() => window.location.hash = '#masters'}
-              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              className="hidden sm:flex bg-green-600 text-white px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 rounded-md hover:bg-green-700 text-xs sm:text-sm"
             >
               {language === "uz" && "Ustalar"}
               {language === "ru" && "Мастера"}
@@ -80,25 +82,25 @@ export default function Header() {
             {/* Password Recovery Button */}
             <Button 
               onClick={() => handleScrollTo('password-recovery')}
-              className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 flex items-center gap-2"
+              className="bg-red-600 text-white px-1.5 sm:px-2 lg:px-3 py-1.5 sm:py-2 rounded-md hover:bg-red-700 flex items-center gap-1 sm:gap-2"
             >
-              <Key className="h-4 w-4" />
-              <span className="hidden lg:inline">
+              <Key className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden md:inline text-xs sm:text-sm">
                 {language === "uz" && "Parolni tiklash"}
-                {language === "ru" && "Восстановление пароля"}
+                {language === "ru" && "Восстановление"}
                 {language === "en" && "Password Recovery"}
               </span>
-              <span className="lg:hidden">
-                {language === "uz" && "Parolni tiklash"}
+              <span className="md:hidden text-xs">
+                {language === "uz" && "Parol"}
                 {language === "ru" && "Пароль"}
-                {language === "en" && "Password"}
+                {language === "en" && "Pass"}
               </span>
             </Button>
 
             {/* Language Selector */}
             <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
-              <SelectTrigger className="w-12 h-10 border-0 bg-transparent hover:bg-gray-100 rounded-full">
-                <Globe className="h-5 w-5 text-gray-600" />
+              <SelectTrigger className="w-8 h-8 sm:w-10 sm:h-10 border-0 bg-transparent hover:bg-gray-100 rounded-full">
+                <Globe className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 text-gray-600" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="uz">🇺🇿 O'zbek</SelectItem>
@@ -112,11 +114,11 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative"
+                className="relative w-8 h-8 sm:w-10 sm:h-10"
               >
-                <ShoppingCart className="h-5 w-5" />
+                <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                 {cartCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                  <Badge className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
                     {cartCount}
                   </Badge>
                 )}

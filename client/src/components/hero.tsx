@@ -53,31 +53,31 @@ export default function Hero() {
   const currentAd = advertisements[currentAdIndex];
 
   return (
-    <section id="hero" className="relative bg-gradient-to-r from-blue-900 to-blue-700 py-10">
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="hero" className="relative bg-gradient-to-r from-blue-900 to-blue-700 py-4 sm:py-6 lg:py-10">
+      <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-8">
         {advertisements.length > 0 && currentAd ? (
-          <div className="relative bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-            <div className="flex items-center gap-6">
-              <div className="flex-1">
-                <h2 className="text-xl lg:text-2xl font-bold mb-2 text-white leading-tight">
+          <div className="relative bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/20">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 lg:gap-6">
+              <div className="flex-1 w-full sm:w-auto">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2 text-white leading-tight">
                   {currentAd.title}
                 </h2>
-                <p className="text-sm mb-4 text-blue-100 line-clamp-2">
+                <p className="text-xs sm:text-sm mb-3 sm:mb-4 text-blue-100 line-clamp-2 sm:line-clamp-3">
                   {currentAd.description}
                 </p>
                 <Button
                   onClick={() => window.open(currentAd.link, '_blank')}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 text-sm font-semibold"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold"
                   size="sm"
                 >
                   {currentAd.buttonText}
                 </Button>
               </div>
-              <div className="w-48 lg:w-64 flex-shrink-0">
+              <div className="w-full sm:w-32 md:w-40 lg:w-64 flex-shrink-0">
                 <img 
                   src={currentAd.imageUrl} 
                   alt={currentAd.title}
-                  className="w-full h-24 lg:h-32 object-cover rounded-lg"
+                  className="w-full h-20 sm:h-20 md:h-24 lg:h-32 object-cover rounded-lg"
                 />
               </div>
             </div>

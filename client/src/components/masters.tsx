@@ -78,8 +78,8 @@ export default function Masters() {
   };
 
   return (
-    <section id="masters" className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="masters" className="py-8 sm:py-12 lg:py-16 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             {language === "uz" && "Malakali Ustalar"}
