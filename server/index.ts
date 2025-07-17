@@ -2,6 +2,9 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// GMT+5 vaqt mintaqasini sozlash (Toshkent vaqti)
+process.env.TZ = 'Asia/Tashkent';
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -63,5 +66,10 @@ app.use((req, res, next) => {
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);
     log(`App ready at http://localhost:${port}`);
+    
+    // Server ishga tushganini tasdiqlash
+    setTimeout(() => {
+      log("Server to'liq ishga tushdi va tayyor!");
+    }, 1000);
   });
 })();
