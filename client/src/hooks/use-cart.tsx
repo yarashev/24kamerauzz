@@ -21,7 +21,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: cartItems = [], isLoading } = useQuery({
+  const { data: cartItems = [], isLoading } = useQuery<(CartItem & { product: Product })[]>({
     queryKey: ["/api/cart"],
     staleTime: 0,
   });
@@ -106,7 +106,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const cartCount = cartItems.reduce((total: number, item: any) => total + item.quantity, 0);
+  const cartCount = (cartItems as (CartItem & { product: Product })[]).reduce((total: number, item) => total + item.quantity, 0);
 
   const addToCart = (productId: number, quantity = 1) => {
     addToCartMutation.mutate({ productId, quantity });
