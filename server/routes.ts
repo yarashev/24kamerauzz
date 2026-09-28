@@ -1,10 +1,14 @@
-import type { Express } from "express";
+import express, { type Express } from "express";
 import { createServer, type Server } from "http";
+import path from "path";
 import { storage } from "./storage";
 import { askJarvis, calculateCameraRecommendation } from "./openai";
 import { insertCartItemSchema, insertChatMessageSchema, insertProductSchema, insertAdvertisementSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve Telegram Mini App static files
+  app.use("/tg-app", express.static(path.join(process.cwd(), "telegram_bot", "webapp")));
+
   // Products API
   app.get("/api/products", async (req, res) => {
     try {

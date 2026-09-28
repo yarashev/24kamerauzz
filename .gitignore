@@ -4,3 +4,7 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+telegram_bot/webapp/icons/
+*.xlsx
+*.webp
+__pycache__/
