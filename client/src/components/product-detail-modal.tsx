@@ -36,7 +36,7 @@ export default function ProductDetailModal({ product, isOpen, onClose }: Product
   ].filter(Boolean);
 
   const getProductSpecs = (product: Product) => {
-    const specs = [];
+    const specs: { label: string; value: string }[] = [];
     
     // Extract resolution from features or name
     if (features.some(f => f.includes('4K') || f.includes('8MP'))) {

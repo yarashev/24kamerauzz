@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>KSS Каталог</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#0b0d17;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.1);--tx:#f2f4ff;--mu:#8b90a8;--a:#7c5cff;--b:#22d3ee;--ok:#34d399;--r:20px}
+@media(prefers-color-scheme:light){:root{--bg:#f3f4fb;--card:rgba(255,255,255,.75);--line:rgba(20,20,60,.08);--tx:#15172b;--mu:#6b7090}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 -apple-system,"SF Pro Display","Segoe UI",Roboto,sans-serif;padding-bottom:110px}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(500px 300px at 10% -5%,rgba(124,92,255,.35),transparent),radial-gradient(400px 300px at 100% 10%,rgba(34,211,238,.25),transparent);pointer-events:none;z-index:-1}
+header{position:sticky;top:0;z-index:5;padding:14px 14px 8px;backdrop-filter:blur(20px);background:color-mix(in srgb,var(--bg) 70%,transparent)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a),var(--b));display:grid;place-items:center;font-weight:800;color:#fff}
+h1{font-size:18px;margin:0;flex:1}h1 small{display:block;font-size:12px;color:var(--mu);font-weight:500}
+.cur{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px}
+.cur button{border:0;background:none;color:var(--mu);padding:6px 11px;border-radius:9px;font-weight:700;font-size:12px}
+.cur button.on{background:linear-gradient(135deg,var(--a),var(--b));color:#fff}
+.search{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0 14px}
+.search input{flex:1;background:none;border:0;outline:0;color:var(--tx);font-size:16px;padding:13px 0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--tx);font-size:13px;font-weight:600}
+.chip.on{background:linear-gradient(135deg,var(--a),var(--b));border-color:transparent;color:#fff}
+.chip i{font-style:normal;opacity:.6;margin-left:4px;font-weight:500}
+main{padding:6px 14px;display:grid;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;backdrop-filter:blur(12px);animation:up .35s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.top2{display:flex;gap:12px}.ic{flex:none;width:56px;height:56px;border-radius:14px;background:#fff;object-fit:cover;border:1px solid var(--line)}.ic.no{display:grid;place-items:center;font-size:22px;background:var(--card)}.tag{font-size:11px;color:var(--b);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.nm{font-weight:650;margin:3px 0 4px;word-break:break-word}
+.ds{font-size:12.5px;color:var(--mu);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.pr{font-size:19px;font-weight:800}.pr small{display:block;font-size:11px;color:var(--mu);font-weight:500}
+.add{border:0;border-radius:14px;padding:10px 16px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--a),var(--b))}
+.qty{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.qty button{border:0;background:none;color:var(--tx);width:38px;height:38px;font-size:20px;font-weight:700}
+.qty b{min-width:22px;text-align:center}
+.more{margin:8px auto;display:block;border:1px solid var(--line);background:var(--card);color:var(--tx);padding:12px 22px;border-radius:14px;font-weight:600}
+.empty{text-align:center;color:var(--mu);padding:60px 0}
+#bar{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:8;display:none;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:22px;color:#fff;font-weight:700;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 14px 40px rgba(124,92,255,.5);border:0;width:calc(100% - 28px)}
+#sheet{position:fixed;inset:0;z-index:10;display:none;background:rgba(0,0,0,.55);align-items:flex-end}
+#sheet.on{display:flex}
+.pn{width:100%;max-height:86%;overflow:auto;background:var(--bg);border-radius:26px 26px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));border:1px solid var(--line);animation:up .3s}
+.pn h2{margin:0 0 12px}.li{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.li span{flex:1;font-size:13.5px}.tot{display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin:16px 0 10px}
+.pn input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:14px;padding:13px;margin-bottom:8px;font-size:15px;outline:0}
+.go{width:100%;border:0;border-radius:16px;padding:15px;font-weight:800;font-size:16px;color:#fff;background:linear-gradient(135deg,var(--ok),var(--b))}
+</style></head><body>
+<header>
+ <div class="top"><div class="logo">K</div><h1>KSS Каталог<small id="cnt">загрузка…</small></h1>
+  <div class="cur"><button data-c="USD" class="on">$</button><button data-c="UZS">So‘m</button></div></div>
+ <div class="search"><span>🔍</span><input id="q" placeholder="Поиск: модель, бренд, тип…" autocomplete="off"></div>
+ <div class="chips" id="chips"></div>
+</header>
+<main id="list"></main>
+<button id="bar"><span id="bc"></span><span id="bt"></span></button>
+<div id="sheet"><div class="pn"><h2>🛒 Корзина</h2><div id="items"></div>
+ <div class="tot"><span>Итого</span><span id="sum"></span></div>
+ <input id="nm" placeholder="Ваше имя"><input id="ph" placeholder="Телефон" inputmode="tel">
+ <button class="go" id="send">Оформить заявку</button></div></div>
+<script>
+const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand();tg?.setHeaderColor?.('#0b0d17');
+const RATE=12500,PAGE=40;let P=[],cat='Все',cur='USD',q='',shown=PAGE,cart={};
+const $=s=>document.querySelector(s),money=v=>cur=='USD'?'$'+v.toLocaleString('en',{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2}):Math.round(v*RATE).toLocaleString('ru').replace(/,/g,' ')+' сум';
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+fetch('products.json').then(r=>r.json()).then(d=>{P=d.map((x,i)=>({...x,i,k:(x.n+' '+x.c+' '+x.s).toLowerCase()}));chips();draw()});
+function chips(){const m={};P.forEach(x=>m[x.c]=(m[x.c]||0)+1);
+ $('#chips').innerHTML=[['Все',P.length],...Object.entries(m).sort((a,b)=>b[1]-a[1])].map(([c,n])=>`<button class="chip ${c==cat?'on':''}" data-c="${esc(c)}">${esc(c)}<i>${n}</i></button>`).join('')}
+function draw(){const w=q.split(/\s+/).filter(Boolean);
+ const f=P.filter(x=>(cat=='Все'||x.c==cat)&&w.every(t=>x.k.includes(t)));
+ $('#cnt').textContent=f.length+' товаров';
+ $('#list').innerHTML=f.length?f.slice(0,shown).map(card).join('')+(f.length>shown?'<button class="more">Показать ещё</button>':''):'<div class="empty">😕 Ничего не найдено</div>';
+ $('#list .more')?.addEventListener('click',()=>{shown+=PAGE;draw()});bar()}
+function ctl(x){const n=cart[x.i]||0;return n?`<div class="qty"><button data-m="${x.i}">−</button><b>${n}</b><button data-p="${x.i}">+</button></div>`:`<button class="add" data-p="${x.i}">В корзину</button>`}
+function card(x){return `<div class="card"><div class="top2">${x.i?`<img class="ic" loading="lazy" src="icons/${x.i}.webp" alt="">`:'<div class="ic no">📦</div>'}<div style="min-width:0"><div class="tag">${esc(x.s||x.c)}</div><div class="nm">${esc(x.n)}</div>${x.d?`<div class="ds">${esc(x.d)}</div>`:''}</div></div><div class="row"><div class="pr">${money(x.p)}<small>${cur=='USD'?money(x.p).length&&Math.round(x.p*RATE).toLocaleString('ru').replace(/,/g,' ')+' сум':'$'+x.p}</small></div><div id="c${x.i}">${ctl(x)}</div></div></div>`}
+function bar(){const ids=Object.keys(cart),n=ids.reduce((s,i)=>s+cart[i],0),t=ids.reduce((s,i)=>s+cart[i]*P[i].p,0);
+ $('#bar').style.display=n?'flex':'none';$('#bc').textContent='🛒 '+n+' шт.';$('#bt').textContent=money(t);$('#sum').textContent=money(t)}
+function chg(i,d){cart[i]=(cart[i]||0)+d;if(cart[i]<=0)delete cart[i];tg?.HapticFeedback?.impactOccurred('light');
+ const e=$('#c'+i);if(e)e.innerHTML=ctl(P[i]);bar();if($('#sheet').classList.contains('on'))items()}
+function items(){const ids=Object.keys(cart);if(!ids.length){$('#sheet').classList.remove('on');return}
+ $('#items').innerHTML=ids.map(i=>`<div class="li"><span>${esc(P[i].n)}<br><small style="color:var(--mu)">${money(P[i].p)}</small></span><div class="qty"><button data-m="${i}">−</button><b>${cart[i]}</b><button data-p="${i}">+</button></div></div>`).join('')}
+document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
+ if(t.dataset.p)chg(+t.dataset.p,1);else if(t.dataset.m)chg(+t.dataset.m,-1);
+ else if(t.classList.contains('chip')){cat=t.dataset.c;shown=PAGE;chips();draw();scrollTo({top:0,behavior:'smooth'})}
+ else if(t.dataset.c){cur=t.dataset.c;document.querySelectorAll('.cur button').forEach(b=>b.classList.toggle('on',b==t));draw();if($('#sheet').classList.contains('on'))items()}
+ else if(t.id=='bar'){items();$('#sheet').classList.add('on')}
+ else if(t.id=='send'){const ids=Object.keys(cart);if(!$('#ph').value.trim()){$('#ph').focus();return}
+  const o={name:$('#nm').value.trim(),phone:$('#ph').value.trim(),items:ids.map(i=>({n:P[i].n,q:cart[i],p:P[i].p})),total:ids.reduce((s,i)=>s+cart[i]*P[i].p,0)};
+  if(tg){tg.sendData(JSON.stringify(o))}else alert(JSON.stringify(o,null,1))}});
+$('#sheet').addEventListener('click',e=>{if(e.target.id=='sheet')e.target.classList.remove('on')});
+let tm;$('#q').addEventListener('input',e=>{clearTimeout(tm);tm=setTimeout(()=>{q=e.target.value.toLowerCase().trim();shown=PAGE;draw()},150)});
+</script></body></html>
